@@ -11,6 +11,7 @@ public class Halle {
     private String name;
     @Column(name = "image_url")
     private String imageUrl;
+    private String strasse;
 
     public Long getId() {
         return id;
@@ -34,5 +35,13 @@ public class Halle {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getStrasse() {
+        return strasse;
+    }
+
+    public void setStrasse(String strasse) {
+        this.strasse = strasse;
     }
 }
