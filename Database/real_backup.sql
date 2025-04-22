@@ -30,7 +30,7 @@ CREATE TABLE `entities` (
   `kontaktperson` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `entities` (
 
 LOCK TABLES `entities` WRITE;
 /*!40000 ALTER TABLE `entities` DISABLE KEYS */;
-INSERT INTO `entities` VALUES (1,'Hallenbad','http://localhost:8080/img/Hallenbad.jpg',NULL,NULL,NULL),(2,'Rhoenkampfbahn','http://localhost:8080/img/Rhoenkampfbahn.jpg',NULL,NULL,NULL);
+INSERT INTO `entities` VALUES (1,'Hallenbad','http://localhost:8080/img/Hallenbad.jpg',NULL,NULL,NULL),(2,'Rhoenkampfbahn','http://localhost:8080/img/Rhoenkampfbahn.jpg',NULL,NULL,NULL),(3,'lauftreff','http://localhost:8080/img/lauftreff.jpg',NULL,NULL,NULL),(4,'bundespolizei','http://localhost:8080/img/bundespolizei.png',NULL,NULL,NULL),(5,'JAF-Schule','http://localhost:8080/img/JAF-Schule.jpg',NULL,NULL,NULL),(6,'Kreissporthalle-1','http://localhost:8080/img/Kreissporthalle-1.jpg',NULL,NULL,NULL),(7,'Kreissporthalle-3','http://localhost:8080/img/Kreissporthalle-3.jpg',NULL,NULL,NULL),(8,'Kreissporthalle-4','http://localhost:8080/img/Kreissporthalle-4.jpg',NULL,NULL,NULL),(9,'PGS-Schule','http://localhost:8080/img/PGS-Schule.jpg',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `entities` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-22 13:37:33
+-- Dump completed on 2025-04-22 14:25:38
