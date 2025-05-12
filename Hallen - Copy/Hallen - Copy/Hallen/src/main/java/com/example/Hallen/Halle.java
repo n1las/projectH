@@ -12,6 +12,15 @@ public class Halle {
     @Column(name = "image_url")
     private String imageUrl;
     private String strasse;
+    private String ort;
+
+    public String getOrt() {
+        return ort;
+    }
+
+    public void setOrt(String ort) {
+        this.ort = ort;
+    }
 
     public Long getId() {
         return id;
