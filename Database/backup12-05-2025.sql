@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 12. Mai 2025 um 09:00
+-- Erstellungszeit: 12. Mai 2025 um 13:04
 -- Server-Version: 10.4.32-MariaDB
 -- PHP-Version: 8.0.30
 
@@ -32,25 +32,27 @@ CREATE TABLE `entities` (
   `name` varchar(255) NOT NULL,
   `image_url` varchar(255) DEFAULT NULL,
   `strasse` varchar(255) DEFAULT NULL,
-  `kontaktperson` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `HallenTyp` int(11) DEFAULT NULL
+  `HallenTyp` int(11) DEFAULT NULL,
+  `Spielfeldgroesse` int(11) DEFAULT NULL,
+  `strasse_nr` int(11) DEFAULT NULL,
+  `plz` int(11) DEFAULT NULL,
+  `ort` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Daten für Tabelle `entities`
 --
 
-INSERT INTO `entities` (`id`, `name`, `image_url`, `strasse`, `kontaktperson`, `email`, `HallenTyp`) VALUES
-(1, 'Hallenbad', 'http://localhost:8080/img/Hallenbad.jpg', NULL, NULL, NULL, NULL),
-(2, 'Rhoenkampfbahn', 'http://localhost:8080/img/Rhoenkampfbahn.jpg', NULL, NULL, NULL, NULL),
-(3, 'lauftreff', 'http://localhost:8080/img/lauftreff.jpg', NULL, NULL, NULL, NULL),
-(4, 'bundespolizei', 'http://localhost:8080/img/bundespolizei.png', NULL, NULL, NULL, NULL),
-(5, 'JAF-Schule', 'http://localhost:8080/img/JAF-Schule.jpg', NULL, NULL, NULL, NULL),
-(6, 'Kreissporthalle-1', 'http://localhost:8080/img/Kreissporthalle-1.jpg', NULL, NULL, NULL, NULL),
-(7, 'Kreissporthalle-3', 'http://localhost:8080/img/Kreissporthalle-3.jpg', NULL, NULL, NULL, NULL),
-(8, 'Kreissporthalle-4', 'http://localhost:8080/img/Kreissporthalle-4.jpg', NULL, NULL, NULL, NULL),
-(9, 'PGS-Schule', 'http://localhost:8080/img/PGS-Schule.jpg', NULL, NULL, NULL, NULL);
+INSERT INTO `entities` (`id`, `name`, `image_url`, `strasse`, `HallenTyp`, `Spielfeldgroesse`, `strasse_nr`, `plz`, `ort`) VALUES
+(1, 'Hallenbad', 'http://localhost:8080/img/Hallenbad.jpg', 'Grossenbacher-Tor', 1, NULL, NULL, 36088, 'Huenfeld'),
+(2, 'Rhoenkampfbahn', 'http://localhost:8080/img/Rhoenkampfbahn.jpg', '', 1, NULL, NULL, 36088, 'Huenfeld'),
+(3, 'lauftreff', 'http://localhost:8080/img/lauftreff.jpg', '', 1, NULL, NULL, 36088, 'Huenfeld'),
+(4, 'bundespolizei', 'http://localhost:8080/img/bundespolizei.png', 'Molzebacherstrasse', 1, 1050, 35, 36088, 'Huenfeld'),
+(5, 'JAF-Schule', 'http://localhost:8080/img/JAF-Schule.jpg', '', 1, NULL, NULL, 36088, 'Huenfeld'),
+(6, 'Kreissporthalle-1', 'http://localhost:8080/img/Kreissporthalle-1.jpg', '', 1, NULL, NULL, 36088, 'Huenfeld'),
+(7, 'Kreissporthalle-3', 'http://localhost:8080/img/Kreissporthalle-3.jpg', '', 1, NULL, NULL, 36088, 'Huenfeld'),
+(8, 'Kreissporthalle-4', 'http://localhost:8080/img/Kreissporthalle-4.jpg', '', 1, NULL, NULL, 36088, 'Huenfeld'),
+(9, 'PGS-Schule', 'http://localhost:8080/img/PGS-Schule.jpg', '', 1, NULL, NULL, 36088, 'Huenfeld');
 
 --
 -- Indizes der exportierten Tabellen
