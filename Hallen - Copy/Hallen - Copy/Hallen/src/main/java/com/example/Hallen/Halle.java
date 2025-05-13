@@ -3,52 +3,32 @@ package com.example.Hallen;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "entities")
+@Table(name = "entities") // Correct table name
 public class Halle {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
-    @Column(name = "image_url")
+
+    @Column(name = "image_url") // Column name with an underscore
     private String imageUrl;
+
     private String strasse;
+
     private String ort;
-    private int plz;
-    private int strasse_nr;
-    private int spielfeldgroesse;
 
-    public int getStrasse_nr() {
-        return strasse_nr;
-    }
+    @Column(name = "plz") // Ensure the column name matches
+    private Integer plz;  // Changed to Integer to allow null values
 
-    public void setStrasse_nr(int strasse_nr) {
-        this.strasse_nr = strasse_nr;
-    }
+    @Column(name = "strasse_nr") // Ensure column name matches
+    private Integer strasseNr; // Changed field name to follow Java conventions
 
-    public int getSpielfeldgroesse() {
-        return spielfeldgroesse;
-    }
+    @Column(name = "spielfeldgroesse") // Ensure column name matches
+    private Integer spielfeldgroesse; // Changed to Integer to allow null values
 
-    public void setSpielfeldgroesse(int spielfeldgroesse) {
-        this.spielfeldgroesse = spielfeldgroesse;
-    }
-
-    public int getPlz() {
-        return plz;
-    }
-
-    public void setPlz(int plz) {
-        this.plz = plz;
-    }
-
-    public String getOrt() {
-        return ort;
-    }
-
-    public void setOrt(String ort) {
-        this.ort = ort;
-    }
-
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -79,5 +59,37 @@ public class Halle {
 
     public void setStrasse(String strasse) {
         this.strasse = strasse;
+    }
+
+    public String getOrt() {
+        return ort;
+    }
+
+    public void setOrt(String ort) {
+        this.ort = ort;
+    }
+
+    public Integer getPlz() {
+        return plz;
+    }
+
+    public void setPlz(Integer plz) {
+        this.plz = plz;
+    }
+
+    public Integer getStrasseNr() {
+        return strasseNr;
+    }
+
+    public void setStrasseNr(Integer strasseNr) {
+        this.strasseNr = strasseNr;
+    }
+
+    public Integer getSpielfeldgroesse() {
+        return spielfeldgroesse;
+    }
+
+    public void setSpielfeldgroesse(Integer spielfeldgroesse) {
+        this.spielfeldgroesse = spielfeldgroesse;
     }
 }
