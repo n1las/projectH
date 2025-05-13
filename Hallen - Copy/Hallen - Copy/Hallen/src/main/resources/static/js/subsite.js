@@ -30,10 +30,15 @@ function fetchImage() {
             document.getElementById("name").textContent = data.name || "Name not available";
 
             // Set street
-            document.getElementById("hallenAdresse").textContent = data.strasse || "Street not available";
+            document.getElementById("hallenAdresse").textContent = data.strasse + " " + data.strasse_nr|| "Street not available";
 
-             // Set street
+             // Set ort
             document.getElementById("ort").textContent = data.ort || "Street not available";
+
+            // Set plz
+            document.getElementById("plz").textContent = data.plz || "Street not available";
+
+             document.getElementById("sfg").textContent = data.spielfeldgroesse || "Street not available";
         })
         .catch(error => console.error("Error fetching data:", error));
 }
