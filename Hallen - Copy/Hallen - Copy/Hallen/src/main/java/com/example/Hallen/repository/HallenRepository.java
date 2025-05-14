@@ -1,5 +1,6 @@
-package com.example.Hallen;
+package com.example.Hallen.repository;
 
+import com.example.Hallen.model.Halle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

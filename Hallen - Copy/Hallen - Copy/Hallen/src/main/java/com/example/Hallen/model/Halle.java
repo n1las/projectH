@@ -1,4 +1,4 @@
-package com.example.Hallen;
+package com.example.Hallen.model;
 
 import jakarta.persistence.*;
 

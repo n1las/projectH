@@ -1,5 +1,7 @@
-package com.example.Hallen;
+package com.example.Hallen.service;
 
+import com.example.Hallen.repository.HallenRepository;
+import com.example.Hallen.model.Halle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
