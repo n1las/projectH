@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/mieter")
+@RequestMapping("/api/Mieter")
 public class MieterController {
 
     private final MieterService service;
@@ -16,9 +16,17 @@ public class MieterController {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping()
     public List<Mieter> getAll() {
         return service.getAll();
+    }
+    @GetMapping("/{id}")
+    public Mieter getById(@PathVariable Long id){
+        return service.getMieterById(id);
+    }
+    @PutMapping("/{id}")
+    public Mieter update(@PathVariable Long id, @RequestBody Mieter updatedMieter) {
+        return service.update(id, updatedMieter);
     }
 
     @PostMapping

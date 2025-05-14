@@ -4,6 +4,7 @@ import com.example.Hallen.model.Mieter;
 import com.example.Hallen.repository.MieterRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class MieterService {
@@ -16,6 +17,21 @@ public class MieterService {
 
     public List<Mieter> getAll() {
         return repository.findAll();
+    }
+    public Mieter getMieterById(Long id){
+        return repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Mieter not found with ID" + id));
+    }
+    public Mieter update(Long id, Mieter updatedMieter) {
+        Mieter existing = repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Mieter not found with ID " + id));
+
+        existing.setName(updatedMieter.getName());
+        existing.setNachName(updatedMieter.getNachName());
+        existing.setTel(updatedMieter.getTel());
+        existing.setEmail(updatedMieter.getEmail());
+
+        return repository.save(existing);
     }
 
     public Mieter save(Mieter mieter) {
