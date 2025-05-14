@@ -30,7 +30,7 @@ function fetchImage() {
             document.getElementById("name").textContent = data.name || "Name not available";
 
             // Set street
-            document.getElementById("hallenAdresse").textContent = data.strasse + " " + data.strasse_nr|| "Street not available";
+            document.getElementById("hallenAdresse").textContent = data.strasse + " " + data.strasseNr|| "Street not available";
 
              // Set ort
             document.getElementById("ort").textContent = data.ort || "Street not available";
