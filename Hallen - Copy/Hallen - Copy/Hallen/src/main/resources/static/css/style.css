@@ -214,5 +214,20 @@ img {
     border-radius: 5px;
     display: none;
 }
+.subiste table{
+    width: 100%;
+    border-collapse: collapse;
+    font-family: sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.subsite table th, td {
+    padding: 12px 16px;
+    border: 1px solid #d0e4f5;
+    text-align: left;
+}
+.subsite table thead {
+    background-color: #007acc;
+    color: white;
+}
 
 
