@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 15, 2025 at 05:13 PM
+-- Generation Time: May 15, 2025 at 06:06 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -95,7 +95,8 @@ CREATE TABLE `termin` (
 --
 
 INSERT INTO `termin` (`ID`, `Halle_ID`, `Mieter_ID`, `Anlass`, `Anfang`, `Ende`) VALUES
-(1, 1, 1, 'Renovieren', '2025-06-01 14:00:00', '2025-06-01 22:00:00');
+(1, 1, 1, 'Renovieren', '2025-06-01 14:00:00', '2025-06-01 22:00:00'),
+(2, 4, 1, 'Einrichtung', '2025-06-30 13:00:00', '2025-06-30 15:00:00');
 
 --
 -- Indexes for dumped tables
@@ -141,7 +142,7 @@ ALTER TABLE `mieter`
 -- AUTO_INCREMENT for table `termin`
 --
 ALTER TABLE `termin`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
