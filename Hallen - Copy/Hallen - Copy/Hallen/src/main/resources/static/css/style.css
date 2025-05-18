@@ -229,5 +229,10 @@ img {
     background-color: #007acc;
     color: white;
 }
-
-
+#calendar {
+      max-width: 900px;
+      margin: 40px auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+    }

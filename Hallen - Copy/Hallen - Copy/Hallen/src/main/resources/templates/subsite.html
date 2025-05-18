@@ -6,6 +6,13 @@
     <title>Hallenbad - Hünfeld</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/de@6.1.8/index.global.min.js"></script>
+
 </head>
 <header>
     <h1>Hallen mieten in Hünfeld</h1>
@@ -31,22 +38,7 @@
             <p><strong>Spielfeldgroesse:</strong> <span id="sfg">Lade...</span></p>
 
         </section>
-        <table>
-            <thead>
-            <tr>
-                <th>Zeit</th>
-                <th>Montag</th>
-                <th>Dienstag</th>
-                <th>Mittwoch</th>
-                <th>Donnerstag</th>
-                <th>Freitag</th>
-                <th>Samstag</th>
-                <th>Sonntag</th>
-            </tr>
-            </thead>
-
-
-        </table>
+        <div id="calendar"></div>
 
         <!-- Mieten-Button -->
         <section class="rent-section">
