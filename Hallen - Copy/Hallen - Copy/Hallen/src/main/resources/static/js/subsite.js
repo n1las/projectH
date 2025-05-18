@@ -4,8 +4,13 @@
 (function () {
     document.addEventListener('DOMContentLoaded', function () {
         const calendarEl = document.getElementById('calendar');
+        if (!calendarEl) return;
 
-        if (!calendarEl) return; // Skip if calendar element doesn't exist
+        const hallenId = getIdFromUrl();
+        if (!hallenId) {
+            console.error("No hallenId in URL");
+            return;
+        }
 
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
@@ -15,23 +20,43 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
-            events: [
-                {
-                    title: 'Renovieren',
-                    start: '2025-06-01T14:00:00',
-                    end: '2025-06-01T22:00:00'
-                },
-                {
-                    title: 'Einrichtung',
-                    start: '2025-06-30T13:00:00',
-                    end: '2025-06-30T15:00:00'
-                }
-            ]
+            events: function (fetchInfo, successCallback, failureCallback) {
+                fetch(`http://localhost:8080/api/termine`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const filteredEvents = data
+                            .filter(event => event.hallenId == hallenId)
+                            .map(event => ({
+                                id: event.id,
+                                title: event.anlass || "Ohne Titel",
+                                start: event.anfang,
+                                end: event.ende
+                            }));
+
+                        successCallback(filteredEvents);
+                    })
+                    .catch(error => {
+                        console.error("Error fetching events:", error);
+                        failureCallback(error);
+                    });
+            }
         });
 
         calendar.render();
     });
+
+    function getIdFromUrl() {
+        const path = window.location.pathname;
+        const segments = path.split("/");
+        return segments[2];
+    }
 })();
+
 
 // ------------------------------------------
 // Data Fetching and DOM Injection (Wrapped)
