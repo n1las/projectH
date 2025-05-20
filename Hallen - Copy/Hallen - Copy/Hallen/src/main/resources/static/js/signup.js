@@ -6,12 +6,12 @@
 
     // Collect input values
     const mieterData = {
-      benutzername: form.querySelector('input[placeholder="Benutzername"]').value,
+      username: form.querySelector('input[placeholder="Benutzername"]').value,
       email: form.querySelector('input[placeholder="E-Mail"]').value,
       passwort: form.querySelector('input[placeholder="Passwort"]').value,
-      vorname: form.querySelector('input[placeholder="Vorname"]').value,
-      nachname: form.querySelector('input[placeholder="Nachname"]').value,
-      telefonnummer: form.querySelector('input[placeholder="Telefonnummer"]').value
+      name: form.querySelector('input[placeholder="Vorname"]').value,
+      nachName: form.querySelector('input[placeholder="Nachname"]').value,
+      tel: form.querySelector('input[placeholder="Telefonnummer"]').value
     };
 
     fetch('/api/Mieter', {
