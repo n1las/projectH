@@ -17,6 +17,24 @@ public class Mieter {
     private Integer tel;
     @Column(name = "Email")
     private String email;
+    private String username;
+    private String passwort;
+
+    public String getPasswort() {
+        return passwort;
+    }
+
+    public void setPasswort(String passwort) {
+        this.passwort = passwort;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public Long getId() {
         return id;
