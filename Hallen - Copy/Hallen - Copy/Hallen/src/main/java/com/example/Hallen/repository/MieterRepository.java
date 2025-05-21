@@ -4,5 +4,6 @@ import com.example.Hallen.model.Mieter;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MieterRepository extends JpaRepository<Mieter, Long> {
+    Mieter findByUsername(String username);
 
 }

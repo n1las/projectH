@@ -18,20 +18,21 @@
     </div>
 </header>
 
-<!-- ✅ Ändere das hier -->
+<!-- Login Form -->
 <div class="login">
   <div class="container">
     <div class="card">
       <h2>Login</h2>
-      <form>
-        <input type="email" placeholder="E-Mail" required />
-        <input type="password" placeholder="Passwort" required />
+      <div id="login-message"></div>
+      <form id="login-form">
+        <input type="text" id="username" placeholder="E-Mail" required />
+        <input type="password" id="password" placeholder="Passwort" required />
         <button type="submit">Einloggen</button>
       </form>
       <a href="signup.html">Noch kein Konto? Jetzt registrieren</a>
     </div>
   </div>
 </div>
-
+<script src="/js/login.js"></script>
 </body>
 </html>

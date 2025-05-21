@@ -41,4 +41,9 @@ public class MieterService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
+    public Mieter findByUsername(String username) {
+        // Datenbankabfrage, z.B. über Repository
+        return repository.findByUsername(username);
+    }
 }
