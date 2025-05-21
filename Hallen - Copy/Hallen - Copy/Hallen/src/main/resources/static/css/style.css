@@ -7,20 +7,18 @@ body {
 }
 header {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background: #0056b3;
     color: white;
     padding: 10px 20px;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* This centers the search bar */
     height: 75px;
+
 }
 header a {
-    position: absolute;
-    top: 54%;
-    left: 20px; /* Adjust as needed */
-    transform: translateY(-50%);
+    text-decoration: none;
+    color: inherit;
 }
 a {
     text-decoration: none; /* Removes underline */
@@ -44,6 +42,9 @@ a {
     margin: 0; /* Remove any margin around the logo */
 }
 .search-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
     max-width: 500px;
@@ -53,7 +54,6 @@ a {
     padding: 5px;
     background: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    justify-content: center;
 }
 
 #search-input {
@@ -77,6 +77,24 @@ a {
 
 #search-button:hover {
     background: #0056b3;
+}
+
+.login-button {
+    /* keine position:absolute mehr */
+}
+
+#login-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.login-button:hover {
+    background-color: #0056b3;
 }
 footer{
     background: #0056b3; /* Updated to match logo color */
