@@ -12,15 +12,23 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     body: JSON.stringify({ username, passwort })
   })
   .then(async response => {
-    const text = await response.text();
     const messageDiv = document.getElementById('login-message');
 
     if (response.ok) {
-      messageDiv.textContent = text; // z.B. "Login erfolgreich"
+      const data = await response.json(); // erwartet JSON mit Token
+      const token = data.token;
+
+      // Speichere den Token im localStorage
+      localStorage.setItem('token', token);
+
+      messageDiv.textContent = 'Login erfolgreich';
       messageDiv.style.color = 'green';
-      // hier kannst du z.B. weiterleiten
+
+      // Weiterleitung z. B.
+      window.location.href = 'index.html';
     } else {
-      messageDiv.textContent = text; // z.B. "Falsches Passwort"
+      const text = await response.text();
+      messageDiv.textContent = text;
       messageDiv.style.color = 'red';
     }
   })

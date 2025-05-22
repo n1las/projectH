@@ -218,6 +218,7 @@ img {
     color: #4CAF50;
     border-radius: 5px;
     position: relative;
+    display: none;
 }
 
 .subsite .btn:hover {
