@@ -20,6 +20,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
 
       // Speichere den Token im localStorage
       localStorage.setItem('token', token);
+      localStorage.setItem('username',username);
 
       messageDiv.textContent = 'Login erfolgreich';
       messageDiv.style.color = 'green';

@@ -29,6 +29,10 @@ public class MieterController {
     public Mieter getById(@PathVariable Long id){
         return service.getMieterById(id);
     }
+    @GetMapping("/byUsername/{username}")
+    public Mieter getByUsername(@PathVariable String username){
+        return service.findByUsername(username);
+    }
     @PutMapping("/{id}")
     public Mieter update(@PathVariable Long id, @RequestBody Mieter updatedMieter) {
         return service.update(id, updatedMieter);
