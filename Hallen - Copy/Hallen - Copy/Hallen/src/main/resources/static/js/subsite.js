@@ -77,6 +77,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const mietenButton = document.getElementById('mieten-button');
     if (mietenButton) {
       mietenButton.style.display = 'inline-block'; // Oder 'block' je nach Layout
+
+      // --- Add localStorage saving logic here ---
+      mietenButton.addEventListener("click", () => {
+        const hallenId = getIdFromUrl();
+        if (hallenId) {
+          localStorage.setItem("selectedSubsiteId", hallenId);
+          console.log(`Subsite ID '${hallenId}' saved to localStorage.`);
+        } else {
+          console.warn("Subsite ID not found in URL.");
+        }
+      });
     }
   }
 
