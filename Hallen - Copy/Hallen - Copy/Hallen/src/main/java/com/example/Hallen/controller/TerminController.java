@@ -1,10 +1,13 @@
 package com.example.Hallen.controller;
 
 import com.example.Hallen.model.Termin;
+import com.example.Hallen.repository.TerminRepository;
 import com.example.Hallen.service.TerminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -13,6 +16,7 @@ import java.util.List;
 public class TerminController {
     @Autowired
     private TerminService service;
+    private TerminRepository terminRepository;
 
     @GetMapping
     public List<Termin> getAll() {
