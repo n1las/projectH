@@ -13,19 +13,25 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        const anlass = form.querySelector('input[placeholder="Anlass"]').value;
+        const anfang = document.getElementById("anfang").value;
+        const ende = document.getElementById("ende").value;
+
+        const checkUrl = `http://localhost:8080/api/termine/check?hallenId=${selectedSubsiteId}&anfang=${encodeURIComponent(anfang)}&ende=${encodeURIComponent(ende)}`;
         try {
-            // Step 1: Fetch Mieter (User) ID
+            const checkResponse = await fetch(checkUrl);
+            const isAvailable = await checkResponse.json();
+
+            if (!isAvailable) {
+                statusText.textContent = "Dieser Zeitraum ist bereits belegt.";
+                return;
+            }
+
             const userResponse = await fetch(`http://localhost:8080/api/Mieter/byUsername/${username}`);
             if (!userResponse.ok) throw new Error("Fehler beim Laden des Benutzers.");
             const userData = await userResponse.json();
             const mieterId = userData.id;
 
-            // Step 2: Collect form data
-            const anlass = form.querySelector('input[placeholder="Anlass"]').value;
-            const anfang = document.getElementById("anfang").value;
-            const ende = document.getElementById("ende").value;
-
-            // Step 3: Construct payload matching backend expectations
             const terminData = {
                 hallenId: selectedSubsiteId,
                 mieter_ID: mieterId,
@@ -34,7 +40,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 ende: ende
             };
 
-            // Step 4: POST to backend
             const postResponse = await fetch("http://localhost:8080/api/termine", {
                 method: "POST",
                 headers: {

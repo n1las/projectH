@@ -5,6 +5,7 @@ import com.example.Hallen.repository.TerminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,4 +34,15 @@ public class TerminService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+    public boolean isTerminAvailable(Long hallenId, LocalDateTime anfang, LocalDateTime ende) {
+        List<Termin> existing = repository.findByHallenId(hallenId);
+        for (Termin t : existing) {
+            if (t.getAnfang().isBefore(ende) && t.getEnde().isAfter(anfang)) {
+                // Overlap exists
+                return false;
+            }
+        }
+        return true; // No conflicts
+    }
+
 }
