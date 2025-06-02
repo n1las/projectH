@@ -76,9 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (token) {
     const mietenButton = document.getElementById('mieten-button');
     if (mietenButton) {
-      mietenButton.style.display = 'inline-block'; // Oder 'block' je nach Layout
+      mietenButton.style.display = 'inline-block';
 
-      // --- Add localStorage saving logic here ---
       mietenButton.addEventListener("click", () => {
         const hallenId = getIdFromUrl();
         if (hallenId) {
@@ -91,10 +90,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Hilfsfunktion: ID aus URL extrahieren
+  // ✅ --- Login/Logout Button Logic ---
+  const loginBtn = document.getElementById('login-button');
+
+  if (token && loginBtn) {
+    loginBtn.textContent = 'LOGOUT';
+    loginBtn.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      window.location.href = 'index.html';
+    });
+  } else if (loginBtn) {
+    loginBtn.addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
+  }
+
+  // --- Helper function ---
   function getIdFromUrl() {
     const path = window.location.pathname;
     const segments = path.split("/");
-    return segments[2];
+    return segments[2]; // Adjust if your URL structure differs
   }
 });
