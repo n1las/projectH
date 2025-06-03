@@ -9,16 +9,26 @@ public class Mieter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
-    @Column(name = "Name")
     private String name;
-    @Column(name = "Nachname")
+    @Column(name = "nachname")
     private String nachName;
-    @Column(name = "Telefonnummer")
+    @Column(name = "telefonnummer")
     private Integer tel;
     @Column(name = "Email")
     private String email;
     private String username;
     private String passwort;
+    @Column(name ="isAdmin")
+    private Boolean isAdmin = false;
+
+
+    public Boolean getAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
+    }
 
     public String getPasswort() {
         return passwort;
