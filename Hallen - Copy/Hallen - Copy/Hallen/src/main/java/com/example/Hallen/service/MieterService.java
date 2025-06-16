@@ -22,6 +22,7 @@ public class MieterService {
         return repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Mieter not found with ID" + id));
     }
+    /*
     public Mieter update(Long id, Mieter updatedMieter) {
         Mieter existing = repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Mieter not found with ID " + id));
@@ -33,6 +34,8 @@ public class MieterService {
 
         return repository.save(existing);
     }
+
+     */
 
     public Mieter save(Mieter mieter) {
         return repository.save(mieter);

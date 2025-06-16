@@ -33,10 +33,12 @@ public class MieterController {
     public Mieter getByUsername(@PathVariable String username){
         return service.findByUsername(username);
     }
+    /*
     @PutMapping("/{id}")
     public Mieter update(@PathVariable Long id, @RequestBody Mieter updatedMieter) {
         return service.update(id, updatedMieter);
     }
+     */
 
     @PostMapping
     public Mieter create(@RequestBody Mieter mieter) {

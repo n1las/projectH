@@ -21,6 +21,16 @@ public class Termin {
     private LocalDateTime anfang;
     @Column(name = "Ende")
     private LocalDateTime ende;
+    @Column(name = "isConfirmed")
+    private Boolean isConfirmed;
+
+    public Boolean getConfirmed() {
+        return isConfirmed;
+    }
+
+    public void setConfirmed(Boolean confirmed) {
+        isConfirmed = confirmed;
+    }
 
     public Long getId() {
         return id;
