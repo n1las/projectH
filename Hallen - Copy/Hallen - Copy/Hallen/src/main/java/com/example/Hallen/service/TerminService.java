@@ -36,7 +36,7 @@ public class TerminService {
     }
 
     public boolean deleteByStart(LocalDateTime start){
-        Optional<Termin> temp = repository.findByStart(start);
+        Optional<Termin> temp = repository.findByAnfang(start);
         if(temp.isPresent()){
             repository.delete(temp.get());
             return true;
@@ -52,6 +52,9 @@ public class TerminService {
             }
         }
         return true; // No conflicts
+    }
+    public List<Termin> findByMieterId(Long mieterId){
+        return repository.findByMieterId(mieterId);
     }
 
 }

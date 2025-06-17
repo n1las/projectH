@@ -20,6 +20,8 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
     );
     List<Termin> findByHallenId(Long hallenId);
 
-    Optional<Termin> findByStart(LocalDateTime start);
+    Optional<Termin> findByAnfang(LocalDateTime anfang);
+
+    List<Termin> findByMieterId(Long mieterId);
 
 }

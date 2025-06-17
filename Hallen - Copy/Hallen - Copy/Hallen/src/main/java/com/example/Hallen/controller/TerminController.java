@@ -29,6 +29,10 @@ public class TerminController {
     public Termin getById(@PathVariable Long id) {
         return service.getById(id).orElseThrow(() -> new RuntimeException("Termin not found"));
     }
+    @GetMapping("/mieter/{mieterId}")
+    public List<Termin> getByMieterId(@PathVariable Long mieterId) {
+        return service.findByMieterId(mieterId);
+    }
 
     @PostMapping
     public Termin create(@RequestBody Termin termin) {
@@ -69,5 +73,4 @@ public class TerminController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment not found.");
         }
     }
-
 }

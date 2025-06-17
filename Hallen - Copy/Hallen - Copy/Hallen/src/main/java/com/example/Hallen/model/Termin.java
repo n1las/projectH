@@ -14,7 +14,7 @@ public class Termin {
     @Column(name = "Halle_ID")
     private Long hallenId;
     @Column(name = "Mieter_ID")
-    private Long mieter_ID;
+    private Long mieterId;
     @Column(name = "Anlass")
     private String anlass;
     @Column(name = "Anfang")
@@ -48,12 +48,12 @@ public class Termin {
         this.hallenId = hallenId;
     }
 
-    public Long getMieter_ID() {
-        return mieter_ID;
+    public Long getMieterId() {
+        return mieterId;
     }
 
-    public void setMieter_ID(Long mieter_ID) {
-        this.mieter_ID = mieter_ID;
+    public void setMieterId(Long mieterId) {
+        this.mieterId = mieterId;
     }
 
     public String getAnlass() {
