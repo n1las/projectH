@@ -4,6 +4,8 @@ import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.TerminRepository;
 import com.example.Hallen.service.TerminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,4 +58,16 @@ public class TerminController {
             return ResponseEntity.badRequest().body(false); // 400 if parsing fails or error occurs
         }
     }
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteAppointment(
+            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start) {
+
+        boolean deleted = service.deleteByStart(start);
+        if (deleted) {
+            return ResponseEntity.ok("Appointment deleted successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment not found.");
+        }
+    }
+
 }

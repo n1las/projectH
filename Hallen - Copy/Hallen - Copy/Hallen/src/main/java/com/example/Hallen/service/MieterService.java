@@ -1,10 +1,14 @@
 package com.example.Hallen.service;
 
 import com.example.Hallen.model.Mieter;
+import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.MieterRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class MieterService {

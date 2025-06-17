@@ -34,6 +34,15 @@ public class TerminService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
+    public boolean deleteByStart(LocalDateTime start){
+        Optional<Termin> temp = repository.findByStart(start);
+        if(temp.isPresent()){
+            repository.delete(temp.get());
+            return true;
+        }
+        return false;
+    }
     public boolean isTerminAvailable(Long hallenId, LocalDateTime anfang, LocalDateTime ende) {
         List<Termin> existing = repository.findByHallenId(hallenId);
         for (Termin t : existing) {

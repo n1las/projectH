@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface TerminRepository extends JpaRepository<Termin, Long> {
     @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM Termin t " +
@@ -18,5 +19,7 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
             @Param("ende") LocalDateTime ende
     );
     List<Termin> findByHallenId(Long hallenId);
+
+    Optional<Termin> findByStart(LocalDateTime start);
 
 }
