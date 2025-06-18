@@ -57,11 +57,19 @@ public class MieterController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Benutzername nicht gefunden");
         }
 
-        if (mieter.getPasswort().equals(loginRequest.getPasswort())) {
-            String token = JwtUtil.generateToken(mieter.getUsername());
-            return ResponseEntity.ok(Map.of("token", token));
-        } else {
+        if (!mieter.getPasswort().equals(loginRequest.getPasswort())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Falsches Passwort");
         }
+
+        // 🔐 Create JWT
+        String token = JwtUtil.generateToken(mieter.getUsername());
+
+        // 🎯 Return token + role info
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "username", mieter.getUsername(),
+                "isAdmin", mieter.getAdmin() // or use mieter.getRolle().equals("ADMIN")
+        ));
     }
+
 }

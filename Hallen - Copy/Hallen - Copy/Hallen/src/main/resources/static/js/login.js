@@ -15,18 +15,24 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     const messageDiv = document.getElementById('login-message');
 
     if (response.ok) {
-      const data = await response.json(); // erwartet JSON mit Token
+      const data = await response.json();
       const token = data.token;
+      const isAdmin = data.isAdmin;
 
-      // Speichere den Token im localStorage
+      // 🧠 Save everything
       localStorage.setItem('token', token);
-      localStorage.setItem('username',username);
+      localStorage.setItem('username', username);
+      localStorage.setItem('isAdmin', isAdmin); // optional, if you want to use it later
 
       messageDiv.textContent = 'Login erfolgreich';
       messageDiv.style.color = 'green';
 
-      // Weiterleitung z. B.
-      window.location.href = 'index.html';
+      // 🔀 Redirect based on role
+      if (isAdmin) {
+        window.location.href = 'admin.html'; // 🔐 your admin dashboard
+      } else {
+        window.location.href = 'index.html'; // 👤 normal user home
+      }
     } else {
       const text = await response.text();
       messageDiv.textContent = text;
