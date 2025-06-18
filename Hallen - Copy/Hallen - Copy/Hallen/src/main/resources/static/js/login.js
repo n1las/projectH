@@ -29,9 +29,9 @@ document.getElementById('login-form').addEventListener('submit', function(event)
 
       // 🔀 Redirect based on role
       if (isAdmin) {
-        window.location.href = 'admin.html'; // 🔐 your admin dashboard
+        window.location.href = 'index.html'; // 🔐 your admin dashboard
       } else {
-        window.location.href = 'index.html'; // 👤 normal user home
+        window.location.href = 'verein.html'; // 👤 normal user home
       }
     } else {
       const text = await response.text();
