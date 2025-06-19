@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/termine")
@@ -18,6 +19,7 @@ import java.util.List;
 public class TerminController {
     @Autowired
     private TerminService service;
+    @Autowired
     private TerminRepository terminRepository;
 
     @GetMapping
@@ -73,4 +75,17 @@ public class TerminController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment not found.");
         }
     }
+    @PatchMapping("/{id}/confirm")
+    public ResponseEntity<?> confirmTermin(@PathVariable Long id) {
+        Optional<Termin> optionalTermin = terminRepository.findById(id);
+        if (optionalTermin.isPresent()) {
+            Termin termin = optionalTermin.get();
+            termin.setConfirmed(true);
+            terminRepository.save(termin);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

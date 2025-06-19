@@ -63,16 +63,20 @@ function renderAppointments(appointments) {
 }
 
 function confirmAppointment(id) {
-  fetch(`/api/termine/${id}`, {
-    method: 'PATCH',
+  fetch(`/api/termine/${id}/confirm`, {
+    method: 'PATCH', // Change to POST or PATCH depending on your backend design
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + token
-    },
-    body: JSON.stringify({ confirmed: true })
-  }).then(() => location.reload());
+    }
+  }).then(response => {
+    if (response.ok) {
+      location.reload();
+    } else {
+      alert("Fehler beim Bestätigen des Termins.");
+    }
+  });
 }
-
 function cancelAppointment(id) {
   fetch(`/api/termine/${id}`, {
     method: 'DELETE',
