@@ -372,3 +372,14 @@ img {
 .signup a:hover {
   text-decoration: underline;
 }
+#deleteButton{
+    padding: 15px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 2px solid #ff0000;
+    background-color: #fff;
+    color: #ff0000;
+    border-radius: 5px;
+    position: relative;
+    display: inline-block;
+}
