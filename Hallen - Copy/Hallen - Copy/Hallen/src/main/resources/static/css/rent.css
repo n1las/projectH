@@ -189,8 +189,16 @@ img {
   border-radius: 8px;
   font-size: 1rem;
 }
+.card input[type="text"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
 
-.card button {
+.db {
   background-color: #e74c3c;
   color: white;
   border: none;
@@ -200,8 +208,23 @@ img {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+.mb {
+  background-color: #28a745; /* sattes Grün */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-.card button:hover {
+.mb:hover {
+  background-color: #218838; /* dunkleres Grün beim Hover */
+}
+
+
+.db:hover {
   background-color: #c0392b;
 }
 

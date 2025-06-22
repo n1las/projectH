@@ -1,61 +1,108 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector("form");
-    const statusText = document.getElementById("mieten-status");
+const form = document.querySelector("form");
+const statusText = document.getElementById("mieten-status");
+const calendarEl = document.getElementById("calendar");
+const hallenId = localStorage.getItem("selectedSubsiteId");
+const username = localStorage.getItem("username");
 
-    form.addEventListener("submit", async function (e) {
-        e.preventDefault();
+if (!hallenId) {
+    console.error("No hallenId in localStorage");
+    if (statusText) statusText.textContent = "Kein Hallen-ID gefunden! ❌";
+    return;
+}
 
-        const username = localStorage.getItem("username");
-        const selectedSubsiteId = localStorage.getItem("selectedSubsiteId");
+// 🔁 Kalender initialisieren
+let calendar;
+if (calendarEl) {
+    calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'de',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: function(fetchInfo, successCallback, failureCallback) {
+            fetch(`http://localhost:8080/api/termine`)
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    const filteredEvents = data
+                        .filter(event => event.hallenId == hallenId)
+                        .map(event => ({
+                            id: event.id,
+                            title: event.anlass || "Ohne Titel",
+                            start: event.anfang,
+                            end: event.ende
+                        }));
+                    successCallback(filteredEvents);
+                })
+                .catch(error => {
+                    console.error("Error fetching events:", error);
+                    failureCallback(error);
+                });
+        }
+    });
+    calendar.render();
+}
 
-        if (!username || !selectedSubsiteId) {
-            statusText.textContent = "Username oder Halle-ID fehlt im localStorage.";
+// 📝 Formular absenden
+form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    if (!username || !hallenId) {
+        statusText.textContent = "Username oder Halle-ID fehlt im localStorage.";
+        return;
+    }
+
+    const anlass = form.querySelector('input[placeholder="Anlass"]').value;
+    const anfang = document.getElementById("anfang").value;
+    const ende = document.getElementById("ende").value;
+
+    const checkUrl = `http://localhost:8080/api/termine/check?hallenId=${hallenId}&anfang=${encodeURIComponent(anfang)}&ende=${encodeURIComponent(ende)}`;
+    try {
+        const checkResponse = await fetch(checkUrl);
+        const isAvailable = await checkResponse.json();
+
+        if (!isAvailable) {
+            statusText.textContent = "Dieser Zeitraum ist bereits belegt.";
             return;
         }
 
-        const anlass = form.querySelector('input[placeholder="Anlass"]').value;
-        const anfang = document.getElementById("anfang").value;
-        const ende = document.getElementById("ende").value;
+        const userResponse = await fetch(`http://localhost:8080/api/Mieter/byUsername/${username}`);
+        if (!userResponse.ok) throw new Error("Fehler beim Laden des Benutzers.");
+        const userData = await userResponse.json();
+        const mieterId = userData.id;
 
-        const checkUrl = `http://localhost:8080/api/termine/check?hallenId=${selectedSubsiteId}&anfang=${encodeURIComponent(anfang)}&ende=${encodeURIComponent(ende)}`;
-        try {
-            const checkResponse = await fetch(checkUrl);
-            const isAvailable = await checkResponse.json();
+        const terminData = {
+            hallenId: hallenId,
+            mieter_ID: mieterId,
+            anlass: anlass,
+            anfang: anfang,
+            ende: ende
+        };
 
-            if (!isAvailable) {
-                statusText.textContent = "Dieser Zeitraum ist bereits belegt.";
-                return;
-            }
+        const postResponse = await fetch("http://localhost:8080/api/termine", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(terminData)
+        });
 
-            const userResponse = await fetch(`http://localhost:8080/api/Mieter/byUsername/${username}`);
-            if (!userResponse.ok) throw new Error("Fehler beim Laden des Benutzers.");
-            const userData = await userResponse.json();
-            const mieterId = userData.id;
+        if (!postResponse.ok) throw new Error("Fehler beim Erstellen des Termins.");
 
-            const terminData = {
-                hallenId: selectedSubsiteId,
-                mieter_ID: mieterId,
-                anlass: anlass,
-                anfang: anfang,
-                ende: ende
-            };
+        statusText.textContent = "✅ Termin erfolgreich erstellt!";
+        form.reset();
 
-            const postResponse = await fetch("http://localhost:8080/api/termine", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(terminData)
-            });
-
-            if (!postResponse.ok) throw new Error("Fehler beim Erstellen des Termins.");
-
-            statusText.textContent = "Termin erfolgreich erstellt!";
-            form.reset();
-
-        } catch (err) {
-            console.error("Fehler:", err);
-            statusText.textContent = "Fehler: " + err.message;
+        // 🔄 Kalender aktualisieren
+        if (calendar) {
+            calendar.refetchEvents();
         }
-    });
+
+    } catch (err) {
+        console.error("Fehler:", err);
+        statusText.textContent = "Fehler: " + err.message;
+    }
+});
 });
