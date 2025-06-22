@@ -1,0 +1,217 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  text-align: center;
+}
+
+header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0056b3;
+  color: white;
+  padding: 10px 20px;
+  height: 75px;
+}
+
+header a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#logo-container {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+}
+
+#logo {
+  position: relative;
+  width: 200px;
+  height: 100px;
+  display: block;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  max-width: 500px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  padding: 5px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 25px 0 0 25px;
+}
+
+#search-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+#search-button:hover {
+  background: #0056b3;
+}
+
+.login-button {
+  /* keine position:absolute mehr */
+}
+
+#login-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 17px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+
+footer {
+  background: #0056b3;
+  color: white;
+  padding: 20px 0;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.sportanlagen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+figure {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+}
+
+figure:hover {
+  transform: translateY(-5px);
+}
+
+figcaption {
+  background: #222;
+  color: white;
+  padding: 10px;
+  font-weight: 600;
+}
+
+.img-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 4px solid #222;
+}
+
+/* ----------------------------- */
+/* Termin löschen Styling below */
+/* ----------------------------- */
+
+.signup .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  max-width: 900px;         /* entspricht max-width vom Kalender */
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card h3 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.card input[type="datetime-local"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.card button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card button:hover {
+  background-color: #c0392b;
+}
+
+#calendar {
+  width: 100%;
+  max-width: 1000px;
+  min-height: 500px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin: auto;
+}
