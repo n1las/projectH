@@ -64,17 +64,6 @@ public class TerminController {
             return ResponseEntity.badRequest().body(false); // 400 if parsing fails or error occurs
         }
     }
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteAppointment(
-            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start) {
-
-        boolean deleted = service.deleteByStart(start);
-        if (deleted) {
-            return ResponseEntity.ok("Appointment deleted successfully.");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment not found.");
-        }
-    }
     @PatchMapping("/{id}/confirm")
     public ResponseEntity<?> confirmTermin(@PathVariable Long id) {
         Optional<Termin> optionalTermin = terminRepository.findById(id);
@@ -85,6 +74,19 @@ public class TerminController {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteTermin(
+            @RequestParam Long hallenId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime anfang) {
+
+        boolean deleted = service.deleteByHallenIdAndAnfang(hallenId, anfang);
+
+        if (deleted) {
+            return ResponseEntity.ok("Termin deleted successfully! 🧹");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No matching Termin found. ❌");
         }
     }
 

@@ -23,6 +23,9 @@ public class Termin {
     private LocalDateTime ende;
     @Column(name = "isConfirmed")
     private Boolean isConfirmed;
+    public Termin(){
+
+    }
 
     public Boolean getConfirmed() {
         return isConfirmed;

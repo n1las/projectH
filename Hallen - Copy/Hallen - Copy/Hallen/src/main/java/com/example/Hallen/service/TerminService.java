@@ -57,4 +57,14 @@ public class TerminService {
         return repository.findByMieterId(mieterId);
     }
 
+    public boolean deleteByHallenIdAndAnfang(Long hallenId, LocalDateTime anfang) {
+        Optional<Termin> terminOpt = repository.findByHallenIdAndAnfang(hallenId, anfang)   ;
+        if (terminOpt.isPresent()) {
+            repository.delete(terminOpt.get());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
