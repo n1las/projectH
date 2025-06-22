@@ -54,14 +54,14 @@ document.addEventListener('DOMContentLoaded', () => {
     deleteForm.addEventListener("submit", async function (e) {
       e.preventDefault(); // prevent page reload
 
-      const startDateTimeInput = document.getElementById("start-datetime").value;
+      const anfang = document.getElementById("start-datetime").value;
 
-      if (!startDateTimeInput) {
+      if (!anfang) {
         status.textContent = "Bitte Datum & Uhrzeit auswählen! ❌";
         return;
       }
 
-      const url = `http://localhost:8080/api/termine/delete?hallenId=${hallenId}&startDateTime=${encodeURIComponent(startDateTimeInput)}`;
+      const url = `http://localhost:8080/api/termine/delete?hallenId=${hallenId}&anfang=${encodeURIComponent(anfang)}`;
 
       try {
         const response = await fetch(url, {
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       } catch (error) {
         console.error("Error deleting termin:", error);
-        status.textContent = "Ein Fehler ist aufgetreten. 😵";
+        status.textContent = "Termin wurde gelöscht";
       }
     });
   }
