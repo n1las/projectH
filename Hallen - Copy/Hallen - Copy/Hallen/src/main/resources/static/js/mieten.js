@@ -3,7 +3,6 @@ const form = document.querySelector("form");
 const statusText = document.getElementById("mieten-status");
 const calendarEl = document.getElementById("calendar");
 const hallenId = localStorage.getItem("selectedSubsiteId");
-const username = localStorage.getItem("username");
 
 if (!hallenId) {
     console.error("No hallenId in localStorage");
@@ -52,10 +51,14 @@ if (calendarEl) {
 form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
+    const usernameInput = form.querySelector('input[name="username"]');
+    const username = usernameInput ? usernameInput.value.trim() : "";
+
     if (!username || !hallenId) {
-        statusText.textContent = "Username oder Halle-ID fehlt im localStorage.";
+        statusText.textContent = "Bitte gib einen gültigen Benutzernamen ein. ❌";
         return;
     }
+
 
     const anlass = form.querySelector('input[placeholder="Anlass"]').value;
     const anfang = document.getElementById("anfang").value;
@@ -74,14 +77,16 @@ form.addEventListener("submit", async function (e) {
         const userResponse = await fetch(`http://localhost:8080/api/Mieter/byUsername/${username}`);
         if (!userResponse.ok) throw new Error("Fehler beim Laden des Benutzers.");
         const userData = await userResponse.json();
+        console.log("User-Daten aus Backend:", userData);
         const mieterId = userData.id;
 
         const terminData = {
             hallenId: hallenId,
-            mieter_ID: mieterId,
+            mieterId: mieterId,
             anlass: anlass,
             anfang: anfang,
-            ende: ende
+            ende: ende,
+            confirmed: false
         };
 
         const postResponse = await fetch("http://localhost:8080/api/termine", {
