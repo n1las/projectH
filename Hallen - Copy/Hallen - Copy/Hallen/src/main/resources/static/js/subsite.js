@@ -76,8 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (token) {
     const mietenButton = document.getElementById('mieten-button');
     const deleteButton = document.getElementById('deleteButton');
-    if (mietenButton) {
+    const isAdmin = localStorage.getItem("isAdmin");
+    console.log(isAdmin);
+    if (isAdmin) {
       mietenButton.style.display = 'inline-block';
+      deleteButton.style.display ='inline-block';
 
       deleteButton.addEventListener("click", () => {
         const hallenId = getIdFromUrl();

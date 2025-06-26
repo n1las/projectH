@@ -381,5 +381,5 @@ img {
     color: #ff0000;
     border-radius: 5px;
     position: relative;
-    display: inline-block;
+    display: none;
 }
