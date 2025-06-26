@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', () => {
   } else if (loginBtn) {
     // If not logged in, make the button go to login page
     loginBtn.addEventListener('click', () => {
-      window.location.href = 'login.html';
+      window.location.href = '/login';
     });
   }
 });
