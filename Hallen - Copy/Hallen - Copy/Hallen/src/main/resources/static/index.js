@@ -9,6 +9,7 @@ window.addEventListener('DOMContentLoaded', () => {
       // Clear token and redirect
       localStorage.removeItem('token');
       localStorage.removeItem('username');
+      localStorage.removeItem('isAdmin');
       window.location.href = 'index.html'; // or wherever you want to redirect
     });
   } else if (loginBtn) {
