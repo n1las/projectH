@@ -112,11 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
     loginBtn.addEventListener('click', () => {
       localStorage.removeItem('token');
       localStorage.removeItem('username');
-      window.location.href = 'index.html';
+      window.location.href = '/home';
     });
   } else if (loginBtn) {
     loginBtn.addEventListener('click', () => {
-      window.location.href = 'login.html';
+      window.location.href = '/login';
     });
   }
 

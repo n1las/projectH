@@ -10,7 +10,7 @@ window.addEventListener('DOMContentLoaded', () => {
       localStorage.removeItem('token');
       localStorage.removeItem('username');
       localStorage.removeItem('isAdmin');
-      window.location.href = 'index.html'; // or wherever you want to redirect
+      window.location.href = '/home'; // or wherever you want to redirect
     });
   } else if (loginBtn) {
     // If not logged in, make the button go to login page
