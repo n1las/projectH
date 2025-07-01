@@ -1,5 +1,6 @@
 package com.example.Hallen.controller;
 
+import com.example.Hallen.dto.SerienTerminRequest;
 import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.TerminRepository;
 import com.example.Hallen.service.TerminService;
@@ -9,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,6 +91,29 @@ public class TerminController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No matching Termin found. ❌");
         }
+    }
+
+    @PostMapping("serienTermin")
+    public ResponseEntity<List<Termin>> createSerienTermin(@RequestBody SerienTerminRequest str){
+        List<Termin> erzeugteTermine = new ArrayList<>();
+        LocalDate serienDatum = str.getSerieAnfang();
+
+        while(!serienDatum.isAfter(str.getSerieEnde())){
+            LocalDateTime anfang = LocalDateTime.of(serienDatum, str.getAnfang());
+            LocalDateTime ende = LocalDateTime.of(serienDatum, str.getEnde());
+            if(service.isTerminAvailable(str.getHallenId(), anfang, ende)){
+                Termin termin = new Termin();
+                termin.setAnfang(anfang);
+                termin.setEnde(ende);
+                termin.setMieterId(str.getMieterId());
+                termin.setAnlass(str.getAnlass());
+
+                service.create(termin);
+                erzeugteTermine.add(termin);
+            }
+            serienDatum = serienDatum.plusWeeks(1);
+        }
+        return ResponseEntity.ok(erzeugteTermine);
     }
 
 }
