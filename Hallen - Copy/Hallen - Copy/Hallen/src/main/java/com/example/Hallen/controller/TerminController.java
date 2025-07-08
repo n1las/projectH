@@ -101,7 +101,7 @@ public class TerminController {
         while(!serienDatum.isAfter(str.getSerieEnde())){
             LocalDateTime anfang = LocalDateTime.of(serienDatum, str.getAnfang());
             LocalDateTime ende = LocalDateTime.of(serienDatum, str.getEnde());
-            if(service.isTerminAvailable(str.getHallenId(), anfang, ende)){
+            if(service.isTerminAvailable(str.getHallenId(), anfang, ende) && serienDatum.getDayOfWeek() == str.getWochentag()){
                 Termin termin = new Termin();
                 termin.setAnfang(anfang);
                 termin.setEnde(ende);
@@ -112,7 +112,7 @@ public class TerminController {
                 service.create(termin);
                 erzeugteTermine.add(termin);
             }
-            serienDatum = serienDatum.plusWeeks(1);
+            serienDatum = serienDatum.plusDays(1);
         }
         return ResponseEntity.ok(erzeugteTermine);
     }

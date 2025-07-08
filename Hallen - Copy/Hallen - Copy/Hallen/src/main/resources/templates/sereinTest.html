@@ -11,6 +11,16 @@
     <label>Enddatum: <input type="date" name="serieEnde" required></label><br>
     <label>Beginn: <input type="time" name="anfang" required></label><br>
     <label>Ende: <input type="time" name="ende" required></label><br>
+    <label for="wochentag">Wochentag wählen:</label>
+      <select id="wochentag" name="wochentag">
+        <option value="MONDAY">Montag</option>
+        <option value="TUESDAY">Dienstag</option>
+        <option value="WEDNESDAY">Mittwoch</option>
+        <option value="THURSDAY">Donnerstag</option>
+        <option value="FRIDAY">Freitag</option>
+        <option value="SATURDAY">Samstag</option>
+        <option value="SUNDAY">Sonntag</option>
+      </select><br>
     <label>Hallen-ID: <input type="number" name="hallenId" required></label><br>
     <label>Mieter-ID: <input type="number" name="mieterId" required></label><br>
     <label>Anlass: <input type="text" name="anlass" required></label><br><br>
@@ -29,6 +39,7 @@
         serieEnde: formData.get("serieEnde"),
         anfang: formData.get("anfang"),
         ende: formData.get("ende"),
+        wochentag: formData.get("wochentag"),
         hallenId: parseInt(formData.get("hallenId")),
         mieterId: parseInt(formData.get("mieterId")),
         anlass: formData.get("anlass")
