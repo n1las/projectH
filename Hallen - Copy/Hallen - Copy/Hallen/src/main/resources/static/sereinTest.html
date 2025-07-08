@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Serientermin-Test</title>
+</head>
+<body>
+  <h2>Serientermin erstellen</h2>
+  <form id="serienForm">
+    <label>Startdatum: <input type="date" name="serieAnfang" required></label><br>
+    <label>Enddatum: <input type="date" name="serieEnde" required></label><br>
+    <label>Beginn: <input type="time" name="anfang" required></label><br>
+    <label>Ende: <input type="time" name="ende" required></label><br>
+    <label>Hallen-ID: <input type="number" name="hallenId" required></label><br>
+    <label>Mieter-ID: <input type="number" name="mieterId" required></label><br>
+    <label>Anlass: <input type="text" name="anlass" required></label><br><br>
+    <button type="submit">Senden</button>
+  </form>
+
+  <div id="output"></div>
+
+  <script>
+    document.getElementById("serienForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = {
+        serieAnfang: formData.get("serieAnfang"),
+        serieEnde: formData.get("serieEnde"),
+        anfang: formData.get("anfang"),
+        ende: formData.get("ende"),
+        hallenId: parseInt(formData.get("hallenId")),
+        mieterId: parseInt(formData.get("mieterId")),
+        anlass: formData.get("anlass")
+      };
+
+      fetch("http://localhost:8080/api/termine/serienTermin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(response => {
+        document.getElementById("output").innerText =
+          `${response.length} Serientermine erfolgreich erstellt! 🎉`;
+        console.log(response);
+      })
+      .catch(error => {
+        console.error(error);
+        document.getElementById("output").innerText =
+          "❌ Fehler beim Senden!";
+      });
+    });
+  </script>
+</body>
+</html>

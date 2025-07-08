@@ -107,7 +107,8 @@ public class TerminController {
                 termin.setEnde(ende);
                 termin.setMieterId(str.getMieterId());
                 termin.setAnlass(str.getAnlass());
-
+                termin.setHallenId(str.getHallenId());
+                termin.setConfirmed(false);
                 service.create(termin);
                 erzeugteTermine.add(termin);
             }
