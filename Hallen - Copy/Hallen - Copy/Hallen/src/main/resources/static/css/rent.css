@@ -180,6 +180,14 @@ img {
   margin-bottom: 1.5rem;
   color: #333;
 }
+.card input{
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
 
 .card input[type="datetime-local"] {
   width: 100%;
@@ -205,6 +213,7 @@ img {
   border-radius: 8px;
   font-size: 1rem;
 }
+
 
 .db {
   background-color: #e74c3c;
