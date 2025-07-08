@@ -28,13 +28,45 @@
   <div class="container">
     <div class="card">
       <h3>Mieten</h3>
-      <form>
-        <input type="text" placeholder="Anlass" required />
-        <input type="datetime-local"id="anfang" name="anfang"value="2025-06-12T19:30" min="2025-06-01T00:00" max="2025-08-14T00:00" />
-        <input type="datetime-local"id="ende" name="ende"value="2025-06-12T19:30" min="2025-06-01T00:00" max="2025-08-14T00:00" />
-        <input type ="text" name="username" placeholder="Benutzername" required/>
-        <button type="submit" class="mb">Mieten</button>
-      </form>
+      <form id="terminForm">
+  <label for="terminTyp">Terminart wählen:</label>
+  <select name="terminTyp" id="terminTyp">
+    <option value="einzel">Einzeltermin</option>
+    <option value="serie">Serientermin</option>
+  </select>
+
+  <!-- EINZELTERMIN-FELDER -->
+  <div id="einzelInputs">
+    <input type="text" name="anlassEinzel" placeholder="Anlass" />
+    <input type="datetime-local" id="anfangEinzel" name="anfangEinzel" value="2025-06-12T19:30" min="2025-06-01T00:00" max="2025-08-14T00:00" />
+    <input type="datetime-local" id="endeEinzel" name="endeEinzel" value="2025-06-12T19:30" min="2025-06-01T00:00" max="2025-08-14T00:00" />
+    <input type="text" name="username" placeholder="Benutzername" />
+  </div>
+
+  <!-- SERIENTERMIN-FELDER -->
+  <div id="serieInputs" style="display: none;">
+    <label>Startdatum: <input type="date" name="serieAnfang"></label><br>
+    <label>Enddatum: <input type="date" name="serieEnde"></label><br>
+    <label>Beginn: <input type="time" name="anfangSerie"></label><br>
+    <label>Ende: <input type="time" name="endeSerie"></label><br>
+    <label for="wochentag">Wochentag wählen:</label>
+    <select id="wochentag" name="wochentag">
+      <option value="MONDAY">Montag</option>
+      <option value="TUESDAY">Dienstag</option>
+      <option value="WEDNESDAY">Mittwoch</option>
+      <option value="THURSDAY">Donnerstag</option>
+      <option value="FRIDAY">Freitag</option>
+      <option value="SATURDAY">Samstag</option>
+      <option value="SUNDAY">Sonntag</option>
+    </select><br>
+    <label>Hallen-ID: <input type="number" name="hallenId"></label><br>
+    <label>username <input type="text" name="mieterId"></label><br>
+    <label>Anlass: <input type="text" name="anlassSerie"></label><br>
+  </div>
+
+  <button type="submit" class="mb">Anlegen</button>
+</form>
+
       <p id="mieten-status"></p>
     </div>
   </div>
