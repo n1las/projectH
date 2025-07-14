@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("terminForm");
   const terminTyp = document.getElementById("terminTyp");
   const einzelInputs = document.getElementById("einzelInputs");
+  const commonInput = document.getElementById("commonInput");
   const serieInputs = document.getElementById("serieInputs");
   const statusText = document.getElementById("mieten-status");
   const calendarEl = document.getElementById("calendar");
@@ -17,9 +18,15 @@ document.addEventListener("DOMContentLoaded", function () {
   terminTyp.addEventListener("change", () => {
     if (terminTyp.value === "einzel") {
       einzelInputs.style.display = "block";
+      commonInput.style.display = "block";
       serieInputs.style.display = "none";
+    } else if(terminTyp.value === "block"){
+      einzelInputs.style.display = "block";
+      serieInputs.style.display = "none";
+      commonInput.style.display = "none";
     } else {
       einzelInputs.style.display = "none";
+      commonInput.style.display = "block";
       serieInputs.style.display = "block";
     }
   });
@@ -120,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const endeUhr = form.querySelector("input[name='endeSerie']").value;
       const wochentag = form.querySelector("select[name='wochentag']").value;
       const anlass = form.querySelector("input[name='anlassSerie']").value;
-      const username = form.querySelector("input[name='mieterId']").value.trim();
+      const username = form.querySelector("input[name='username']").value.trim();
 
     
       if (!anfangDatum || !endeDatum || !anfangUhr || !endeUhr || !wochentag || !anlass || !username) {

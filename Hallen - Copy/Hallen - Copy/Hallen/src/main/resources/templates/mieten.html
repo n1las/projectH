@@ -33,6 +33,7 @@
   <select name="terminTyp" id="terminTyp">
     <option value="einzel">Einzeltermin</option>
     <option value="serie">Serientermin</option>
+    <option value="block">Zeitraum blocken</option>
   </select>
 
   <!-- EINZELTERMIN-FELDER -->
@@ -40,6 +41,9 @@
     <input type="text" name="anlassEinzel" placeholder="Anlass" />
     <input type="datetime-local" id="anfangEinzel" name="anfangEinzel" value="2025-06-12T19:30" min="2025-06-01T00:00" max="2025-08-14T00:00" />
     <input type="datetime-local" id="endeEinzel" name="endeEinzel" value="2025-06-12T19:30" min="2025-06-01T00:00" max="2025-08-14T00:00" />
+  </div>
+  <!--Unabhängige felder-->
+  <div id="commonInput">
     <input type="text" name="username" placeholder="Benutzername" />
   </div>
 
@@ -60,7 +64,6 @@
       <option value="SUNDAY">Sonntag</option>
     </select><br>
     <label>Hallen-ID: <input type="number" name="hallenId"></label><br>
-    <label>username <input type="text" name="mieterId"></label><br>
     <label>Anlass: <input type="text" name="anlassSerie"></label><br>
   </div>
 
