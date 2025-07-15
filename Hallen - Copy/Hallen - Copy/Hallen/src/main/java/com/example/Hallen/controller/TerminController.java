@@ -1,5 +1,6 @@
 package com.example.Hallen.controller;
 
+import com.example.Hallen.dto.BlockTimeRequest;
 import com.example.Hallen.dto.SerienTerminRequest;
 import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.TerminRepository;
@@ -115,6 +116,24 @@ public class TerminController {
             serienDatum = serienDatum.plusDays(1);
         }
         return ResponseEntity.ok(erzeugteTermine);
+    }
+    @PostMapping("blockTermin")
+    public ResponseEntity<String> createBlock(@RequestBody BlockTimeRequest btr){
+        if(service.isTerminAvailable(btr.getHallenId(),btr.getAnfang(), btr.getEnde())){
+            Termin termin = new Termin();
+            termin.setAnfang(btr.getAnfang());
+            termin.setEnde(btr.getEnde());
+            termin.setAnlass(btr.getAnlass());
+            termin.setConfirmed(true);
+            termin.setHallenId(btr.getHallenId());
+            service.create(termin);
+
+            return ResponseEntity.ok("Block Termin erstellt");
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Es befindet sich ein oder mehrere Termin im Zeitraum des Blocks bitte löschen sie diese");
+        }
     }
 
 }

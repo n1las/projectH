@@ -169,5 +169,38 @@ document.addEventListener("DOMContentLoaded", function () {
         statusText.textContent = "❌ Fehler beim Serientermin.";
       }
     }
+
+    else if (typ === "block") {
+  const anlass = form.querySelector("input[name='anlassEinzel']").value.trim();
+  const anfang = form.querySelector("input[name='anfangEinzel']").value;
+  const ende = form.querySelector("input[name='endeEinzel']").value;
+
+  if (!anlass || !anfang || !ende) {
+    statusText.textContent = "❌ Bitte alle Block-Felder ausfüllen.";
+    return;
+  }
+
+  const blockTimeData = {
+    hallenId: parseInt(hallenId),
+    anlass: anlass,
+    anfang: anfang,
+    ende: ende,
+  };
+
+  const post = await fetch("http://localhost:8080/api/termine/blockTermin", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(blockTimeData),
+  });
+
+  if (post.ok) {
+    statusText.textContent = "✅ Block-Zeitraum erfolgreich eingetragen!";
+    form.reset();
+    calendar?.refetchEvents();
+  } else {
+    statusText.textContent = "❌ Fehler beim Speichern des Blocks.";
+  }
+}
+
   });
 });
