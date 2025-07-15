@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const mieterId = userData.id;
 
       const serienTerminData = {
-        hallenId: parseInt(hallenId),
+        hallenId: hallenId,
         mieterId: mieterId,
         anlass: anlass,
         serieAnfang: anfangDatum,
