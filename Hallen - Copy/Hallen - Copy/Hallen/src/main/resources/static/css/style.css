@@ -79,11 +79,7 @@ a {
     background: #0056b3;
 }
 
-.login-button {
-    /* keine position:absolute mehr */
-}
-
-#login-button {
+.header-button {
     background-color: #007bff;
     color: white;
     border: none;
@@ -93,7 +89,7 @@ a {
     font-size: 17px;
 }
 
-.login-button:hover {
+.header-button:hover {
     background-color: #0056b3;
 }
 footer{
