@@ -1,0 +1,242 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+}
+
+/* Body & container */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0056b3;
+  color: white;
+  padding: 10px 20px;
+  height: 80px;
+  flex-shrink: 0;
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 1001;
+}
+
+
+.left-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Sidebar button styling (optional) */
+#sidebar-button {
+  font-size: 40px;
+  padding: 5px;
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+}
+
+/* Logo */
+#logo {
+  width: 180px;
+  height: auto;
+  padding: 10px;
+  border: none;
+}
+
+/* remove black line below logo */
+a {
+  text-decoration: none;
+  outline: none;
+  border: none;
+}
+
+/* Search */
+.search-container {
+  display: flex;
+  align-items: center;
+  max-width: 400px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  padding: 5px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 25px 0 0 25px;
+}
+
+#search-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+#search-button:hover {
+  background: #0056b3;
+}
+
+/* Header buttons */
+.header-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  margin-left: 10px;
+}
+
+.header-button:hover {
+  background-color: #003d80;
+}
+
+/* Container holds sidebar + main */
+.container {
+  flex: 1;
+  display: flex;
+  height: calc(100vh - 75px);
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: #001f4d;
+  position: fixed;
+  top: 80px;
+  left: 0px;
+  color: white;
+  width: 200px;
+  padding-top: 20px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  transition: all 0.3s ease;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  
+}
+.sidebar.hidden {  
+  transform: translateX(-100%);
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  padding: 12px 20px;
+  display: block;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+  border-left: 4px solid transparent;
+}
+
+.sidebar a:hover {
+  background-color: #003d80;
+  border-left: 4px solid #007bff;
+}
+
+/* Main content */
+.main-content {
+  background: white;
+  flex: 1;
+  padding: 20px 30px;
+  overflow-y: auto;
+}
+footer{
+    background: #0056b3; /* Updated to match logo color */
+    color: white;
+    padding: 20px 0;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 1001;
+}
+
+.sportanlagen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 40px;
+    max-width: 1200px;
+    margin: auto;
+    position: relative;
+
+}
+figure {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+figure:hover {
+    transform: translateY(-5px);
+}
+figcaption {
+    background: #222;
+    color: white;
+    padding: 10px;
+    font-weight: 600;
+}
+.img-btn {
+    position: relative;
+    overflow: hidden;
+}
+img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 4px solid #222;
+
+}
+.btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 5px;
+
+}
+.btn:hover {
+    background: #0056b3;
+    opacity: 0.9;
+}
+.btn:active {
+    background: #004085; /* Darker blue for active state */
+}

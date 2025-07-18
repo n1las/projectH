@@ -5,23 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hallen in Hünfeld</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/index.css" rel="stylesheet">
 </head>
 <body>
 <header>
+  <div class="left-container">
+    <button id="sidebar-button">☰</button>
     <a href="/home">
-        <img src="img/logo.png" alt="logo" id="logo">
+      <img src="img/logo.png" alt="logo" id="logo">
     </a>
-    <div class="search-container">
-        <input type="text" id="search-input" placeholder="Suchen...">
-        <button id="search-button">Suchen</button>
-    </div>
-    <div class="header-button-container">
-        <button class="header-button">LOGIN</button>
-        <button class="header-button">ADMIN</button>
-    </div>
+  </div>
+
+  <div class="search-container">
+    <input type="text" id="search-input" placeholder="Suchen...">
+    <button id="search-button">Suchen</button>
+  </div>
+
+  <div class="header-button-container">
+    <button class="header-button" id="login-button">LOGIN</button>
+    <button class="header-button">ADMIN</button>
+  </div>
 </header>
-<div class="sportanlagen">
+
+  <div class="container">
+    <nav class="sidebar hidden" id="sidebar">
+      <ul>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Users</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="#">Reports</a></li>
+        <!-- Add more nav items -->
+      </ul>
+    </nav>
+    <div class="sportanlagen">
     <figure>
         <figcaption>Hallenbad</figcaption>
         <div class="img-btn">
@@ -95,6 +111,7 @@
         </div>
     </figure>
 </div>
+  </div>
 </body>
 <footer>
     <div class="footer">
