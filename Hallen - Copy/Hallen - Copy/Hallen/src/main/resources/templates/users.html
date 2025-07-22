@@ -1,10 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hallen in Hünfeld</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="/css/users.css" rel="stylesheet">
 </head>
 <body>
+<header>
+  <div class="left-container">
+    <button id="sidebar-button">☰</button>
+    <a href="/home">
+      <img src="img/logo.png" alt="logo" id="logo">
+    </a>
+  </div>
 
+  <div class="search-container">
+    <input type="text" id="search-input" placeholder="Suchen...">
+    <button id="search-button">Suchen</button>
+  </div>
+
+  <div class="header-button-container">
+    <button class="header-button">LOGIN</button>
+    <button class="header-button">ADMIN</button>
+  </div>
+</header>
+
+  <div class="container">
+    <nav class="sidebar hidden" id="sidebar">
+      <ul>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Users</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="#">Reports</a></li>
+        <!-- Add more nav items -->
+      </ul>
+    </nav>
+    <main class="main-content">
+  <h2>Benutzerverwaltung</h2>
+  <div class="user-table-wrapper">
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Passwort</th>
+          <th>Rolle</th>
+          <th>Aktionen</th>
+        </tr>
+      </thead>
+      <tbody id="user-table-body">
+        
+      </tbody>
+    </table>
+  </div>
+</main>
+  </div>
 </body>
+<footer>
+    <div class="footer">
+        <p>Impressung:</p>
+        <p>Mustermann GmbH</p>
+        <p>Beispielstraße 123</p>
+        <p>12345 Musterstadt</p>
+        <p>Deutschland</p>
+        <p>Telefon: 01234 567890</p>
+        <p>Email: info@mustermann.de</p>
+    </div>
+</footer>
+<script src="/js/users.js"></script>
+<script src="/js/sidebar.js"></script>
 </html>
