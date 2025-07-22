@@ -18,8 +18,13 @@ fetch("http://localhost:8080/api/Mieter") // Your Spring Boot endpoint
         <td>${user.username}</td>
         <td>${user.passwort}</td>
         <td>${admin}</td>
-        <td><button class="table-btn">Bearbeiten</button></td>
-      `;
+        <td>
+        <button class="table-btn edit-btn" data-id="${user.id}">Bearbeiten</button>
+        </td>
+        <td>
+        <button class="table-btn delete-btn" data-id="${user.id}">Löschen</button>
+        </td>
+    `;
       userTableBody.appendChild(row);
     });
   })

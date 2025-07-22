@@ -1,0 +1,89 @@
+.card {
+  font-family: 'Poppins', sans-serif;
+  background-color: #ffffff;
+  padding: 20px 40px;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  width: 95%;
+  margin: auto;
+  box-sizing: border-box;
+
+  /* 🆕: Zentrierung auf Bildschirmhöhe */
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+
+.card h2 {
+  color: #0056b3;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.card .form-group {
+  margin-bottom: 1.8rem;
+}
+
+.card label {
+  display: block;
+  margin-bottom: 0.6rem;
+  color: #333;
+  font-weight: 500;
+  font-size: 1.05rem;
+}
+
+.card input,
+.card select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.6rem;
+  font-size: 1.05rem;
+  font-family: 'Poppins', sans-serif;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card input:focus,
+.card select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.card .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.card .btn {
+  padding: 0.75rem 1.5rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.05rem;
+  transition: background-color 0.3s ease;
+}
+
+.card .btn:hover {
+  background-color: #0056b3;
+}
+
+.card .btn.cancel {
+  background-color: #cccccc;
+  color: #333;
+}
+
+.card .btn.cancel:hover {
+  background-color: #999999;
+}

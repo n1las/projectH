@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hallen in Hünfeld</title>
+    <title>Edit User</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link href="/css/users.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/editUser.css" rel="stylesheet">
 </head>
 <body>
 <header>
@@ -22,7 +23,7 @@
   </div>
 
   <div class="header-button-container">
-    <button class="header-button">LOGIN</button>
+    <button class="header-button" id="login-button">LOGIN</button>
     <button class="header-button">ADMIN</button>
   </div>
 </header>
@@ -37,28 +38,40 @@
         <!-- Add more nav items -->
       </ul>
     </nav>
-    <main class="main-content">
-  <h2>Benutzerverwaltung</h2>
-  <div class="user-table-wrapper">
-    <table class="user-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Passwort</th>
-          <th>Rolle</th>
-          <th>Aktionen</th>
-          <th>Löschen</th>
-        </tr>
-      </thead>
-      <tbody id="user-table-body">
+    <div class="card">
+      <h2>Kunden bearbeiten</h2>
+      <form>
+        <div class="form-group">
+          <label for="first-name">Vorname</label>
+          <input type="text" id="first-name" placeholder="Max" />
+        </div>
 
-      </tbody>
-    </table>
+        <div class="form-group">
+          <label for="last-name">Nachname</label>
+          <input type="text" id="last-name" placeholder="Mustermann" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">E-Mail-Adresse</label>
+          <input type="email" id="email" placeholder="max@mustermann.de" />
+        </div>
+
+        <div class="form-group">
+          <label for="role">Rolle</label>
+          <select id="role">
+            <option value="user">Benutzer</option>
+            <option value="admin">Administrator</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn">Speichern</button>
+          <button type="button" class="btn cancel">Abbrechen</button>
+        </div>
+      </form>
+    </div>
   </div>
-</main>
-  </div>
-</body>
+  </body>
 <footer>
     <div class="footer">
         <p>Impressung:</p>
@@ -69,7 +82,5 @@
         <p>Telefon: 01234 567890</p>
         <p>Email: info@mustermann.de</p>
     </div>
-</footer>
-<script src="/js/users.js"></script>
 <script src="/js/sidebar.js"></script>
 </html>

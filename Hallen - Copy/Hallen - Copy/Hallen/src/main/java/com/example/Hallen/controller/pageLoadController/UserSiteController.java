@@ -9,4 +9,8 @@ public class UserSiteController {
     public String showUserPage(){
         return "users";
     }
+    @GetMapping("editUser")
+    public String showEditUserPage(){
+        return "editUser";
+    }
 }
