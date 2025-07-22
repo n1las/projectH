@@ -24,11 +24,18 @@
     // Formular absenden
     document.getElementById("edit-user-form").addEventListener("submit", async (e) => {
       e.preventDefault();
+      let isAdmin
+      if (document.getElementById("role").value == "Admin"){
+         isAdmin = true;
+      }
+      else{
+         isAdmin = false;
+      }
 
       const updatedUser = {
         username: document.getElementById("username").value,
-        password: document.getElementById("password").value,
-        role: parseInt(document.getElementById("role").value)
+        passwort: document.getElementById("password").value,
+        admin: isAdmin
       };
 
       try {
@@ -42,8 +49,7 @@
 
         if (!res.ok) throw new Error("Update fehlgeschlagen");
 
-        alert("Benutzer erfolgreich aktualisiert!");
-        window.location.href = "/benutzer-verwalten"; // ggf. anpassen
+        alert("Benutzer erfolgreich aktualisiert!"); // ggf. anpassen
       } catch (err) {
         alert("Fehler beim Speichern: " + err.message);
       }
