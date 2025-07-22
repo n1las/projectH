@@ -13,7 +13,7 @@
   <div class="left-container">
     <button id="sidebar-button">☰</button>
     <a href="/home">
-      <img src="img/logo.png" alt="logo" id="logo">
+      <img src="http://localhost:8080/img/logo.png" alt="logo" id="logo">
     </a>
   </div>
 
@@ -39,28 +39,24 @@
       </ul>
     </nav>
     <div class="card">
-      <h2>Kunden bearbeiten</h2>
-      <form>
+      <h2>Benutzer bearbeiten</h2>
+      <form id="edit-user-form">
+
         <div class="form-group">
-          <label for="first-name">Vorname</label>
-          <input type="text" id="first-name" placeholder="Max" />
+          <label for="username">Username</label>
+          <input type="text" id="username" placeholder="username" />
         </div>
 
         <div class="form-group">
-          <label for="last-name">Nachname</label>
-          <input type="text" id="last-name" placeholder="Mustermann" />
-        </div>
-
-        <div class="form-group">
-          <label for="email">E-Mail-Adresse</label>
-          <input type="email" id="email" placeholder="max@mustermann.de" />
+          <label for="password">Passwort</label>
+          <input type="text" id="password" placeholder="passwort123" />
         </div>
 
         <div class="form-group">
           <label for="role">Rolle</label>
           <select id="role">
-            <option value="user">Benutzer</option>
-            <option value="admin">Administrator</option>
+            <option value="Verein">Verein</option>
+            <option value="Admin">Administrator</option>
           </select>
         </div>
 
@@ -83,4 +79,5 @@
         <p>Email: info@mustermann.de</p>
     </div>
 <script src="/js/sidebar.js"></script>
+<script src="/js/editUser.js"></script>
 </html>

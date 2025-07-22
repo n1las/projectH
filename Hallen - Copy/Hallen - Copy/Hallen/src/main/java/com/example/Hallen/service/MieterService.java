@@ -26,20 +26,18 @@ public class MieterService {
         return repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Mieter not found with ID" + id));
     }
-    /*
     public Mieter update(Long id, Mieter updatedMieter) {
         Mieter existing = repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Mieter not found with ID " + id));
 
-        existing.setName(updatedMieter.getName());
-        existing.setNachName(updatedMieter.getNachName());
-        existing.setTel(updatedMieter.getTel());
-        existing.setEmail(updatedMieter.getEmail());
+        existing.setUsername(updatedMieter.getUsername());
+        existing.setPasswort(updatedMieter.getPasswort());
+        existing.setAdmin(updatedMieter.getAdmin());
 
         return repository.save(existing);
     }
 
-     */
+
 
     public Mieter save(Mieter mieter) {
         return repository.save(mieter);
