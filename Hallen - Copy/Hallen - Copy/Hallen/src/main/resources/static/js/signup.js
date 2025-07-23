@@ -1,39 +1,41 @@
+  document.addEventListener("DOMContentLoaded", async () => {
 
-  document.querySelector('form').addEventListener('submit', function(event) {
-    event.preventDefault(); // prevent normal form submission
-
-    const form = event.target;
-
-    // Collect input values
-    const mieterData = {
-      username: form.querySelector('input[placeholder="Benutzername"]').value,
-      email: form.querySelector('input[placeholder="E-Mail"]').value,
-      passwort: form.querySelector('input[placeholder="Passwort"]').value,
-      name: form.querySelector('input[placeholder="Vorname"]').value,
-      nachName: form.querySelector('input[placeholder="Nachname"]').value,
-      tel: form.querySelector('input[placeholder="Telefonnummer"]').value
-    };
-
-    fetch('/api/Mieter', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(mieterData)
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Netzwerkantwort war nicht ok');
+    // Formular absenden
+    document.getElementById("edit-user-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      let isAdmin
+      if (document.getElementById("role").value == "Admin"){
+         isAdmin = true;
       }
-      return response.json();
-    })
-    .then(data => {
-      alert('Registrierung erfolgreich!');
-      // Optionally redirect or clear form here
-      form.reset();
-    })
-    .catch(error => {
-      console.error('Fehler bei der Registrierung:', error);
-      alert('Fehler bei der Registrierung, bitte erneut versuchen.');
+      else{
+         isAdmin = false;
+      }
+
+      const newUser = {
+        username: document.getElementById("username").value,
+        passwort: document.getElementById("password").value,
+        admin: isAdmin
+      };
+
+      try {
+        const res = await fetch("/api/Mieter", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(newUser)
+        });
+
+        if (!res.ok) throw new Error("Benutzer konnte nicht erstellt werden");
+
+        alert("Benutzer erfolgreich erstellt"); // ggf. anpassen
+      } catch (err) {
+        alert("Fehler beim Speichern: " + err.message);
+      }
+    });
+
+    // Abbrechen → zurück zur vorherigen Seite
+    document.querySelector(".cancel").addEventListener("click", () => {
+      window.history.back();
     });
   });
