@@ -25,5 +25,7 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
     List<Termin> findByMieterId(Long mieterId);
 
     Optional<Termin>findByHallenIdAndAnfang(Long hallenId, LocalDateTime anfang);
+
+    List<Termin>findByIsConfirmed(String confirmed);
     void deleteByHallenIdAndAnfang(Long hallenId, LocalDateTime anfang);
 }

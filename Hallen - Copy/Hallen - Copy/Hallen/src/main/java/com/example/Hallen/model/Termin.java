@@ -22,16 +22,16 @@ public class Termin {
     @Column(name = "Ende")
     private LocalDateTime ende;
     @Column(name = "isConfirmed")
-    private Boolean isConfirmed;
+    private String isConfirmed; // confirmed, unconfirmed, expired
     public Termin(){
 
     }
 
-    public Boolean getConfirmed() {
+    public String getConfirmed() {
         return isConfirmed;
     }
 
-    public void setConfirmed(Boolean confirmed) {
+    public void setConfirmed(String confirmed) {
         isConfirmed = confirmed;
     }
 

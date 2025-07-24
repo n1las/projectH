@@ -32,34 +32,38 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // 📅 Kalender anzeigen
-  let calendar;
-  if (calendarEl) {
-    calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: "dayGridMonth",
-      locale: "de",
-      headerToolbar: {
-        left: "prev,next today",
-        center: "title",
-        right: "dayGridMonth,timeGridWeek,timeGridDay",
-      },
-      events: function (fetchInfo, successCallback, failureCallback) {
-        fetch("http://localhost:8080/api/termine")
-          .then((res) => res.json())
-          .then((data) => {
-            const filtered = data
-              .filter((e) => e.hallenId == hallenId)
-              .map((e) => ({
-                title: e.anlass,
-                start: e.anfang,
-                end: e.ende,
-              }));
-            successCallback(filtered);
-          })
-          .catch((err) => failureCallback(err));
-      },
-    });
-    calendar.render();
-  }
+let calendar;
+if (calendarEl) {
+  calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: "dayGridMonth",
+    locale: "de",
+    headerToolbar: {
+      left: "prev,next today",
+      center: "title",
+      right: "dayGridMonth,timeGridWeek,timeGridDay",
+    },
+    events: function (fetchInfo, successCallback, failureCallback) {
+      fetch("http://localhost:8080/api/termine")
+        .then((res) => res.json())
+        .then((data) => {
+          const filtered = data
+            .filter((e) => e.hallenId == hallenId)
+            .map((e) => ({
+              title: e.anlass,
+              start: e.anfang,
+              end: e.ende,
+              backgroundColor: e.confirmed ? "green" : "red",
+              borderColor: e.confirmed ? "green" : "red",
+              textColor: "white", // optional for better contrast
+            }));
+          successCallback(filtered);
+        })
+        .catch((err) => failureCallback(err));
+    },
+  });
+  calendar.render();
+}
+
 
   // 📤 Formular absenden
   form.addEventListener("submit", async (e) => {

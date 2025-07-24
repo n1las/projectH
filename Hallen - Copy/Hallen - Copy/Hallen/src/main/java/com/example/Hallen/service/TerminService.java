@@ -66,5 +66,8 @@ public class TerminService {
             return false;
         }
     }
+    public List<Termin> findByConfirmed(String confirmed){
+        return repository.findByIsConfirmed(confirmed);
+    }
 
 }
