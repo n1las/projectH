@@ -23,6 +23,7 @@ public class TerminService {
     }
 
     public Termin create(Termin termin) {
+        termin.setConfirmed("unconfirmed");
         return repository.save(termin);
     }
 

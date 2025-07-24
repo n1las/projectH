@@ -48,14 +48,36 @@ if (calendarEl) {
         .then((data) => {
           const filtered = data
             .filter((e) => e.hallenId == hallenId)
-            .map((e) => ({
-              title: e.anlass,
-              start: e.anfang,
-              end: e.ende,
-              backgroundColor: e.confirmed ? "green" : "red",
-              borderColor: e.confirmed ? "green" : "red",
-              textColor: "white", // optional for better contrast
-            }));
+            .map((e) => {
+              let backgroundColor = "gray";
+              let borderColor = "gray";
+              let textColor = "white";
+
+              switch (e.confirmed) {
+                case "confirmed":
+                  backgroundColor = "green";
+                  borderColor = "green";
+                  break;
+                case "unconfirmed":
+                  backgroundColor = "gold";
+                  borderColor = "gold";
+                  textColor = "black";
+                  break;
+                case "expired":
+                  backgroundColor = "red";
+                  borderColor = "red";
+                  break;
+              }
+
+              return {
+                title: e.anlass,
+                start: e.anfang,
+                end: e.ende,
+                backgroundColor,
+                borderColor,
+                textColor,
+              };
+            });
           successCallback(filtered);
         })
         .catch((err) => failureCallback(err));
@@ -108,7 +130,7 @@ if (calendarEl) {
         anlass: anlass,
         anfang: anfang,
         ende: ende,
-        confirmed: false,
+        confirmed: "unconfirmed",
       };
 
       const post = await fetch("http://localhost:8080/api/termine", {
