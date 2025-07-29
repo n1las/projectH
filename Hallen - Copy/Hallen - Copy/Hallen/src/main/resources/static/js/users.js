@@ -37,6 +37,33 @@ fetch("http://localhost:8080/api/Mieter")
         window.location.href = `/editUser/${userId}`;
       });
     });
+    const deleteButtons = document.querySelectorAll(".delete-btn");
+
+    deleteButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        const userId = button.getAttribute("data-id");
+
+        if (confirm("Are you sure you want to delete this user?")) {
+          fetch(`/api/Mieter/${userId}`, {
+            method: 'DELETE'
+          })
+          .then(response => {
+            if (response.ok) {
+              alert("User deleted successfully!");
+              // Optionally remove the row from the DOM
+              button.closest("tr").remove();
+            } else {
+              alert("Failed to delete user.");
+            }
+          })
+          .catch(error => {
+            console.error("Error deleting user:", error);
+            alert("An error occurred.");
+          });
+        }
+      });
+    });
+
   })
   .catch(error => {
     console.error("Fehler beim Abrufen der Benutzer:", error);
