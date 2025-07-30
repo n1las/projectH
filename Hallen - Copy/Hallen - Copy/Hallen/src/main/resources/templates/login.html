@@ -23,16 +23,21 @@
   <div class="container">
     <div class="card">
       <h2>Login</h2>
-      <div id="login-message"></div>
-      <form id="login-form">
-        <input type="text" id="username" placeholder="Username" required />
-        <input type="password" id="password" placeholder="Passwort" required />
-        <button type="submit">Einloggen</button>
+      <div th:if="${param.error}" style="color:red;">
+        Falscher Benutzername oder Passwort.
+      </div>
+      <div th:if="${param.logout}" style="color:green;">
+          Du hast dich erfolgreich ausgeloggt.
+      </div>
+
+      <form th:action="@{/login}" method="post" id="login-form">
+        <input type="text" name="username" placeholder="Username">
+        <input type="password" name="password" placeholder="Password">
+        <button type="submit">Login</button>
       </form>
       <a href="/signup">Noch kein Konto? Jetzt registrieren</a>
     </div>
   </div>
 </div>
-<script src="/js/login.js"></script>
 </body>
 </html>

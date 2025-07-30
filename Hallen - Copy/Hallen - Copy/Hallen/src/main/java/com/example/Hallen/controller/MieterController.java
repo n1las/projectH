@@ -49,6 +49,7 @@ public class MieterController {
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
+    /*
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Mieter mieter = service.findByUsername(loginRequest.getUsername());
@@ -71,5 +72,7 @@ public class MieterController {
                 "isAdmin", mieter.getAdmin() // or use mieter.getRolle().equals("ADMIN")
         ));
     }
+
+     */
 
 }

@@ -49,6 +49,7 @@ public class MieterService {
 
     public Mieter findByUsername(String username) {
         // Datenbankabfrage, z.B. über Repository
-        return repository.findByUsername(username);
+        return repository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Mieter with username: " + username + "was not found"));
     }
 }
