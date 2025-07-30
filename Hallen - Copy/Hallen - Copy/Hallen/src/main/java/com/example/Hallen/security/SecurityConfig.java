@@ -17,6 +17,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 @Configuration
 public class SecurityConfig {
 
+    private final CustomAccessDeniedHandler cadh;
+
+    public SecurityConfig(CustomAccessDeniedHandler accessDeniedHandler) {
+        this.cadh = accessDeniedHandler;
+    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -26,6 +31,8 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/register", "/css/**", "/js/**", "/img/**").permitAll()
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(cadh))
                 .formLogin(login -> login
                         .loginPage("/login")        // your custom login URL
                         .loginProcessingUrl("/login") // same endpoint for submission
