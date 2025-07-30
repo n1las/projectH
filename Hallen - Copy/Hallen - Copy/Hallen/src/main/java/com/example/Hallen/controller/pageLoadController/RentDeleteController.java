@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class RentDeleteController {
-    @GetMapping("/mieten")
+    @GetMapping("/admin/mieten")
     public String showMietenPage(){
         return "mieten";
     }
-    @GetMapping("delete")
+    @GetMapping("/admin/delete")
     public String showDeletePage(){
         return "delete";
     }

@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .formLogin(login -> login
                         .loginPage("/login")        // your custom login URL
                         .loginProcessingUrl("/login") // same endpoint for submission
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/home", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
@@ -41,7 +41,7 @@ public class SecurityConfig {
     }
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // BCrypt is best practice!
+        return NoOpPasswordEncoder.getInstance(); // There is no encryption atm
     }
 
     @Bean

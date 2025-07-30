@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class UserSiteController {
-    @GetMapping("/users")
+    @GetMapping("/admin/users")
     public String showUserPage(){
         return "users";
     }
-    @GetMapping("editUser/{id}")
+    @GetMapping("/admin/editUser/{id}")
     public String showEditUserPage(@PathVariable String id){
         return "editUser";
     }

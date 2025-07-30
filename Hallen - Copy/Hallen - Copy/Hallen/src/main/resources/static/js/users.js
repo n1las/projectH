@@ -34,7 +34,7 @@ fetch("http://localhost:8080/api/Mieter")
     editButtons.forEach(button => {
       button.addEventListener("click", () => {
         const userId = button.getAttribute("data-id");
-        window.location.href = `/editUser/${userId}`;
+        window.location.href = `/admin/editUser/${userId}`;
       });
     });
     const deleteButtons = document.querySelectorAll(".delete-btn");
