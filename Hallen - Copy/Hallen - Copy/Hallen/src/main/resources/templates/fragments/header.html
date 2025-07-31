@@ -1,0 +1,19 @@
+<div th:fragment ="header">
+<header>
+  <div class="left-container">
+    <button id="sidebar-button">☰</button>
+    <a href="/home">
+      <img src="/img/logo.png" alt="logo" id="logo">
+    </a>
+  </div>
+
+  <div class="search-container">
+    <input type="text" id="search-input" placeholder="Suchen...">
+    <button id="search-button">Suchen</button>
+  </div>
+
+    <form action ="/logout" method="post">
+    <button type="submit" class="header-button">Logout</button>
+    </form>
+</header>
+</div>

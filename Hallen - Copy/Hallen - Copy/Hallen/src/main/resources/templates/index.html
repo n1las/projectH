@@ -9,26 +9,7 @@
     <link href="/css/index.css" rel="stylesheet">
 </head>
 <body>
-<header>
-  <div class="left-container">
-    <button id="sidebar-button">☰</button>
-    <a href="/home">
-      <img src="img/logo.png" alt="logo" id="logo">
-    </a>
-  </div>
-
-  <div class="search-container">
-    <input type="text" id="search-input" placeholder="Suchen...">
-    <button id="search-button">Suchen</button>
-  </div>
-
-    <form action ="/logout" method="post">
-    <button type="submit" class="header-button">Logout</button>
-    </form>
-
-
-</header>
-
+    <div th:replace="fragments/header :: header"></div>
   <div class="container">
     <div th:replace="fragments/sidebar :: sidebar"></div>
     <div class="sportanlagen">
