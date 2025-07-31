@@ -1,0 +1,17 @@
+<nav class="sidebar hidden" id="sidebar" th:fragment="sidebar">
+    <ul>
+      <li><a href="#">Home</a></li>
+
+      <li sec:authorize="hasAnyRole('USER', 'ADMIN')">
+        <a href="/termine">Termine einpflegen</a>
+      </li>
+
+      <li sec:authorize="hasAnyRole('USER', 'ADMIN')">
+        <a href="/blocktermine">Blocktermine erstellen</a>
+      </li>
+
+      <li sec:authorize="hasRole('ADMIN')">
+        <a href="/admin/users">Benutzer verwalten</a>
+      </li>
+    </ul>
+</nav>
