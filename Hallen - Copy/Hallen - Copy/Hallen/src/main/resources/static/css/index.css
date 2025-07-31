@@ -71,6 +71,9 @@ a {
   padding: 5px;
   background: #fff;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%)
 }
 
 #search-input {
@@ -192,6 +195,7 @@ footer{
     padding: 40px;
     max-width: 1200px;
     margin: auto;
+    margin-top: 60px;
     position: relative;
 
 }
