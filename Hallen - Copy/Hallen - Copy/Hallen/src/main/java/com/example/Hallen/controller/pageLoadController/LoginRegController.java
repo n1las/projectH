@@ -10,7 +10,7 @@ public class LoginRegController {
         return "login";
     }
 
-    @GetMapping("/signup")
+    @GetMapping("/admin/signup")
     public String showSignupPage(){
         return "signup";
     }

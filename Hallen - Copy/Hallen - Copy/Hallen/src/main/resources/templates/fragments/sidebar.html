@@ -2,16 +2,19 @@
     <ul>
       <li><a href="#">Home</a></li>
 
-      <li sec:authorize="hasAnyRole('USER', 'ADMIN')">
+      <li sec:authorize="hasRole('ADMIN')">
         <a href="/termine">Termine einpflegen</a>
       </li>
 
-      <li sec:authorize="hasAnyRole('USER', 'ADMIN')">
+      <li sec:authorize="hasRole('ADMIN')">
         <a href="/blocktermine">Blocktermine erstellen</a>
       </li>
 
       <li sec:authorize="hasRole('ADMIN')">
         <a href="/admin/users">Benutzer verwalten</a>
+      </li>
+      <li sec:authorize="hasAnyRole('ADMIN', 'USER')">
+        <a href="/verein">Meine Termine</a>
       </li>
     </ul>
 </nav>

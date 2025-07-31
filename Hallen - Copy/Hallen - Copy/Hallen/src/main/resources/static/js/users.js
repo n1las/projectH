@@ -72,7 +72,7 @@ fetch("http://localhost:8080/api/Mieter")
 const newUserButton = document.getElementById("nu-btn");
 if (newUserButton) {
   newUserButton.addEventListener("click", () => {
-    window.location.href = "/signup";
+    window.location.href = "/admin/signup";
   });
 }
 

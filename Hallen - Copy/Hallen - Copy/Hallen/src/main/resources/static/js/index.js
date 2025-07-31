@@ -21,13 +21,4 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- SIDEBAR TOGGLE BUTTON ---
-  const toggleBtn = document.getElementById('sidebar-button');
-  const sidebar = document.getElementById('sidebar');
-
-  if (toggleBtn && sidebar) {
-    toggleBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('hidden');
-    });
-  }
 });
