@@ -12,20 +12,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/de@6.1.8/index.global.min.js"></script>
+    <div th:replace="fragments/cssInjection :: cssInjection"></div>
     
 </head>
 <body>
-<header>
-    <a href="/home">
-        <img src="/img/logo.png" alt="logo" id="logo">
-    </a>
-    <div class="search-container">
-        <input type="text" id="search-input" placeholder="Suchen...">
-        <button id="search-button">Suchen</button>
-    </div>
-</header>
+<div th:replace="fragments/header :: header"></div>
 <div class="signup">
   <div class="container">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
     <div class="card">
       <h3>Mieten</h3>
       <form id="terminForm">
@@ -75,5 +69,6 @@
 </div>
 <div id="calendar"></div>
 </body>
+<div th:replace="fragments/footer :: footer"></div>
 <script src="/js/mieten.js"></script>
 </html>

@@ -7,37 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
     <link href="/css/editUser.css" rel="stylesheet">
+    <div th:replace="fragments/cssInjection :: cssInjection"></div>
 </head>
 <body>
-<header>
-  <div class="left-container">
-    <button id="sidebar-button">☰</button>
-    <a href="/home">
-      <img src="http://localhost:8080/img/logo.png" alt="logo" id="logo">
-    </a>
-  </div>
-
-  <div class="search-container">
-    <input type="text" id="search-input" placeholder="Suchen...">
-    <button id="search-button">Suchen</button>
-  </div>
-
-  <div class="header-button-container">
-    <button class="header-button" id="login-button">LOGIN</button>
-    <button class="header-button">ADMIN</button>
-  </div>
-</header>
-
+<div th:replace="fragments/header :: header"></div>
   <div class="container">
-    <nav class="sidebar hidden" id="sidebar">
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Termine einpflegen</a></li>
-        <li><a href="#">Blocktermine erstellen</a></li>
-        <li><a href="#">Benutzer verwalten</a></li>
-        <!-- Add more nav items -->
-      </ul>
-    </nav>
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
     <div class="card">
       <h2>Benutzer anlegen</h2>
       <form id="edit-user-form">
@@ -78,6 +53,7 @@
         <p>Telefon: 01234 567890</p>
         <p>Email: info@mustermann.de</p>
     </div>
-<script src="/js/sidebar.js"></script>
+</footer>
+<div th:replace="fragments/footer :: footer"></div>
 <script src="/js/signup.js"></script>
 </html>
