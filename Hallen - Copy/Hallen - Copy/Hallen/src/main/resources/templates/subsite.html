@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hallenbad - Hünfeld</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- <link href="/css/style.css" rel="stylesheet"> -->
+    <link href="/css/subsite.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js"></script>
@@ -16,45 +16,35 @@
 
 </head>
 
-<div th:replace="fragments/header :: header"></div>
 <body class="subsite">
+    <div th:replace="fragments/header :: header"></div>
     <div class="container">
         <div th:replace="fragments/sidebar :: sidebar"></div>
-        <div class="content">
-            <h2 id="name"> </h2>
-
-            <!-- Bild des Hallenbads -->
-            <div class="image-container">
-                <img src="" alt="Hallenbad" class="facility-image" id="dynamicImage">
-            </div>
-
-            <!-- Details zum Hallenbad -->
-            <section class="facility-info">
-                <h3>Informationen</h3>
-                <p><strong>Adresse:</strong> <span id="hallenAdresse">Lade...</span></p>
-                <p><strong>Ort:</strong> <span id="ort">Lade...</span></p>
-                <p><strong></strong> PLZ:<span id="plz">Lade...</span></p>
-                <p><strong>Spielfeldgroesse:</strong> <span id="sfg">Lade...</span></p>
-
-            </section>
-            <div id="calendar"></div>
-
-            <!-- Mieten-Button -->
-            <section class="rent-section">
-                <a href="/admin/mieten">
-                    <button class="btn" id="mieten-button">Jetzt mieten</button>
-                    
-                </a>
-                <a href="/admin/delete">
-                    <button id="deleteButton">Termin löschen</button>
-                </a>
-            </section>
-        </div>
-
-        
+    <div class="left-panel">
+      <img class="place-image" id="dynamicImage" src="" alt="Rental Place">
+      <div class="info-card">
+        <h2 id="name">Cozy Event Hall</h2>
+        <p id="hallenAdresse"><strong>Location:</strong> Hamburg, Germany</p>
+        <p><strong>Size:</strong> 120 m²</p>
+        <p><strong>Capacity:</strong> 80 people</p>
+      </div>
     </div>
-</body>
-<div th:replace="fragments/footer :: footer"></div>
 
-<!-- <script src="/js/subsite.js"></script> -->
+    <!-- Right Side -->
+    <div class="right-panel">
+      <div id="calendar"></div>
+      <div class="button-row">
+        <a href="/admin/mieten">
+            <button sec:authorize ="hasRole('ADMIN')" class="btn btn-rent">Termin einrichten</button>
+        </a>
+        <a href="/admin/mieten">
+            <button sec:authorize ="hasRole('ADMIN')" class="btn btn-delete">Termin löschen</button>
+        </a>
+        <button sec:authorize="hasRole('USER')" class="btn btn-request">Termin anfragen</button>
+      </div>
+    </div>
+    </div>
+    <div th:replace="fragments/footer :: footer"></div>
+</body>
+<script src="/js/subsite.js"></script>
 </html>
