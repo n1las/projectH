@@ -13,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/de@6.1.8/index.global.min.js"></script>
+    <div th:replace="fragments/cssInjection :: cssInjection"></div>
 
 </head>
 
@@ -23,10 +24,11 @@
     <div class="left-panel">
       <img class="place-image" id="dynamicImage" src="" alt="Rental Place">
       <div class="info-card">
-        <h2 id="name">Cozy Event Hall</h2>
-        <p id="hallenAdresse"><strong>Location:</strong> Hamburg, Germany</p>
-        <p><strong>Size:</strong> 120 m²</p>
-        <p><strong>Capacity:</strong> 80 people</p>
+        <h2 id="name">Lade...</h2>
+        <p><strong>Adresse: </strong><span id="hallenAdresse">Lade..</span></p>
+        <p><strong>Ort: </strong><spand id="ort">Lade..</spand></p>
+        <p><strong>PLZ: </strong><spand id="plz">Lade..</spand></p>
+        <p><strong>Größe: </strong><spand id="sfg">Lade..</spand></p>
       </div>
     </div>
 

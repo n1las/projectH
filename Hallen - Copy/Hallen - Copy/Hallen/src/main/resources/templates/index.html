@@ -7,11 +7,12 @@
     <title>Hallen in Hünfeld</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="/css/index.css" rel="stylesheet">
+    <div th:replace="fragments/cssInjection :: cssInjection"></div>
 </head>
 <body>
     <div th:replace="fragments/header :: header"></div>
   <div class="container">
-    <div th:replace="fragments/sidebar :: sidebar"></div>
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
     <div class="sportanlagen">
     <figure>
         <figcaption>Hallenbad</figcaption>
@@ -87,6 +88,17 @@
     </figure>
 </div>
   </div>
+  <footer>
+    <div class="footer">
+        <p>Impressung:</p>
+        <p>Mustermann GmbH</p>
+        <p>Beispielstraße 123</p>
+        <p>12345 Musterstadt</p>
+        <p>Deutschland</p>
+        <p>Telefon: 01234 567890</p>
+        <p>Email: info@mustermann.de</p>
+    </div>
+</footer>
 </body>
 <div th:replace="fragments/footer :: footer"></div>
 <script src="/js/index.js"></script>
