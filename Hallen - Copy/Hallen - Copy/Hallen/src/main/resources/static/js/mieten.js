@@ -7,6 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const statusText = document.getElementById("mieten-status");
   const calendarEl = document.getElementById("calendar");
   const hallenId = localStorage.getItem("selectedSubsiteId");
+  const rentBtn = document.getElementById("rent-btn");
+
+  form.addEventListener("submit", (e) => e.preventDefault());
+
 
   if (!hallenId) {
     console.error("Keine Hallen-ID gefunden.");
@@ -88,8 +92,7 @@ if (calendarEl) {
 
 
   // 📤 Formular absenden
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  rentBtn.addEventListener("click", async () => {
     statusText.textContent = "";
 
     const typ = terminTyp.value;
