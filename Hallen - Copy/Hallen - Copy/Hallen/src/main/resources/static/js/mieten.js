@@ -20,20 +20,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 🧩 Umschalten der Input-Gruppen
   terminTyp.addEventListener("change", () => {
-    if (terminTyp.value === "einzel") {
-      einzelInputs.style.display = "block";
-      commonInput.style.display = "block";
-      serieInputs.style.display = "none";
-    } else if(terminTyp.value === "block"){
-      einzelInputs.style.display = "block";
-      serieInputs.style.display = "none";
-      commonInput.style.display = "none";
-    } else {
-      einzelInputs.style.display = "none";
-      commonInput.style.display = "block";
-      serieInputs.style.display = "block";
-    }
-  });
+  if (terminTyp.value === "einzel") {
+    einzelInputs.style.display = "block";
+    commonInput.style.display = "block";
+    serieInputs.style.display = "none";
+    deleteInputs.style.display = "none";
+  } else if (terminTyp.value === "block") {
+    einzelInputs.style.display = "block";
+    commonInput.style.display = "none";
+    serieInputs.style.display = "none";
+    deleteInputs.style.display = "none";
+  } else if (terminTyp.value === "serie") {
+    einzelInputs.style.display = "none";
+    commonInput.style.display = "block";
+    serieInputs.style.display = "block";
+    deleteInputs.style.display = "none";
+  } else if (terminTyp.value === "delete") {
+    einzelInputs.style.display = "none";
+    commonInput.style.display = "none";
+    serieInputs.style.display = "none";
+    deleteInputs.style.display = "block";
+  }
+});
+
 
   // 📅 Kalender anzeigen
 let calendar;
@@ -230,6 +239,29 @@ if (calendarEl) {
     statusText.textContent = "❌ Fehler beim Speichern des Blocks.";
   }
 }
+else if (typ === "delete") {
+  const anfang = form.querySelector("input[name='anfangDelete']").value;
+
+  if (!anfang) {
+    statusText.textContent = "❌ Bitte Startzeitpunkt eingeben.";
+    return;
+  }
+
+  const deleteUrl = `http://localhost:8080/api/termine/delete?hallenId=${hallenId}&anfang=${encodeURIComponent(anfang)}`;
+
+  const response = await fetch(deleteUrl, {
+    method: "DELETE",
+  });
+
+  if (response.ok) {
+    statusText.textContent = "✅ Termin erfolgreich gelöscht!";
+    form.reset();
+    calendar?.refetchEvents();
+  } else {
+    statusText.textContent = "❌ Fehler beim Löschen.";
+  }
+}
+
 
   });
 });

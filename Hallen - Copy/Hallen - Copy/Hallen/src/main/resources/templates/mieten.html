@@ -30,6 +30,7 @@
     <option value="einzel">Einzeltermin</option>
     <option value="serie">Serientermin</option>
     <option value="block">Zeitraum blocken</option>
+    <option value="delete">Termin löschen</option>
   </select>
 
   <!-- EINZELTERMIN-FELDER -->
@@ -61,6 +62,12 @@
     </select><br>
     <label>Anlass: <input type="text" name="anlassSerie"></label><br>
   </div>
+
+  <!--Lösch Felder-->
+  <div id="deleteInputs">
+    <label for="anfangDelete">Startzeit des Termins</label>
+    <input type="datetime-local" id="anfangDelete" name="anfangDelete"/>
+  </div>
   
 </form>
     <p id="mieten-status"></p>
@@ -71,11 +78,7 @@
     <div class="right-panel">
       <div id="calendar"></div>
       <div class="button-row">
-        <button sec:authorize ="hasRole('ADMIN')" class="btn btn-rent" id="rent-btn">Termin einrichten</button>
-        <a href="/admin/mieten">
-            <button sec:authorize ="hasRole('ADMIN')" class="btn btn-delete">Termin löschen</button>
-        </a>
-        <button sec:authorize="hasRole('USER')" class="btn btn-request">Termin anfragen</button>
+        <button sec:authorize ="hasRole('ADMIN')" class="btn btn-rent" id="rent-btn">Bestätigen</button>
       </div>
     </div>
     </div>
