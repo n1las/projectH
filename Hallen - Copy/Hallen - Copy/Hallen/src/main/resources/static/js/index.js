@@ -3,6 +3,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('token');
   const loginBtn = document.getElementById('login-button');
 
+  // Note: check if its still needed 
   if (loginBtn) {
     if (token) {
       // Change button to "LOGOUT"
