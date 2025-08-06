@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,6 +57,17 @@ public class TerminService {
     }
     public List<Termin> findByMieterId(Long mieterId){
         return repository.findByMieterId(mieterId);
+    }
+
+    public List<Termin> findByMieterIdAndConfirmed(Long mieterID, String confirmed){
+        List<Termin> allTermine = repository.findByMieterId(mieterID);
+        List<Termin> confirmedTermine = new ArrayList<>();
+        for(Termin t: allTermine){
+            if(t.getConfirmed().equals(confirmed)){
+                confirmedTermine.add(t);
+            }
+        }
+        return confirmedTermine;
     }
 
     public boolean deleteByHallenIdAndAnfang(Long hallenId, LocalDateTime anfang) {

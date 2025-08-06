@@ -42,6 +42,11 @@ public class TerminController {
         return service.findByMieterId(mieterId);
     }
 
+    @GetMapping("/getByMieterIdAndConfirmed/{mieterId}/{confirmed}")
+    public List<Termin> getUnconfirmedTerminByMieterId(@PathVariable Long mieterId, @PathVariable String confirmed){
+        return service.findByMieterIdAndConfirmed(mieterId,confirmed);
+    }
+
     @PostMapping
     public Termin create(@RequestBody Termin termin) {
         return service.create(termin);
