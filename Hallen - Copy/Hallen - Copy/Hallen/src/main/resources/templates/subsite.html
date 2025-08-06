@@ -37,7 +37,7 @@
       <div id="calendar"></div>
       <div class="button-row">
         <a href="/admin/mieten">
-            <button sec:authorize ="hasRole('ADMIN')" class="btn btn-rent">Termin einrichten</button>
+            <button sec:authorize ="hasRole('ADMIN')" class="btn btn-rent" id="terminPlan-btn">Termin einrichten</button>
         </a>
         <a href="/admin/mieten">
             <button sec:authorize ="hasRole('ADMIN')" class="btn btn-delete">Termin löschen</button>
