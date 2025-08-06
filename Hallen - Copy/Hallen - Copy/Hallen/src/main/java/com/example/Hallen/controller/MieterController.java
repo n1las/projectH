@@ -3,7 +3,10 @@ package com.example.Hallen.controller;
 import com.example.Hallen.dto.LoginRequest;
 import com.example.Hallen.model.Mieter;
 import com.example.Hallen.security.JwtUtil;
+import com.example.Hallen.security.SecurityConfig;
+import com.example.Hallen.security.SecurityUtils;
 import com.example.Hallen.service.MieterService;
+import org.apache.catalina.security.SecurityUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,30 +52,12 @@ public class MieterController {
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
-    /*
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        Mieter mieter = service.findByUsername(loginRequest.getUsername());
 
-        if (mieter == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Benutzername nicht gefunden");
-        }
-
-        if (!mieter.getPasswort().equals(loginRequest.getPasswort())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Falsches Passwort");
-        }
-
-        // 🔐 Create JWT
-        String token = JwtUtil.generateToken(mieter.getUsername());
-
-        // 🎯 Return token + role info
-        return ResponseEntity.ok(Map.of(
-                "token", token,
-                "username", mieter.getUsername(),
-                "isAdmin", mieter.getAdmin() // or use mieter.getRolle().equals("ADMIN")
-        ));
+    @GetMapping("/me")
+    public Map<String, Object> getCurrentUserInfo(){
+        Long id = SecurityUtils.getCurrentMieterId();
+        return Map.of("id", id);
     }
 
-     */
 
 }

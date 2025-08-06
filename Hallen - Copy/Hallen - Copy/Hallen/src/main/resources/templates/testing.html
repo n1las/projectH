@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hallen in Hünfeld</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="/css/users.css" rel="stylesheet">
+    <div th:replace="fragments/cssInjection :: cssInjection"></div>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+  <div class="container">
+  <div th:replace="fragments/sidebar :: sidebar"></div>
+    <main class="main-content">
+  <h2>Benutzerverwaltung</h2>
+  <div class="user-table-wrapper">
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th>Halle</th>
+          <th>Anlass</th>
+          <th>Anfang</th>
+          <th>Ende</th>
+          <th>Absagen</th>
+          <th>Bestätigen</th>
+        </tr>
+      </thead>
+      <tbody id="user-table-body">
+
+      </tbody>
+    </table>
+    <button class="user-btn" id="nu-btn">Benutzer anlegen</button>
+  </div>
+</main>
+  </div>
+</body>
+<div th:replace="fragments/footer :: footer"></div>
+<script src="/js/users.js"></script>
+</html>
