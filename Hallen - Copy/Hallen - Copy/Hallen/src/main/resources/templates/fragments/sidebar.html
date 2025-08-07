@@ -1,6 +1,6 @@
 <nav class="sidebar hidden" id="sidebar" th:fragment="sidebar">
     <ul id="sidebar-list">
-      <li><a href="#">Home</a></li>
+      <li><a href="/home">Home</a></li>
 
       <li sec:authorize="hasRole('ADMIN')">
         <a href="/termine">Termine einpflegen</a>
