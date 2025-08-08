@@ -14,6 +14,8 @@ import java.util.Optional;
 public class TerminService {
     @Autowired
     private TerminRepository repository;
+    @Autowired
+    private  EmailService emailService;
 
     public List<Termin> getAll() {
         return repository.findAll();
@@ -86,6 +88,13 @@ public class TerminService {
     public Optional<Termin> updateTerminStatus(Long id, String terminStatus){
         Optional<Termin> terminOptional = repository.findById(id);
         if(terminOptional.isPresent()){
+            if(terminStatus.equals("cancelled")){
+                String receiver = "arz.niklas@gmail.com";
+                String subject = "Termin wurde gecancelt";
+                String text = "Der Termin mit der Id" +id + " wurde abgesagt";
+
+                emailService.sendEmail(receiver, subject, text);
+            }
             Termin termin = terminOptional.get();
             termin.setConfirmed(terminStatus);
             repository.save(termin);
