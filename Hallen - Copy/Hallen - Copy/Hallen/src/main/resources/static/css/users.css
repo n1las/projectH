@@ -127,3 +127,9 @@ img {
 .user-btn:hover {
   background-color: #0056b3;
 }
+.confirm-btn{
+  background-color: rgb(4, 193, 4);
+}
+.delete-btn{
+  background-color: red;
+}

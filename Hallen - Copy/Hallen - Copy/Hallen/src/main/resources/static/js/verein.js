@@ -52,10 +52,10 @@ function renderTerminTable(termine) {
       <td>${anfangFormatted}</td>
       <td>${endeFormatted}</td>
       <td>
-        <button class="table-btn confirm-btn" data-id="${termin.id}">Bestätigen</button>
+        <button class="table-btn delete-btn" data-id="${termin.id}">Absagen</button>
       </td>
       <td>
-        <button class="table-btn delete-btn" data-id="${termin.id}">Absagen</button>
+        <button class="table-btn confirm-btn" data-id="${termin.id}">Bestätigen</button>
       </td>
     `;
     terminTableBody.appendChild(row);
