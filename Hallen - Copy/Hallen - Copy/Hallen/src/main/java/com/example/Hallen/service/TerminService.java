@@ -1,6 +1,8 @@
 package com.example.Hallen.service;
 
+import com.example.Hallen.model.Mieter;
 import com.example.Hallen.model.Termin;
+import com.example.Hallen.repository.MieterRepository;
 import com.example.Hallen.repository.TerminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class TerminService {
     private TerminRepository repository;
     @Autowired
     private  EmailService emailService;
+
+    @Autowired
+    private MieterRepository mieterRepository;
 
     public List<Termin> getAll() {
         return repository.findAll();
@@ -88,14 +93,26 @@ public class TerminService {
     public Optional<Termin> updateTerminStatus(Long id, String terminStatus){
         Optional<Termin> terminOptional = repository.findById(id);
         if(terminOptional.isPresent()){
-            if(terminStatus.equals("cancelled")){
-                String receiver = "arz.niklas@gmail.com";
-                String subject = "Termin wurde gecancelt";
-                String text = "Der Termin mit der Id" +id + " wurde abgesagt";
-
-                emailService.sendEmail(receiver, subject, text);
-            }
             Termin termin = terminOptional.get();
+            if(terminStatus.equals("cancelled")){
+                Optional<Mieter> mieterOptional = mieterRepository.findById(termin.getMieterId());
+                if(mieterOptional.isPresent()){
+                    Mieter mieter = mieterOptional.get();
+                    String receiver = "arz.niklas@gmail.com";
+                    String subject = "Termin wurde gecancelt";
+                    String text = "Hallo,\n" +
+                            "der Termin mit den Folgend Infos wurde von " + mieter.getUsername() + "abgesagt\n" +
+                            "TerminId: " + termin.getId() +
+                            "\n Anlass: " + termin.getAnlass() +
+                            "\n Anfang: " + termin.getAnfang() +
+                            "\n Ende: " + termin.getEnde() +
+                            "\n HallenID: " + termin.getHallenId();
+
+                    emailService.sendEmail(receiver, subject, text);
+                }
+
+            }
+
             termin.setConfirmed(terminStatus);
             repository.save(termin);
         }
