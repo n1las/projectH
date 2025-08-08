@@ -24,5 +24,11 @@ public class HallenService {
 
 
     }
+    public String getHallenNameById(Long id){
+        return hallenRepository.findById(id)
+                .map(Halle::getName)
+                .orElse("Halle nicht gefunden");
+    }
+
 
 }
