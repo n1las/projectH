@@ -76,17 +76,27 @@ public class TerminController {
             return ResponseEntity.badRequest().body(false); // 400 if parsing fails or error occurs
         }
     }
-
+    // Note: find a way to maybe put cancelTermin and confirmTermin into one Method called updateTerminStatus
     @PatchMapping("/{id}/confirm")
     public ResponseEntity<?> confirmTermin(@PathVariable Long id) {
-        Optional<Termin> optionalTermin = terminRepository.findById(id);
-        if (optionalTermin.isPresent()) {
-            Termin termin = optionalTermin.get();
-            termin.setConfirmed("confirmed");
-            terminRepository.save(termin);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
+        Optional<Termin> terminOptional = service.updateTerminStatus(id, "confirmed");
+        if(terminOptional.isPresent()){
+            return ResponseEntity.ok(terminOptional.get());
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("keinen Termin mit der Id" + id +"gefunden.");
+        }
+    }
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<?> cancelTermin(@PathVariable Long id) {
+        Optional<Termin> terminOptional = service.updateTerminStatus(id, "cancelled");
+        if(terminOptional.isPresent()){
+            return ResponseEntity.ok(terminOptional.get());
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("keinen Termin mit der Id" + id +"gefunden.");
         }
     }
 

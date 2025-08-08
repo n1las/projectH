@@ -22,7 +22,7 @@ public class Termin {
     @Column(name = "Ende")
     private LocalDateTime ende;
     @Column(name = "isConfirmed")
-    private String isConfirmed; // confirmed, unconfirmed, expired
+    private String isConfirmed; // confirmed, unconfirmed, expired, cancelled
     public Termin(){
 
     }

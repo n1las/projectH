@@ -83,4 +83,14 @@ public class TerminService {
         return repository.findByIsConfirmed(confirmed);
     }
 
+    public Optional<Termin> updateTerminStatus(Long id, String terminStatus){
+        Optional<Termin> terminOptional = repository.findById(id);
+        if(terminOptional.isPresent()){
+            Termin termin = terminOptional.get();
+            termin.setConfirmed(terminStatus);
+            repository.save(termin);
+        }
+        return terminOptional;
+    }
+
 }

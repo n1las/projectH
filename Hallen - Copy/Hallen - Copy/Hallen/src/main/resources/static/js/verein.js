@@ -128,13 +128,13 @@ function renderTerminTable(termine) {
       const sicher = confirm("Bist du sicher, dass du diesen Termin absagen möchtest?");
       if (!sicher) return;
 
-      fetch(`/api/termine/${terminId}`, { method: "DELETE" })
+      fetch(`/api/termine/${terminId}/cancel`, { method: "PATCH" })
         .then(response => {
-          if (!response.ok) throw new Error("Fehler beim Löschen");
+          if (!response.ok) throw new Error("Fehler beim Bestätigen");
           loadTermine();
         })
         .catch(error => {
-          console.error("Fehler beim Löschen:", error);
+          console.error("Fehler beim Bestätigen:", error);
         });
     });
   });

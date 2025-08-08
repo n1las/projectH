@@ -16,6 +16,7 @@ public class TerminStatusService {
     @Autowired
     private TerminRepository repository;
 
+    // sets every termin to expired that has been expired for more than 1 hour it does check this every hour at Minute 0
     @Scheduled(cron = "0 0 * * * *")
     public void updateExpiredTermine(){
         LocalDateTime now = LocalDateTime.now().minusHours(1);
@@ -26,6 +27,14 @@ public class TerminStatusService {
                 t.setConfirmed("expired");
                 repository.save(t);
             }
+        }
+    }
+    // Deletes every cancelled Termin every Monday at 00:00
+    @Scheduled(cron = "0 0 0 * * MON")
+    public void deleteCancelledTermine(){
+        List<Termin> cancelledTermine = repository.findByIsConfirmed("cancelled");
+        for(Termin t: cancelledTermine){
+            repository.deleteById(t.getId());
         }
     }
 }

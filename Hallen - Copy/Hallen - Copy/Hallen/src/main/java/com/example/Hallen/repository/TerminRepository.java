@@ -28,4 +28,5 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
 
     List<Termin>findByIsConfirmed(String confirmed);
     void deleteByHallenIdAndAnfang(Long hallenId, LocalDateTime anfang);
+
 }
