@@ -101,7 +101,7 @@ public class TerminService {
                     String receiver = "arz.niklas@gmail.com";
                     String subject = "Termin wurde gecancelt";
                     String text = "Hallo,\n" +
-                            "der Termin mit den Folgend Infos wurde von " + mieter.getUsername() + "abgesagt\n" +
+                            "der Termin mit den Folgend Infos wurde von " + mieter.getUsername() + " abgesagt\n" +
                             "TerminId: " + termin.getId() +
                             "\n Anlass: " + termin.getAnlass() +
                             "\n Anfang: " + termin.getAnfang() +
