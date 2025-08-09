@@ -1,5 +1,6 @@
 package com.example.Hallen.service;
 
+import com.example.Hallen.dto.BlockTimeRequest;
 import com.example.Hallen.model.Mieter;
 import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.MieterRepository;
@@ -117,6 +118,21 @@ public class TerminService {
             repository.save(termin);
         }
         return terminOptional;
+    }
+    public BlockTimeRequest createBlockTermin(BlockTimeRequest blockTimeRequest){
+        if(isTerminAvailable(blockTimeRequest.getHallenId(),blockTimeRequest.getAnfang(),blockTimeRequest.getEnde())){
+            Termin termin = new Termin();
+            termin.setHallenId(blockTimeRequest.getHallenId());
+            termin.setAnlass(blockTimeRequest.getAnlass());
+            termin.setAnfang(blockTimeRequest.getAnfang());
+            termin.setEnde(blockTimeRequest.getEnde());
+            termin.setConfirmed("block");
+            repository.save(termin);
+        return blockTimeRequest;
+    }else{
+        throw new IllegalArgumentException("Termin nicht verfügbar");
+        }
+
     }
 
 }

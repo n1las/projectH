@@ -21,8 +21,12 @@ public class Termin {
     private LocalDateTime anfang;
     @Column(name = "Ende")
     private LocalDateTime ende;
+    // isConfirmed descriebes the Staus of the appointment
+    // expired = not confirmed until 1h after appointment
+    // cancelled = user cancelled the apointment before it happend, email gets send to admin and appointment get deleted after 7 days
+    // block = used to block other appointments when the Halle is closed
     @Column(name = "isConfirmed")
-    private String isConfirmed; // confirmed, unconfirmed, expired, cancelled
+    private String isConfirmed; // confirmed, unconfirmed, expired, cancelled, block
     public Termin(){
 
     }

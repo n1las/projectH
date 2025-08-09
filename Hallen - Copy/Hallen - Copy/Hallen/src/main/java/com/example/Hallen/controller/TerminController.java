@@ -138,22 +138,15 @@ public class TerminController {
         return ResponseEntity.ok(erzeugteTermine);
     }
 
-    @PostMapping("blockTermin")
-    public ResponseEntity<String> createBlock(@RequestBody BlockTimeRequest btr) {
-        if (service.isTerminAvailable(btr.getHallenId(), btr.getAnfang(), btr.getEnde())) {
-            Termin termin = new Termin();
-            termin.setAnfang(btr.getAnfang());
-            termin.setEnde(btr.getEnde());
-            termin.setAnlass(btr.getAnlass());
-            termin.setConfirmed("confirmed");
-            termin.setHallenId(btr.getHallenId());
-            service.create(termin);
-
-            return ResponseEntity.ok("Block Termin erstellt");
-        } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Es befindet sich ein oder mehrere Termin im Zeitraum des Blocks bitte löschen sie diese");
+    @PostMapping("/blockTermin")
+    public ResponseEntity<BlockTimeRequest> createBlock(@RequestBody BlockTimeRequest btr) {
+        try{
+            BlockTimeRequest blockTimeRequest = service.createBlockTermin(btr);
+            return ResponseEntity.status(HttpStatus.CREATED).body(blockTimeRequest);
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+
     }
 
     @GetMapping("/ByConfirmed/{confirmed}")
