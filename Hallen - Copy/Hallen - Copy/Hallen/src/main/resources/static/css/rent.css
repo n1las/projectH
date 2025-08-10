@@ -170,3 +170,6 @@
   border-radius: 8px;
   font-size: 1rem;
 }
+#deleteInputs {
+  display: none;
+}
