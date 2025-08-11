@@ -30,15 +30,15 @@ footer{
 
 .sportanlagen {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     padding: 40px;
-    max-width: 1200px;
+    max-width: 1600px;
     margin: auto;
     margin-top: 60px;
     position: relative;
-
 }
+
 figure {
     background: white;
     border-radius: 10px;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 11, 2025 at 02:40 PM
+-- Generation Time: Aug 11, 2025 at 10:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,18 +44,18 @@ CREATE TABLE `entities` (
 --
 
 INSERT INTO `entities` (`id`, `name`, `image_url`, `strasse`, `HallenTyp`, `Spielfeldgroesse`, `strasse_nr`, `plz`, `ort`) VALUES
-(1, 'Sporthalle-Bundespolizei', 'http://localhost:8080/img/Hallenbad.jpg', 'Molzbacher Strasse', 1, 1050, 35, 36088, 'Huenfeld'),
-(2, 'Sporthalle-Justizvollzugsanstalt', 'http://localhost:8080/img/Rhoenkampfbahn.jpg', 'Molzbacher Strasse', 3, 800, 37, 36088, 'Huenfeld'),
-(3, 'Sportcenter Grossenbach', 'http://localhost:8080/img/lauftreff.jpg', 'Linkbergerstrasse', 1, 288, 29, 36088, 'Huenfeld'),
-(4, 'Grundschule Mackenzell', 'http://localhost:8080/img/bundespolizei.png', 'Dallbergerstr', 1, 405, 12, 36088, 'Huenfeld'),
-(5, 'Grundschule Michelsrombach', 'http://localhost:8080/img/JAF-Schule.jpg', 'Richard-Schick-Strasse', 1, 187, 12, 36088, 'Huenfeld'),
-(6, 'Johann-Adam-Foersterschule', 'http://localhost:8080/img/Kreissporthalle-1.jpg', 'Ostlandring', 1, 288, 10, 36088, 'Huenfeld'),
-(7, 'Paul-Gerhardt-Schule', 'http://localhost:8080/img/Kreissporthalle-3.jpg', 'Mackenzeller Strasse', 1, 91, 4, 36088, 'Huenfeld'),
-(8, 'Kreissporthalle 2', 'http://localhost:8080/img/Kreissporthalle-4.jpg', 'Jahnstrasse', 2, 568, 18, 36088, 'Huenfeld'),
-(9, 'Kreissporthalle 1', 'http://localhost:8080/img/PGS-Schule.jpg', 'Jahnstrasse', 3, 800, 18, 36088, 'Huenfeld'),
-(31, 'Kreissporthalle 3', NULL, 'Karl-Medler-Strasse', 2, 528, 10, NULL, NULL),
-(32, 'Kreissporthalle 3 Buehne', NULL, 'Karl-Medler-Strasse', 1, 170, 10, NULL, NULL),
-(33, 'Kreissporthalle 4', NULL, 'Karl-Medler-Strasse', 2, 800, 8, NULL, NULL);
+(1, 'Sporthalle-Bundespolizei', 'http://localhost:8080/img/Bundespolizei.png', 'Molzbacher Strasse', 1, 1050, 35, 36088, 'Huenfeld'),
+(2, 'Sporthalle-Justizvollzugsanstalt', 'http://localhost:8080/img/jvz.png', 'Molzbacher Strasse', 3, 800, 37, 36088, 'Huenfeld'),
+(3, 'Sportcenter Grossenbach', 'http://localhost:8080/img/grossenbach', 'Linkbergerstrasse', 1, 288, 29, 36088, 'Huenfeld'),
+(4, 'Grundschule Mackenzell', 'http://localhost:8080/img/mackenzell.jpg', 'Dallbergerstr', 1, 405, 12, 36088, 'Huenfeld'),
+(5, 'Grundschule Michelsrombach', 'http://localhost:8080/img/michelsrombach.jpg', 'Richard-Schick-Strasse', 1, 187, 12, 36088, 'Huenfeld'),
+(6, 'Johann-Adam-Foersterschule', 'http://localhost:8080/img/JAF-Schule.jpg', 'Ostlandring', 1, 288, 10, 36088, 'Huenfeld'),
+(7, 'Paul-Gerhardt-Schule', 'http://localhost:8080/img/PGS-Schule.jpg', 'Mackenzeller Strasse', 1, 91, 4, 36088, 'Huenfeld'),
+(8, 'Kreissporthalle 2', 'http://localhost:8080/img/Kreissporthalle-1.jpg', 'Jahnstrasse', 2, 568, 18, 36088, 'Huenfeld'),
+(9, 'Kreissporthalle 1', 'http://localhost:8080/img/Kreissporthalle-1.jpg', 'Jahnstrasse', 3, 800, 18, 36088, 'Huenfeld'),
+(10, 'Kreissporthalle 3', 'http://localhost:8080/img/Kreissporthalle-3.jpg', 'Karl-Medler-Strasse', 2, 528, 10, NULL, NULL),
+(11, 'Kreissporthalle 3 Buehne', 'http://localhost:8080/img/Kreissporthalle-3.jpg', 'Karl-Medler-Strasse', 1, 170, 10, NULL, NULL),
+(12, 'Kreissporthalle 4', 'http://localhost:8080/img/Kreissporthalle-4.jpg', 'Karl-Medler-Strasse', 2, 800, 8, NULL, NULL);
 
 -- --------------------------------------------------------
 
