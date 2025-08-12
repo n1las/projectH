@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 12, 2025 at 11:13 AM
+-- Generation Time: Aug 12, 2025 at 05:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -142,6 +142,15 @@ CREATE TABLE `termin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `termin`
+--
+
+INSERT INTO `termin` (`ID`, `Mieter_ID`, `Anlass`, `Anfang`, `Ende`, `isConfirmed`, `feld_id`) VALUES
+(1, 32, 'Test Anlass 981', '2025-08-12 13:02:06', '2025-08-12 14:02:06', 'expired', 12),
+(2, 32, 'Test Anlass 981', '2025-08-12 13:02:06', '2025-08-12 14:02:06', 'expired', 13),
+(3, 32, 'Test Anlass 981', '2025-08-12 13:02:06', '2025-08-12 14:02:06', 'expired', 14);
+
+--
 -- Indexes for dumped tables
 --
 
@@ -198,7 +207,7 @@ ALTER TABLE `mieter`
 -- AUTO_INCREMENT for table `termin`
 --
 ALTER TABLE `termin`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
