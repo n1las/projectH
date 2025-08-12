@@ -2,7 +2,6 @@ package com.example.Hallen.controller;
 
 import com.example.Hallen.dto.BlockTimeRequest;
 import com.example.Hallen.dto.SerienTerminRequest;
-import com.example.Hallen.model.Mieter;
 import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.TerminRepository;
 import com.example.Hallen.service.TerminService;
@@ -128,7 +127,7 @@ public class TerminController {
                 termin.setEnde(ende);
                 termin.setMieterId(str.getMieterId());
                 termin.setAnlass(str.getAnlass());
-                termin.setHallenId(str.getHallenId());
+                termin.setFeldId(str.getHallenId());
                 termin.setConfirmed("unconfirmed");
                 service.create(termin);
                 erzeugteTermine.add(termin);

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TerminRepository extends JpaRepository<Termin, Long> {
+
+    /*
     @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM Termin t " +
             "WHERE t.hallenId = :hallenId AND " +
             "(t.anfang < :ende AND t.ende > :anfang)")
@@ -18,15 +20,17 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
             @Param("anfang") LocalDateTime anfang,
             @Param("ende") LocalDateTime ende
     );
-    List<Termin> findByHallenId(Long hallenId);
+
+     */
+    List<Termin> findByFeldId(Long feldId);
 
     Optional<Termin> findByAnfang(LocalDateTime anfang);
 
     List<Termin> findByMieterId(Long mieterId);
 
-    Optional<Termin>findByHallenIdAndAnfang(Long hallenId, LocalDateTime anfang);
+    Optional<Termin> findByFeldIdAndAnfang(Long feldId, LocalDateTime anfang);
 
     List<Termin>findByIsConfirmed(String confirmed);
-    void deleteByHallenIdAndAnfang(Long hallenId, LocalDateTime anfang);
+    void deleteByFeldIdAndAnfang(Long feldId, LocalDateTime anfang);
 
 }

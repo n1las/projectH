@@ -54,7 +54,7 @@ public class TerminService {
         return false;
     }
     public boolean isTerminAvailable(Long hallenId, LocalDateTime anfang, LocalDateTime ende) {
-        List<Termin> existing = repository.findByHallenId(hallenId);
+        List<Termin> existing = repository.findByFeldId(hallenId);
         for (Termin t : existing) {
             if (t.getAnfang().isBefore(ende) && t.getEnde().isAfter(anfang)) {
                 // Overlap exists
@@ -79,7 +79,7 @@ public class TerminService {
     }
 
     public boolean deleteByHallenIdAndAnfang(Long hallenId, LocalDateTime anfang) {
-        Optional<Termin> terminOpt = repository.findByHallenIdAndAnfang(hallenId, anfang)   ;
+        Optional<Termin> terminOpt = repository.findByFeldIdAndAnfang(hallenId, anfang)   ;
         if (terminOpt.isPresent()) {
             repository.delete(terminOpt.get());
             return true;
@@ -107,7 +107,7 @@ public class TerminService {
                             "\n Anlass: " + termin.getAnlass() +
                             "\n Anfang: " + termin.getAnfang() +
                             "\n Ende: " + termin.getEnde() +
-                            "\n HallenID: " + termin.getHallenId();
+                            "\n HallenID: " + termin.getFeldId();
 
                     emailService.sendEmail(receiver, subject, text);
                 }
@@ -122,7 +122,7 @@ public class TerminService {
     public BlockTimeRequest createBlockTermin(BlockTimeRequest blockTimeRequest){
         if(isTerminAvailable(blockTimeRequest.getHallenId(),blockTimeRequest.getAnfang(),blockTimeRequest.getEnde())){
             Termin termin = new Termin();
-            termin.setHallenId(blockTimeRequest.getHallenId());
+            termin.setFeldId(blockTimeRequest.getHallenId());
             termin.setAnlass(blockTimeRequest.getAnlass());
             termin.setAnfang(blockTimeRequest.getAnfang());
             termin.setEnde(blockTimeRequest.getEnde());

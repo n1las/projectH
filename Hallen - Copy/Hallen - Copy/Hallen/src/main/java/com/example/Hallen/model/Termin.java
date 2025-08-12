@@ -11,8 +11,8 @@ public class Termin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
-    @Column(name = "Halle_ID")
-    private Long hallenId;
+    @Column(name = "feld_id")
+    private Long feldId;
     @Column(name = "Mieter_ID")
     private Long mieterId;
     @Column(name = "Anlass")
@@ -47,12 +47,12 @@ public class Termin {
         this.id = id;
     }
 
-    public Long getHallenId() {
-        return hallenId;
+    public Long getFeldId() {
+        return feldId;
     }
 
-    public void setHallenId(Long hallenId) {
-        this.hallenId = hallenId;
+    public void setFeldId(Long feldId) {
+        this.feldId = feldId;
     }
 
     public Long getMieterId() {
