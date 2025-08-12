@@ -1,6 +1,7 @@
 package com.example.Hallen.service;
 
 import com.example.Hallen.dto.BlockTimeRequest;
+import com.example.Hallen.dto.RentMultipleFelderRequest;
 import com.example.Hallen.model.Mieter;
 import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.MieterRepository;
@@ -34,6 +35,22 @@ public class TerminService {
     public Termin create(Termin termin) {
         termin.setConfirmed("unconfirmed");
         return repository.save(termin);
+    }
+    public List<Termin> rentMultipleFelder(RentMultipleFelderRequest rentMultipleFelderRequest){
+        if(rentMultipleFelderRequest == null || rentMultipleFelderRequest.getFeldIds().isEmpty()){
+            throw new IllegalArgumentException("Keine Felder Ausgewählt");
+        }
+        List<Termin> addedTermine = new ArrayList<>();
+        for(Long ids: rentMultipleFelderRequest.getFeldIds()){
+            Termin termin = new Termin();
+            termin.setFeldId(ids);
+            termin.setAnfang(rentMultipleFelderRequest.getAnfang());
+            termin.setEnde(rentMultipleFelderRequest.getEnde());
+            termin.setAnlass(rentMultipleFelderRequest.getAnlass());
+            termin.setMieterId(rentMultipleFelderRequest.getMieterId());
+            addedTermine.add(create(termin));
+        }
+        return addedTermine;
     }
 
     public Termin update(Long id, Termin termin) {
@@ -78,8 +95,8 @@ public class TerminService {
         return confirmedTermine;
     }
 
-    public boolean deleteByHallenIdAndAnfang(Long hallenId, LocalDateTime anfang) {
-        Optional<Termin> terminOpt = repository.findByFeldIdAndAnfang(hallenId, anfang)   ;
+    public boolean deleteByFeldIdAndAnfang(Long feldId, LocalDateTime anfang) {
+        Optional<Termin> terminOpt = repository.findByFeldIdAndAnfang(feldId, anfang)   ;
         if (terminOpt.isPresent()) {
             repository.delete(terminOpt.get());
             return true;
@@ -107,7 +124,7 @@ public class TerminService {
                             "\n Anlass: " + termin.getAnlass() +
                             "\n Anfang: " + termin.getAnfang() +
                             "\n Ende: " + termin.getEnde() +
-                            "\n HallenID: " + termin.getFeldId();
+                            "\n FeldID: " + termin.getFeldId();
 
                     emailService.sendEmail(receiver, subject, text);
                 }

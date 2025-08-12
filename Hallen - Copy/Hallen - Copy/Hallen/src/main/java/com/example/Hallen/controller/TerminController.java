@@ -1,6 +1,7 @@
 package com.example.Hallen.controller;
 
 import com.example.Hallen.dto.BlockTimeRequest;
+import com.example.Hallen.dto.RentMultipleFelderRequest;
 import com.example.Hallen.dto.SerienTerminRequest;
 import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.TerminRepository;
@@ -46,9 +47,10 @@ public class TerminController {
         return service.findByMieterIdAndConfirmed(mieterId,confirmed);
     }
 
-    @PostMapping
-    public Termin create(@RequestBody Termin termin) {
-        return service.create(termin);
+    @PostMapping("/mieten/multipleFelder")
+    public ResponseEntity<List<Termin>> rentMultipleFelder(@RequestBody RentMultipleFelderRequest rentMultipleFelderRequest) {
+        List<Termin> termine = service.rentMultipleFelder(rentMultipleFelderRequest);
+        return ResponseEntity.ok(termine);
     }
 
     @PutMapping("/{id}")
@@ -101,10 +103,10 @@ public class TerminController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteTermin(
-            @RequestParam Long hallenId,
+            @RequestParam Long feldId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime anfang) {
 
-        boolean deleted = service.deleteByHallenIdAndAnfang(hallenId, anfang);
+        boolean deleted = service.deleteByFeldIdAndAnfang(feldId, anfang);
 
         if (deleted) {
             return ResponseEntity.ok("Termin deleted successfully! 🧹");
