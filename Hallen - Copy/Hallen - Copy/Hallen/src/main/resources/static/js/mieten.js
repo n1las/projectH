@@ -264,4 +264,40 @@ else if (typ === "delete") {
 
 
   });
+
+const anzahlFelderSelect = document.getElementById("anzahlFelder");
+const feldButtonsContainer = document.getElementById("feldButtonsContainer");
+
+anzahlFelderSelect.addEventListener("change", async () => {
+  feldButtonsContainer.innerHTML = ""; // vorher leeren
+
+  if (anzahlFelderSelect.value === "einzeln") {
+    try {
+      // Hole die Feldnamen vom Backend (URL anpassen!)
+      const res = await fetch(`http://localhost:8080/api/feld/getFelderNameByHallenId/${hallenId}`);
+      if (!res.ok) throw new Error("Felder konnten nicht geladen werden");
+      const felder = await res.json(); // z.B. ["Feld 1", "Feld 2", ...]
+
+      felder.forEach((feldName, i) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = feldName;
+        btn.className = "feld-button";
+        btn.style.marginRight = "8px";
+        btn.dataset.feldName = feldName;
+
+        // Toggle-Auswahl per CSS-Klasse
+        btn.addEventListener("click", () => {
+          btn.classList.toggle("selected");
+        });
+
+        feldButtonsContainer.appendChild(btn);
+      });
+    } catch (e) {
+      feldButtonsContainer.textContent = "Fehler beim Laden der Felder.";
+      console.error(e);
+    }
+  }
+});
+
 });

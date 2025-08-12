@@ -1,7 +1,9 @@
 package com.example.Hallen.service;
 
 import com.example.Hallen.dto.BlockTimeRequest;
+import com.example.Hallen.dto.RentHalleRequest;
 import com.example.Hallen.dto.RentMultipleFelderRequest;
+import com.example.Hallen.model.Feld;
 import com.example.Hallen.model.Mieter;
 import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.MieterRepository;
@@ -20,6 +22,8 @@ public class TerminService {
     private TerminRepository repository;
     @Autowired
     private  EmailService emailService;
+    @Autowired
+    private FeldService feldService;
 
     @Autowired
     private MieterRepository mieterRepository;
@@ -32,6 +36,10 @@ public class TerminService {
         return repository.findById(id);
     }
 
+    public List<Termin> getTerminByFeldId(Long feldId){
+        return repository.findByFeldId(feldId);
+    }
+
     public Termin create(Termin termin) {
         termin.setConfirmed("unconfirmed");
         return repository.save(termin);
@@ -42,16 +50,42 @@ public class TerminService {
         }
         List<Termin> addedTermine = new ArrayList<>();
         for(Long ids: rentMultipleFelderRequest.getFeldIds()){
-            Termin termin = new Termin();
-            termin.setFeldId(ids);
-            termin.setAnfang(rentMultipleFelderRequest.getAnfang());
-            termin.setEnde(rentMultipleFelderRequest.getEnde());
-            termin.setAnlass(rentMultipleFelderRequest.getAnlass());
-            termin.setMieterId(rentMultipleFelderRequest.getMieterId());
-            addedTermine.add(create(termin));
+            if(isTerminAvailable(ids, rentMultipleFelderRequest.getAnfang(),rentMultipleFelderRequest.getEnde())){
+                Termin termin = new Termin();
+                termin.setFeldId(ids);
+                termin.setAnfang(rentMultipleFelderRequest.getAnfang());
+                termin.setEnde(rentMultipleFelderRequest.getEnde());
+                termin.setAnlass(rentMultipleFelderRequest.getAnlass());
+                termin.setMieterId(rentMultipleFelderRequest.getMieterId());
+                addedTermine.add(create(termin));
+            }
+            else{
+                throw new IllegalArgumentException("Termin ist bereits besetzt");
+            }
+
         }
         return addedTermine;
     }
+    // Note find a way to maybe combine rentHalle and rentMultiple felder into one Method
+    public List<Termin> rentHalle(RentHalleRequest rentHalleRequest){
+        List<Feld> feldIds = feldService.getFelderByHalleId(rentHalleRequest.getHalleId());
+        List<Termin> termine = new ArrayList<>();
+        for(Feld feld: feldIds){
+            if(isTerminAvailable(feld.getId(),rentHalleRequest.getAnfang(),rentHalleRequest.getEnde())){
+                Termin termin = new Termin();
+                termin.setMieterId(rentHalleRequest.getMieterId());
+                termin.setAnlass(rentHalleRequest.getAnlass());
+                termin.setAnfang(rentHalleRequest.getAnfang());
+                termin.setEnde(rentHalleRequest.getEnde());
+                termine.add(create(termin));
+            }
+            else{
+                throw new IllegalArgumentException("Termin bereits belegt");
+            }
+        }
+        return termine;
+    }
+
 
     public Termin update(Long id, Termin termin) {
         termin.setId(id);
@@ -70,8 +104,8 @@ public class TerminService {
         }
         return false;
     }
-    public boolean isTerminAvailable(Long hallenId, LocalDateTime anfang, LocalDateTime ende) {
-        List<Termin> existing = repository.findByFeldId(hallenId);
+    public boolean isTerminAvailable(Long feldId, LocalDateTime anfang, LocalDateTime ende) {
+        List<Termin> existing = repository.findByFeldId(feldId);
         for (Termin t : existing) {
             if (t.getAnfang().isBefore(ende) && t.getEnde().isAfter(anfang)) {
                 // Overlap exists

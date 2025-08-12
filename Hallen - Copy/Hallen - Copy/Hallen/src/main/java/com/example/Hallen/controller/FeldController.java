@@ -28,4 +28,8 @@ public class FeldController {
     public List<Feld> getByHallenId(@PathVariable Long halleId){
         return feldService.getFelderByHalleId(halleId);
     }
+    @GetMapping("/getFelderNameByHallenId/{halleId}")
+    public List<String> getFeldNameByHalleId(@PathVariable Long halleId){
+        return feldService.getFeldeNameByHalleId(halleId);
+    }
 }

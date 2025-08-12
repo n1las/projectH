@@ -33,6 +33,9 @@
     <option value="delete">Termin löschen</option>
   </select>
 
+  
+
+
   <!-- EINZELTERMIN-FELDER -->
   <div id="einzelInputs">
     <input type="text" name="anlassEinzel" placeholder="Anlass" />
@@ -42,6 +45,13 @@
   <!--Unabhängige felder-->
   <div id="commonInput">
     <input type="text" name="username" placeholder="Benutzername" />
+
+    <label for="anzahlFelder">Anzahl der Felder:</label>
+    <select id="anzahlFelder" name="anzahlFelder">
+        <option value="komplett">Komplette Halle</option>
+        <option value="einzeln">Einzelne Felder</option>
+    </select>
+    <div id="feldButtonsContainer" style="margin-top: 10px;"></div>
   </div>
 
   <!-- SERIENTERMIN-FELDER -->

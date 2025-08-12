@@ -1,6 +1,7 @@
 package com.example.Hallen.controller;
 
 import com.example.Hallen.dto.BlockTimeRequest;
+import com.example.Hallen.dto.RentHalleRequest;
 import com.example.Hallen.dto.RentMultipleFelderRequest;
 import com.example.Hallen.dto.SerienTerminRequest;
 import com.example.Hallen.model.Termin;
@@ -46,10 +47,19 @@ public class TerminController {
     public List<Termin> getUnconfirmedTerminByMieterId(@PathVariable Long mieterId, @PathVariable String confirmed){
         return service.findByMieterIdAndConfirmed(mieterId,confirmed);
     }
+    @GetMapping("/getByFeldId/{feldId}")
+        public List<Termin> getTerminByFeldId(@PathVariable Long feldId){
+            return service.getTerminByFeldId(feldId);
+        }
 
     @PostMapping("/mieten/multipleFelder")
     public ResponseEntity<List<Termin>> rentMultipleFelder(@RequestBody RentMultipleFelderRequest rentMultipleFelderRequest) {
         List<Termin> termine = service.rentMultipleFelder(rentMultipleFelderRequest);
+        return ResponseEntity.ok(termine);
+    }
+    @PostMapping("/mieten/halle")
+    public ResponseEntity<List<Termin>> rentHalle(@RequestBody RentHalleRequest rentHalleRequest){
+        List<Termin> termine = service.rentHalle(rentHalleRequest);
         return ResponseEntity.ok(termine);
     }
 

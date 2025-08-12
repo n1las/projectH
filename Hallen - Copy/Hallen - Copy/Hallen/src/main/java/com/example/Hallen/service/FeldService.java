@@ -5,6 +5,7 @@ import com.example.Hallen.repository.FeldRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,5 +25,14 @@ public class FeldService {
 
     public List<Feld> getFelderByHalleId(Long halleId){
         return feldRepository.findByHalleId(halleId);
+    }
+
+    public List<String> getFeldeNameByHalleId(Long halleId){
+        List<String> feldNamen = new ArrayList<>();
+        List<Feld> felder = getFelderByHalleId(halleId);
+        for(Feld feld: felder){
+            feldNamen.add(feld.getName());
+        }
+        return feldNamen;
     }
 }
