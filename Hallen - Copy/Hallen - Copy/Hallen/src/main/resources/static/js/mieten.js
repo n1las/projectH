@@ -4,12 +4,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const einzelInputs = document.getElementById("einzelInputs");
   const commonInput = document.getElementById("commonInput");
   const serieInputs = document.getElementById("serieInputs");
+  const deleteInputs = document.getElementById("deleteInputs");
   const statusText = document.getElementById("mieten-status");
   const calendarEl = document.getElementById("calendar");
   const hallenId = localStorage.getItem("selectedSubsiteId");
   const rentBtn = document.getElementById("rent-btn");
 
-  let selectedFeldIds = []; // Speicherung ausgewählter Felder
+  const anzahlFelderSelect = document.getElementById("anzahlFelderDiv");
+  const feldButtonsContainer = document.getElementById("feldButtonsContainer");
+  let selectedFeldIds = []; // IDs der ausgewählten Felder
 
   form.addEventListener("submit", (e) => e.preventDefault());
 
@@ -18,6 +21,24 @@ document.addEventListener("DOMContentLoaded", function () {
     statusText.textContent = "❌ Keine Halle ausgewählt!";
     return;
   }
+
+  // 🏟️ Halle abfragen und Select ggf. anzeigen
+  (async () => {
+    try {
+      const res = await fetch(`http://localhost:8080/api/Hallen/${hallenId}`);
+      if (!res.ok) throw new Error("Halle konnte nicht geladen werden");
+      const halle = await res.json();
+
+      if (halle.hallenTyp > 1) {
+        anzahlFelderSelect.style.display = "block";
+      } else {
+        anzahlFelderSelect.style.display = "none";
+      }
+    } catch (e) {
+      console.error("Fehler beim Laden der Halle:", e);
+      anzahlFelderSelect.style.display = "none";
+    }
+  })();
 
   // 🧩 Umschalten der Input-Gruppen
   terminTyp.addEventListener("change", () => {
@@ -111,8 +132,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const anfang = form.querySelector("input[name='anfangEinzel']").value;
       const ende = form.querySelector("input[name='endeEinzel']").value;
 
-      if (!username || !anlass || !anfang || !ende) {
-        statusText.textContent = "❌ Bitte alle Felder ausfüllen.";
+      if (!username || !anlass || !anfang || !ende || selectedFeldIds.length === 0) {
+        statusText.textContent = "❌ Bitte alle Felder und mindestens ein Feld auswählen.";
         return;
       }
 
@@ -125,14 +146,13 @@ document.addEventListener("DOMContentLoaded", function () {
       const userData = await userResponse.json();
       const mieterId = userData.id;
 
-      // 📦 Daten für neuen Endpoint
       const rentData = {
-        feldIds: selectedFeldIds,
+        hallenId: parseInt(hallenId),
         mieterId: mieterId,
         anlass: anlass,
         anfang: anfang,
-        ende: ende
-      
+        ende: ende,
+        feldIds: selectedFeldIds, // <-- hier mitgeben
       };
 
       const post = await fetch("http://localhost:8080/api/termine/mieten/multipleFelder", {
@@ -145,13 +165,12 @@ document.addEventListener("DOMContentLoaded", function () {
         statusText.textContent = "✅ Einzeltermin erfolgreich erstellt!";
         form.reset();
         selectedFeldIds = [];
+        feldButtonsContainer.querySelectorAll(".feld-button.selected").forEach(btn => btn.classList.remove("selected"));
         calendar?.refetchEvents();
       } else {
         statusText.textContent = "❌ Fehler beim Speichern.";
       }
-    }
-
-
+    } 
     else if (typ === "serie") {
       const anfangDatum = form.querySelector("input[name='serieAnfang']").value;
       const endeDatum = form.querySelector("input[name='serieEnde']").value;
@@ -183,7 +202,6 @@ document.addEventListener("DOMContentLoaded", function () {
         anfang: anfangUhr,
         ende: endeUhr,
         wochentag: wochentag,
-        feldIds: selectedFeldIds // ⬅️ hier neu
       };
 
       const post = await fetch("http://localhost:8080/api/termine/serienTermin", {
@@ -196,12 +214,10 @@ document.addEventListener("DOMContentLoaded", function () {
         statusText.textContent = "✅ Serientermin erfolgreich erstellt!";
         form.reset();
         calendar?.refetchEvents();
-        selectedFeldIds = [];
       } else {
         statusText.textContent = "❌ Fehler beim Serientermin.";
       }
     }
-
     else if (typ === "block") {
       const anlass = form.querySelector("input[name='anlassEinzel']").value.trim();
       const anfang = form.querySelector("input[name='anfangEinzel']").value;
@@ -217,7 +233,6 @@ document.addEventListener("DOMContentLoaded", function () {
         anlass: anlass,
         anfang: anfang,
         ende: ende,
-        feldIds: selectedFeldIds // ⬅️ hier neu
       };
 
       const post = await fetch("http://localhost:8080/api/termine/blockTermin", {
@@ -230,26 +245,24 @@ document.addEventListener("DOMContentLoaded", function () {
         statusText.textContent = "✅ Block-Zeitraum erfolgreich eingetragen!";
         form.reset();
         calendar?.refetchEvents();
-        selectedFeldIds = [];
       } else {
         statusText.textContent = "❌ Fehler beim Speichern des Blocks.";
       }
     }
-
     else if (typ === "delete") {
       const anfang = form.querySelector("input[name='anfangDelete']").value;
 
       if (!anfang) {
-        statusText.textContent = "❌ Bitte Startzeitpunkt eingeben.";
+        statusText.textContent = "❌ Bitte Anfangsdatum angeben.";
         return;
       }
 
-      const deleteUrl = `http://localhost:8080/api/termine/delete?hallenId=${hallenId}&anfang=${encodeURIComponent(anfang)}`;
+      const post = await fetch(`http://localhost:8080/api/termine/delete/${hallenId}/${anfang}`, {
+        method: "DELETE",
+      });
 
-      const response = await fetch(deleteUrl, { method: "DELETE" });
-
-      if (response.ok) {
-        statusText.textContent = "✅ Termin erfolgreich gelöscht!";
+      if (post.ok) {
+        statusText.textContent = "✅ Termin gelöscht!";
         form.reset();
         calendar?.refetchEvents();
       } else {
@@ -258,52 +271,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // 🏟 Feld-Buttons laden
-  const anzahlFelderSelect = document.getElementById("anzahlFelder");
-  const feldButtonsContainer = document.getElementById("feldButtonsContainer");
-
-  anzahlFelderSelect.addEventListener("change", async () => {
+  // 🎛️ Feld-Buttons erstellen (bei Auswahl Anzahl Felder)
+  anzahlFelderSelect.addEventListener("change", () => {
     feldButtonsContainer.innerHTML = "";
     selectedFeldIds = [];
-
-    if (anzahlFelderSelect.value === "einzeln") {
-      try {
-        const res = await fetch(`http://localhost:8080/api/feld/getByHallenId/${hallenId}`);
-        if (!res.ok) throw new Error("Felder konnten nicht geladen werden");
-
-        const felder = await res.json();
-
-        felder.forEach((feld) => {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.textContent = feld.name;
-          btn.className = "feld-button";
-          btn.style.marginRight = "8px";
-          btn.dataset.feldId = feld.id;
-          btn.dataset.feldName = feld.name;
-
-          btn.addEventListener("click", () => {
-            const feldId = btn.dataset.feldId;
-
-            btn.classList.toggle("selected");
-
-            if (btn.classList.contains("selected")) {
-              if (!selectedFeldIds.includes(feldId)) {
-                selectedFeldIds.push(feldId);
-              }
-            } else {
-              selectedFeldIds = selectedFeldIds.filter(id => id !== feldId);
-            }
-
-            console.log("Aktuell ausgewählte Feld-IDs:", selectedFeldIds);
-          });
-
-          feldButtonsContainer.appendChild(btn);
-        });
-      } catch (e) {
-        feldButtonsContainer.textContent = "Fehler beim Laden der Felder.";
-        console.error(e);
-      }
+    const count = parseInt(anzahlFelderSelect.value);
+    for (let i = 1; i <= count; i++) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = `Feld ${i}`;
+      btn.classList.add("feld-button");
+      btn.addEventListener("click", () => {
+        btn.classList.toggle("selected");
+        const id = i;
+        if (selectedFeldIds.includes(id)) {
+          selectedFeldIds = selectedFeldIds.filter((x) => x !== id);
+        } else {
+          selectedFeldIds.push(id);
+        }
+      });
+      feldButtonsContainer.appendChild(btn);
     }
   });
 });

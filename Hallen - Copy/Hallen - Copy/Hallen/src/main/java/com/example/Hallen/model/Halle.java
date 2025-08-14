@@ -27,6 +27,16 @@ public class Halle {
 
     @Column(name = "spielfeldgroesse") // Ensure column name matches
     private Integer spielfeldgroesse; // Changed to Integer to allow null values
+    @Column(name ="HallenTyp")
+    private Integer hallenTyp;
+
+    public Integer getHallenTyp() {
+        return hallenTyp;
+    }
+
+    public void setHallenTyp(Integer hallenTyp) {
+        this.hallenTyp = hallenTyp;
+    }
 
     // Getters and setters
     public Long getId() {
