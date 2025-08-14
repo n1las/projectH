@@ -1,7 +1,5 @@
 package com.example.Hallen.dto;
 
-import com.example.Hallen.model.Mieter;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -9,8 +7,8 @@ public class RentMultipleFelderRequest {
     List<Long> feldIds;
     Long mieterId;
     String anlass;
-    LocalDateTime Anfang;
-    LocalDateTime Ende;
+    LocalDateTime anfang;
+    LocalDateTime ende;
 
     public List<Long> getFeldIds() {
         return feldIds;
@@ -37,18 +35,18 @@ public class RentMultipleFelderRequest {
     }
 
     public LocalDateTime getAnfang() {
-        return Anfang;
+        return anfang;
     }
 
     public void setAnfang(LocalDateTime anfang) {
-        Anfang = anfang;
+        this.anfang = anfang;
     }
 
     public LocalDateTime getEnde() {
-        return Ende;
+        return ende;
     }
 
     public void setEnde(LocalDateTime ende) {
-        Ende = ende;
+        this.ende = ende;
     }
 }

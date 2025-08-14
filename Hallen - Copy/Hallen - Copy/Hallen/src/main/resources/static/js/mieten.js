@@ -9,8 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const hallenId = localStorage.getItem("selectedSubsiteId");
   const rentBtn = document.getElementById("rent-btn");
 
-  form.addEventListener("submit", (e) => e.preventDefault());
+  let selectedFeldIds = []; // Speicherung ausgewählter Felder
 
+  form.addEventListener("submit", (e) => e.preventDefault());
 
   if (!hallenId) {
     console.error("Keine Hallen-ID gefunden.");
@@ -20,85 +21,83 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 🧩 Umschalten der Input-Gruppen
   terminTyp.addEventListener("change", () => {
-  if (terminTyp.value === "einzel") {
-    einzelInputs.style.display = "block";
-    commonInput.style.display = "block";
-    serieInputs.style.display = "none";
-    deleteInputs.style.display = "none";
-  } else if (terminTyp.value === "block") {
-    einzelInputs.style.display = "block";
-    commonInput.style.display = "none";
-    serieInputs.style.display = "none";
-    deleteInputs.style.display = "none";
-  } else if (terminTyp.value === "serie") {
-    einzelInputs.style.display = "none";
-    commonInput.style.display = "block";
-    serieInputs.style.display = "block";
-    deleteInputs.style.display = "none";
-  } else if (terminTyp.value === "delete") {
-    einzelInputs.style.display = "none";
-    commonInput.style.display = "none";
-    serieInputs.style.display = "none";
-    deleteInputs.style.display = "block";
-  }
-});
-
+    if (terminTyp.value === "einzel") {
+      einzelInputs.style.display = "block";
+      commonInput.style.display = "block";
+      serieInputs.style.display = "none";
+      deleteInputs.style.display = "none";
+    } else if (terminTyp.value === "block") {
+      einzelInputs.style.display = "block";
+      commonInput.style.display = "none";
+      serieInputs.style.display = "none";
+      deleteInputs.style.display = "none";
+    } else if (terminTyp.value === "serie") {
+      einzelInputs.style.display = "none";
+      commonInput.style.display = "block";
+      serieInputs.style.display = "block";
+      deleteInputs.style.display = "none";
+    } else if (terminTyp.value === "delete") {
+      einzelInputs.style.display = "none";
+      commonInput.style.display = "none";
+      serieInputs.style.display = "none";
+      deleteInputs.style.display = "block";
+    }
+  });
 
   // 📅 Kalender anzeigen
-let calendar;
-if (calendarEl) {
-  calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: "dayGridMonth",
-    locale: "de",
-    headerToolbar: {
-      left: "prev,next today",
-      center: "title",
-      right: "dayGridMonth,timeGridWeek,timeGridDay",
-    },
-    events: function (fetchInfo, successCallback, failureCallback) {
-      fetch("http://localhost:8080/api/termine")
-        .then((res) => res.json())
-        .then((data) => {
-          const filtered = data
-            .filter((e) => e.hallenId == hallenId)
-            .map((e) => {
-              let backgroundColor = "gray";
-              let borderColor = "gray";
-              let textColor = "white";
+  let calendar;
+  if (calendarEl) {
+    calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: "dayGridMonth",
+      locale: "de",
+      headerToolbar: {
+        left: "prev,next today",
+        center: "title",
+        right: "dayGridMonth,timeGridWeek,timeGridDay",
+      },
+      events: function (fetchInfo, successCallback, failureCallback) {
+        fetch("http://localhost:8080/api/termine")
+          .then((res) => res.json())
+          .then((data) => {
+            const filtered = data
+              .filter((e) => e.hallenId == hallenId)
+              .map((e) => {
+                let backgroundColor = "gray";
+                let borderColor = "gray";
+                let textColor = "white";
 
-              switch (e.confirmed) {
-                case "confirmed":
-                  backgroundColor = "green";
-                  borderColor = "green";
-                  break;
-                case "unconfirmed":
-                  backgroundColor = "gold";
-                  borderColor = "gold";
-                  textColor = "black";
-                  break;
-                case "expired":
-                  backgroundColor = "red";
-                  borderColor = "red";
-                  break;
-              }
+                switch (e.confirmed) {
+                  case "confirmed":
+                    backgroundColor = "green";
+                    borderColor = "green";
+                    break;
+                  case "unconfirmed":
+                    backgroundColor = "gold";
+                    borderColor = "gold";
+                    textColor = "black";
+                    break;
+                  case "expired":
+                    backgroundColor = "red";
+                    borderColor = "red";
+                    break;
+                }
 
-              return {
-                title: e.anlass,
-                start: e.anfang,
-                end: e.ende,
-                backgroundColor,
-                borderColor,
-                textColor,
-              };
-            });
-          successCallback(filtered);
-        })
-        .catch((err) => failureCallback(err));
-    },
-  });
-  calendar.render();
-}
-
+                return {
+                  title: e.anlass,
+                  start: e.anfang,
+                  end: e.ende,
+                  backgroundColor,
+                  borderColor,
+                  textColor,
+                };
+              });
+            successCallback(filtered);
+          })
+          .catch((err) => failureCallback(err));
+      },
+    });
+    calendar.render();
+  }
 
   // 📤 Formular absenden
   rentBtn.addEventListener("click", async () => {
@@ -117,16 +116,6 @@ if (calendarEl) {
         return;
       }
 
-      // ✅ Verfügbarkeit prüfen
-      const checkUrl = `http://localhost:8080/api/termine/check?hallenId=${hallenId}&anfang=${encodeURIComponent(anfang)}&ende=${encodeURIComponent(ende)}`;
-      const checkResponse = await fetch(checkUrl);
-      const isAvailable = await checkResponse.json();
-
-      if (!isAvailable) {
-        statusText.textContent = "❌ Zeitraum bereits belegt.";
-        return;
-      }
-
       // 🧍 Mieter-ID laden
       const userResponse = await fetch(`http://localhost:8080/api/Mieter/byUsername/${username}`);
       if (!userResponse.ok) {
@@ -136,29 +125,34 @@ if (calendarEl) {
       const userData = await userResponse.json();
       const mieterId = userData.id;
 
-      const terminData = {
-        hallenId: hallenId,
+      // 📦 Daten für neuen Endpoint
+      const rentData = {
+        feldIds: selectedFeldIds,
         mieterId: mieterId,
         anlass: anlass,
         anfang: anfang,
-        ende: ende,
-        confirmed: "unconfirmed",
+        ende: ende
+      
       };
 
-      const post = await fetch("http://localhost:8080/api/termine", {
+      const post = await fetch("http://localhost:8080/api/termine/mieten/multipleFelder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(terminData),
+        body: JSON.stringify(rentData),
       });
 
       if (post.ok) {
         statusText.textContent = "✅ Einzeltermin erfolgreich erstellt!";
         form.reset();
+        selectedFeldIds = [];
         calendar?.refetchEvents();
       } else {
         statusText.textContent = "❌ Fehler beim Speichern.";
       }
-    } else if (typ === "serie") {
+    }
+
+
+    else if (typ === "serie") {
       const anfangDatum = form.querySelector("input[name='serieAnfang']").value;
       const endeDatum = form.querySelector("input[name='serieEnde']").value;
       const anfangUhr = form.querySelector("input[name='anfangSerie']").value;
@@ -167,13 +161,11 @@ if (calendarEl) {
       const anlass = form.querySelector("input[name='anlassSerie']").value;
       const username = form.querySelector("input[name='username']").value.trim();
 
-    
       if (!anfangDatum || !endeDatum || !anfangUhr || !endeUhr || !wochentag || !anlass || !username) {
         statusText.textContent = "❌ Bitte alle Felder ausfüllen Serie bro.";
         return;
       }
 
-      // 🧍 Mieter-ID laden
       const userResponse = await fetch(`http://localhost:8080/api/Mieter/byUsername/${username}`);
       if (!userResponse.ok) {
         statusText.textContent = "❌ Benutzer nicht gefunden.";
@@ -191,6 +183,7 @@ if (calendarEl) {
         anfang: anfangUhr,
         ende: endeUhr,
         wochentag: wochentag,
+        feldIds: selectedFeldIds // ⬅️ hier neu
       };
 
       const post = await fetch("http://localhost:8080/api/termine/serienTermin", {
@@ -203,101 +196,114 @@ if (calendarEl) {
         statusText.textContent = "✅ Serientermin erfolgreich erstellt!";
         form.reset();
         calendar?.refetchEvents();
+        selectedFeldIds = [];
       } else {
         statusText.textContent = "❌ Fehler beim Serientermin.";
       }
     }
 
     else if (typ === "block") {
-  const anlass = form.querySelector("input[name='anlassEinzel']").value.trim();
-  const anfang = form.querySelector("input[name='anfangEinzel']").value;
-  const ende = form.querySelector("input[name='endeEinzel']").value;
+      const anlass = form.querySelector("input[name='anlassEinzel']").value.trim();
+      const anfang = form.querySelector("input[name='anfangEinzel']").value;
+      const ende = form.querySelector("input[name='endeEinzel']").value;
 
-  if (!anlass || !anfang || !ende) {
-    statusText.textContent = "❌ Bitte alle Block-Felder ausfüllen.";
-    return;
-  }
+      if (!anlass || !anfang || !ende) {
+        statusText.textContent = "❌ Bitte alle Block-Felder ausfüllen.";
+        return;
+      }
 
-  const blockTimeData = {
-    hallenId: parseInt(hallenId),
-    anlass: anlass,
-    anfang: anfang,
-    ende: ende,
-  };
+      const blockTimeData = {
+        hallenId: parseInt(hallenId),
+        anlass: anlass,
+        anfang: anfang,
+        ende: ende,
+        feldIds: selectedFeldIds // ⬅️ hier neu
+      };
 
-  const post = await fetch("http://localhost:8080/api/termine/blockTermin", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(blockTimeData),
-  });
-
-  if (post.ok) {
-    statusText.textContent = "✅ Block-Zeitraum erfolgreich eingetragen!";
-    form.reset();
-    calendar?.refetchEvents();
-  } else {
-    statusText.textContent = "❌ Fehler beim Speichern des Blocks.";
-  }
-}
-else if (typ === "delete") {
-  const anfang = form.querySelector("input[name='anfangDelete']").value;
-
-  if (!anfang) {
-    statusText.textContent = "❌ Bitte Startzeitpunkt eingeben.";
-    return;
-  }
-
-  const deleteUrl = `http://localhost:8080/api/termine/delete?hallenId=${hallenId}&anfang=${encodeURIComponent(anfang)}`;
-
-  const response = await fetch(deleteUrl, {
-    method: "DELETE",
-  });
-
-  if (response.ok) {
-    statusText.textContent = "✅ Termin erfolgreich gelöscht!";
-    form.reset();
-    calendar?.refetchEvents();
-  } else {
-    statusText.textContent = "❌ Fehler beim Löschen.";
-  }
-}
-
-
-  });
-
-const anzahlFelderSelect = document.getElementById("anzahlFelder");
-const feldButtonsContainer = document.getElementById("feldButtonsContainer");
-
-anzahlFelderSelect.addEventListener("change", async () => {
-  feldButtonsContainer.innerHTML = ""; // vorher leeren
-
-  if (anzahlFelderSelect.value === "einzeln") {
-    try {
-      // Hole die Feldnamen vom Backend (URL anpassen!)
-      const res = await fetch(`http://localhost:8080/api/feld/getFelderNameByHallenId/${hallenId}`);
-      if (!res.ok) throw new Error("Felder konnten nicht geladen werden");
-      const felder = await res.json(); // z.B. ["Feld 1", "Feld 2", ...]
-
-      felder.forEach((feldName, i) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.textContent = feldName;
-        btn.className = "feld-button";
-        btn.style.marginRight = "8px";
-        btn.dataset.feldName = feldName;
-
-        // Toggle-Auswahl per CSS-Klasse
-        btn.addEventListener("click", () => {
-          btn.classList.toggle("selected");
-        });
-
-        feldButtonsContainer.appendChild(btn);
+      const post = await fetch("http://localhost:8080/api/termine/blockTermin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(blockTimeData),
       });
-    } catch (e) {
-      feldButtonsContainer.textContent = "Fehler beim Laden der Felder.";
-      console.error(e);
-    }
-  }
-});
 
+      if (post.ok) {
+        statusText.textContent = "✅ Block-Zeitraum erfolgreich eingetragen!";
+        form.reset();
+        calendar?.refetchEvents();
+        selectedFeldIds = [];
+      } else {
+        statusText.textContent = "❌ Fehler beim Speichern des Blocks.";
+      }
+    }
+
+    else if (typ === "delete") {
+      const anfang = form.querySelector("input[name='anfangDelete']").value;
+
+      if (!anfang) {
+        statusText.textContent = "❌ Bitte Startzeitpunkt eingeben.";
+        return;
+      }
+
+      const deleteUrl = `http://localhost:8080/api/termine/delete?hallenId=${hallenId}&anfang=${encodeURIComponent(anfang)}`;
+
+      const response = await fetch(deleteUrl, { method: "DELETE" });
+
+      if (response.ok) {
+        statusText.textContent = "✅ Termin erfolgreich gelöscht!";
+        form.reset();
+        calendar?.refetchEvents();
+      } else {
+        statusText.textContent = "❌ Fehler beim Löschen.";
+      }
+    }
+  });
+
+  // 🏟 Feld-Buttons laden
+  const anzahlFelderSelect = document.getElementById("anzahlFelder");
+  const feldButtonsContainer = document.getElementById("feldButtonsContainer");
+
+  anzahlFelderSelect.addEventListener("change", async () => {
+    feldButtonsContainer.innerHTML = "";
+    selectedFeldIds = [];
+
+    if (anzahlFelderSelect.value === "einzeln") {
+      try {
+        const res = await fetch(`http://localhost:8080/api/feld/getByHallenId/${hallenId}`);
+        if (!res.ok) throw new Error("Felder konnten nicht geladen werden");
+
+        const felder = await res.json();
+
+        felder.forEach((feld) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = feld.name;
+          btn.className = "feld-button";
+          btn.style.marginRight = "8px";
+          btn.dataset.feldId = feld.id;
+          btn.dataset.feldName = feld.name;
+
+          btn.addEventListener("click", () => {
+            const feldId = btn.dataset.feldId;
+
+            btn.classList.toggle("selected");
+
+            if (btn.classList.contains("selected")) {
+              if (!selectedFeldIds.includes(feldId)) {
+                selectedFeldIds.push(feldId);
+              }
+            } else {
+              selectedFeldIds = selectedFeldIds.filter(id => id !== feldId);
+            }
+
+            console.log("Aktuell ausgewählte Feld-IDs:", selectedFeldIds);
+          });
+
+          feldButtonsContainer.appendChild(btn);
+        });
+      } catch (e) {
+        feldButtonsContainer.textContent = "Fehler beim Laden der Felder.";
+        console.error(e);
+      }
+    }
+  });
 });
