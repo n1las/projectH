@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const calendarEl = document.getElementById("calendar");
   const hallenId = localStorage.getItem("selectedSubsiteId");
   const rentBtn = document.getElementById("rent-btn");
+  const felderAuswahlDiv =document.getElementById("felderAuswahlDiv");
 
   const anzahlFelderSelect = document.getElementById("anzahlFelder"); // nur anzeigen/verstecken
   const feldButtonsContainer = document.getElementById("feldButtonsContainer");
@@ -31,9 +32,12 @@ document.addEventListener("DOMContentLoaded", function () {
       const halle = await res.json();
 
       if (halle.hallenTyp > 1) {
+        felderAuswahlDiv.style.display = "block";
+  
         if (anzahlFelderSelect) anzahlFelderSelect.style.display = "block";
         // Buttons direkt aus dem Feld-Endpoint generieren
         await loadFelderAndBuildButtons();
+
       } else {
         if (anzahlFelderSelect) anzahlFelderSelect.style.display = "none";
         // wenn keine Mehrfeld-Halle: Buttons wegräumen
@@ -70,6 +74,19 @@ document.addEventListener("DOMContentLoaded", function () {
       // Für delete keine Felder nötig
     }
   });
+  anzahlFelderSelect.addEventListener("change", async () => {
+    feldButtonsContainer.display ="none";
+
+    if (anzahlFelderSelect.value === "einzeln") {
+      feldButtonsContainer.display="block";
+      feldButtonsContainer.style.display = "block";
+
+    } else if (anzahlFelderSelect.value === "komplett") {
+      feldButtonsContainer.display="none";
+    }
+
+  });
+  
 
   // Kalender rendern
   let calendar;
@@ -301,6 +318,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!feldButtonsContainer) return;
       try {
         const res = await fetch(`http://localhost:8080/api/feld/getByHallenId/${hallenId}`);
+
         if (!res.ok) throw new Error("Felder konnten nicht geladen werden");
 
         const felder = await res.json(); // erwartet: [{ id, name, ... }, ...]

@@ -173,3 +173,9 @@
 #deleteInputs {
   display: none;
 }
+#felderAuswahlDiv{
+  display: none;
+}
+#feldButtonsContainer{
+  display: none;
+}
