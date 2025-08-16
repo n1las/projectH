@@ -51,6 +51,11 @@ public class TerminController {
         public List<Termin> getTerminByFeldId(@PathVariable Long feldId){
             return service.getTerminByFeldId(feldId);
         }
+    @GetMapping("/getByHalleId/{halleId}")
+    public List<Termin>getTerminByHalleId(@PathVariable Long halleId){
+        return service.getByHalleId(halleId);
+    }
+
 
     @PostMapping("/mieten/multipleFelder")
     public ResponseEntity<List<Termin>> rentMultipleFelder(@RequestBody RentMultipleFelderRequest rentMultipleFelderRequest) {

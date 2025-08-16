@@ -40,6 +40,15 @@ public class TerminService {
         return repository.findByFeldId(feldId);
     }
 
+    public List<Termin> getByHalleId(Long halleId){
+        List<Feld> felder = feldService.getFelderByHalleId(halleId);
+        List<Termin> termine = new ArrayList<>();
+        for(Feld f: felder){
+            termine.addAll(getTerminByFeldId(f.getId()));
+        }
+        return termine;
+    }
+
     public Termin create(Termin termin) {
         termin.setConfirmed("unconfirmed");
         return repository.save(termin);
