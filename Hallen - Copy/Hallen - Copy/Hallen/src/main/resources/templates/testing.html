@@ -1,56 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Rent Multiple Felder Test</title>
+    <title>Test FullCalendar</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        #calendar {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .fc-timegrid-col {
+            min-width: 150px;  /* Standard ist ~100px, hier vergrößert */
+        }
+        /* Optional: etwas Abstand zwischen Terminen */
+        .fc-event {
+            margin: 2px 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Rent Multiple Felder Test</h1>
-    <button id="testBtn">Run Test</button>
-    <pre id="output"></pre>
 
-    <script>
-        async function runTest() {
-            const output = document.getElementById("output");
-            output.textContent = "Fetching feld IDs...\n";
+    <h1>Test FullCalendar</h1>
+    <div id="calendar"></div>
 
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
+    const calendarEl = document.getElementById('calendar');
+    const hallenId = 9;
+
+    // Zuerst Hallentyp holen (optional, sonst Hardcode)
+    const hallentyp = 3; // Beispiel: 3 Felder pro Halle
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: async function(fetchInfo, successCallback, failureCallback) {
             try {
-                // Step 1: Get feld IDs from the API
-                const feldRes = await fetch("http://localhost:8080/api/feld/getByHallenId/9");
-                const felder = await feldRes.json();
-                output.textContent += `Got felder: ${JSON.stringify(felder, null, 2)}\n`;
+                const response = await fetch(`http://localhost:8080/api/termine/getByHalleId/${hallenId}`);
+                if (!response.ok) throw new Error('Fehler beim Laden der Termine');
+                const termine = await response.json();
 
-                // Step 2: Extract feld IDs
-                const feldIds = felder.map(f => f.id);
-                output.textContent += `Extracted feld IDs: ${feldIds.join(", ")}\n`;
+                // Hole Feldnamen parallel
+                const feldMap = {};
+                await Promise.all(termine.map(async t => {
+                    if (!feldMap[t.feldId]) {
+                        try {
+                            const feldResp = await fetch(`http://localhost:8080/api/feld/${t.feldId}`);
+                            if (feldResp.ok) {
+                                const feldData = await feldResp.json();
+                                feldMap[t.feldId] = feldData.name;
+                            }
+                        } catch(e) {
+                            feldMap[t.feldId] = '';
+                        }
+                    }
+                }));
 
-                // Step 3: Build RentMultipleFelderRequest
-                const requestPayload = {
-                    feldIds: feldIds,
-                    mieterId: 32,
-                    anlass: "Test Anlass " + Math.floor(Math.random() * 1000),
-                    anfang: new Date().toISOString(),
-                    ende: new Date(Date.now() + 60 * 60 * 1000).toISOString() // +1 hour
-                };
-                output.textContent += `Request payload: ${JSON.stringify(requestPayload, null, 2)}\n`;
+                // Gruppiere Termine nach MieterId, Anlass, Anfang, Ende
+                const grouped = {};
+                for (let t of termine) {
+                    const key = `${t.mieterId}-${t.anlass}-${t.anfang}-${t.ende}`;
+                    if (!grouped[key]) grouped[key] = [];
+                    grouped[key].push(t);
+                }
 
-                // Step 4: Send POST request
-                const rentRes = await fetch("http://localhost:8080/api/termine/mieten/multipleFelder", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(requestPayload)
+                // Baue Events
+                const events = Object.values(grouped).map(grp => {
+                    const t = grp[0]; // Alle gleichen Werte
+                    let title = t.anlass;
+
+                    // Prüfe Hallentyp und Gruppengröße
+                    if (grp.length === hallentyp) {
+                        title += ' (komplette Halle)';
+                    } else {
+                        // Normale Anzeige: alle Feldnamen zusammenführen
+                        const feldNames = grp.map(x => feldMap[x.feldId] || '').join(', ');
+                        title += ` (${feldNames})`;
+                    }
+
+                    return {
+                        id: grp.map(x => x.id).join(','), // mehrere IDs zusammen
+                        title,
+                        start: t.anfang,
+                        end: t.ende,
+                        color: t.confirmed === 'unconfirmed' ? '#ff9f89' : '#3788d8'
+                    };
                 });
 
-                const rentData = await rentRes.json();
-                output.textContent += `\nServer response:\n${JSON.stringify(rentData, null, 2)}`;
-            } catch (err) {
-                output.textContent += `Error: ${err}`;
+                successCallback(events);
+            } catch (error) {
+                console.error(error);
+                failureCallback(error);
             }
         }
+    });
 
-        document.getElementById("testBtn").addEventListener("click", runTest);
-    </script>
+    calendar.render();
+});
+</script>
+
+
 </body>
 </html>

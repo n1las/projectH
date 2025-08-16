@@ -87,62 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   });
   
-
-  // Kalender rendern
-  let calendar;
-  if (calendarEl) {
-    calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: "dayGridMonth",
-      locale: "de",
-      headerToolbar: {
-        left: "prev,next today",
-        center: "title",
-        right: "dayGridMonth,timeGridWeek,timeGridDay",
-      },
-      events: function (fetchInfo, successCallback, failureCallback) {
-        fetch("http://localhost:8080/api/termine")
-          .then((res) => res.json())
-          .then((data) => {
-            const filtered = data
-              .filter((e) => e.hallenId == hallenId)
-              .map((e) => {
-                let backgroundColor = "gray";
-                let borderColor = "gray";
-                let textColor = "white";
-
-                switch (e.confirmed) {
-                  case "confirmed":
-                    backgroundColor = "green";
-                    borderColor = "green";
-                    break;
-                  case "unconfirmed":
-                    backgroundColor = "gold";
-                    borderColor = "gold";
-                    textColor = "black";
-                    break;
-                  case "expired":
-                    backgroundColor = "red";
-                    borderColor = "red";
-                    break;
-                }
-
-                return {
-                  title: e.anlass,
-                  start: e.anfang,
-                  end: e.ende,
-                  backgroundColor,
-                  borderColor,
-                  textColor,
-                };
-              });
-            successCallback(filtered);
-          })
-          .catch((err) => failureCallback(err));
-      },
-    });
-    calendar.render();
-  }
-
   // ➜ Absenden
   rentBtn.addEventListener("click", async () => {
     if (!statusText) return;
