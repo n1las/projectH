@@ -33,8 +33,19 @@ document.addEventListener('DOMContentLoaded', async function() {
     const calendarEl = document.getElementById('calendar');
     const hallenId = 9;
 
-    // Zuerst Hallentyp holen (optional, sonst Hardcode)
-    const hallentyp = 3; // Beispiel: 3 Felder pro Halle
+    // Beispiel: Hole hallentyp dynamisch oder hardcode ihn
+    const hallentyp = 3; // z. B. 3 Felder pro Halle
+
+    // Farb-Mapping nach Status
+    function getEventColor(status) {
+        switch (status) {
+            case 'confirmed': return 'green';
+            case 'unconfirmed': return 'yellow';
+            case 'expired': return 'red';
+            case 'block': return 'gray';
+            default: return 'blue'; // fallback
+        }
+    }
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
@@ -82,17 +93,16 @@ document.addEventListener('DOMContentLoaded', async function() {
                     if (grp.length === hallentyp) {
                         title += ' (komplette Halle)';
                     } else {
-                        // Normale Anzeige: alle Feldnamen zusammenführen
                         const feldNames = grp.map(x => feldMap[x.feldId] || '').join(', ');
                         title += ` (${feldNames})`;
                     }
 
                     return {
-                        id: grp.map(x => x.id).join(','), // mehrere IDs zusammen
+                        id: grp.map(x => x.id).join(','), 
                         title,
                         start: t.anfang,
                         end: t.ende,
-                        color: t.confirmed === 'unconfirmed' ? '#ff9f89' : '#3788d8'
+                        color: getEventColor(t.confirmed) // <-- neue Farbzuweisung
                     };
                 });
 
@@ -107,6 +117,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     calendar.render();
 });
 </script>
+
 
 
 </body>
