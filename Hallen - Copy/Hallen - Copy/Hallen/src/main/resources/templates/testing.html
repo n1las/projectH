@@ -33,19 +33,31 @@ document.addEventListener('DOMContentLoaded', async function() {
     const calendarEl = document.getElementById('calendar');
     const hallenId = 9;
 
-    // Beispiel: Hole hallentyp dynamisch oder hardcode ihn
-    const hallentyp = 3; // z. B. 3 Felder pro Halle
-
     // Farb-Mapping nach Status
     function getEventColor(status) {
         switch (status) {
             case 'confirmed': return 'green';
-            case 'unconfirmed': return 'yellow';
+            case 'unconfirmed': return 'gold';
             case 'expired': return 'red';
             case 'block': return 'gray';
-            default: return 'blue'; // fallback
+            default: return 'blue';
         }
     }
+
+    // Hole HallenTyp vor Kalenderinitialisierung
+    async function getHallentyp(hallenId) {
+        try {
+            const resp = await fetch(`http://localhost:8080/api/Hallen/${hallenId}`);
+            if (!resp.ok) throw new Error("Fehler beim Laden der Halle");
+            const halle = await resp.json();
+            return halle.hallenTyp;
+        } catch (e) {
+            console.error(e);
+            return 1; // Fallback, falls Fehler
+        }
+    }
+
+    const hallentyp = await getHallentyp(hallenId);
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
@@ -86,10 +98,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 // Baue Events
                 const events = Object.values(grouped).map(grp => {
-                    const t = grp[0]; // Alle gleichen Werte
+                    const t = grp[0]; 
                     let title = t.anlass;
 
-                    // Prüfe Hallentyp und Gruppengröße
                     if (grp.length === hallentyp) {
                         title += ' (komplette Halle)';
                     } else {
@@ -102,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         title,
                         start: t.anfang,
                         end: t.ende,
-                        color: getEventColor(t.confirmed) // <-- neue Farbzuweisung
+                        color: getEventColor(t.confirmed)
                     };
                 });
 
@@ -117,6 +128,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     calendar.render();
 });
 </script>
+
 
 
 
