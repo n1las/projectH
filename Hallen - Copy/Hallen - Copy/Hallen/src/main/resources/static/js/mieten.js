@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (feldButtonsContainer) {
           feldButtonsContainer.querySelectorAll(".feld-button.selected").forEach(btn => btn.classList.remove("selected"));
         }
-        calendar?.refetchEvents();
+        location.href = location.href;
       } else {
         statusText.textContent = "❌ Fehler beim Speichern.";
       }
@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (feldButtonsContainer) {
           feldButtonsContainer.querySelectorAll(".feld-button.selected").forEach(btn => btn.classList.remove("selected"));
         }
-        calendar?.refetchEvents();
+        location.href = location.href;
       } else {
         statusText.textContent = "❌ Fehler beim Speichern.";
       }
