@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const rentBtn = document.getElementById("rent-btn");
   const felderAuswahlDiv =document.getElementById("felderAuswahlDiv");
 
+
   const anzahlFelderSelect = document.getElementById("anzahlFelder"); // nur anzeigen/verstecken
   const feldButtonsContainer = document.getElementById("feldButtonsContainer");
 
@@ -39,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
         await loadFelderAndBuildButtons();
 
       } else {
-        if (anzahlFelderSelect) anzahlFelderSelect.style.display = "none";
+        if (anzahlFelderSelect) anzahlFelderSelect.remove(1);
         // wenn keine Mehrfeld-Halle: Buttons wegräumen
         clearFeldButtons();
       }
