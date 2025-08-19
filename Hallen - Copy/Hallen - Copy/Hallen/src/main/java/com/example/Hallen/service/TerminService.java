@@ -82,6 +82,7 @@ public class TerminService {
         for(Feld feld: feldIds){
             if(isTerminAvailable(feld.getId(),rentHalleRequest.getAnfang(),rentHalleRequest.getEnde())){
                 Termin termin = new Termin();
+                termin.setFeldId(feld.getId());
                 termin.setMieterId(rentHalleRequest.getMieterId());
                 termin.setAnlass(rentHalleRequest.getAnlass());
                 termin.setAnfang(rentHalleRequest.getAnfang());

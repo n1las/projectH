@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
       feldButtonsContainer.style.display = "block";
 
     } else if (anzahlFelderSelect.value === "komplett") {
-      feldButtonsContainer.display="none";
+      feldButtonsContainer.style.display ="none";
     }
 
   });
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const anfang = form.querySelector("input[name='anfangEinzel']").value;
       const ende = form.querySelector("input[name='endeEinzel']").value;
 
-      if (!username || !anlass || !anfang || !ende || selectedFeldIds.length === 0) {
+      if (!username || !anlass || !anfang || !ende || (selectedFeldIds.length === 0 && selectedFeldIds.value === "einzeln")) {
         statusText.textContent = "❌ Bitte alle Felder ausfüllen und mindestens ein Feld auswählen.";
         return;
       }
@@ -114,8 +114,38 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       const userData = await userResponse.json();
       const mieterId = userData.id;
+      
+      const felderOrHalle = anzahlFelderSelect.value;
 
-      const rentData = {
+      if(felderOrHalle === "komplett"){
+        const rentData = {
+          halleId: parseInt(hallenId),
+          mieterId: mieterId,
+          anlass: anlass,
+          anfang: anfang,
+          ende: ende,
+        };
+
+        const post = await fetch("http://localhost:8080/api/termine/mieten/halle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(rentData),
+      });
+       if (post.ok) {
+        statusText.textContent = "✅ Einzeltermin erfolgreich erstellt!";
+        form.reset();
+        // Auswahl zurücksetzen
+        selectedFeldIds = [];
+        if (feldButtonsContainer) {
+          feldButtonsContainer.querySelectorAll(".feld-button.selected").forEach(btn => btn.classList.remove("selected"));
+        }
+        calendar?.refetchEvents();
+      } else {
+        statusText.textContent = "❌ Fehler beim Speichern.";
+      }
+      }
+      else if(felderOrHalle === "einzeln"){
+        const rentData = {
         hallenId: parseInt(hallenId),
         mieterId: mieterId,
         anlass: anlass,
@@ -128,9 +158,9 @@ document.addEventListener("DOMContentLoaded", function () {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(rentData),
+        
       });
-
-      if (post.ok) {
+         if (post.ok) {
         statusText.textContent = "✅ Einzeltermin erfolgreich erstellt!";
         form.reset();
         // Auswahl zurücksetzen
@@ -142,6 +172,8 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         statusText.textContent = "❌ Fehler beim Speichern.";
       }
+      }
+
     }
 
     // SERIE
