@@ -154,11 +154,11 @@ public class TerminController {
         return ResponseEntity.ok(erzeugteTermine);
     }
 
-    @PostMapping("/blockTermin")
-    public ResponseEntity<BlockTimeRequest> createBlock(@RequestBody BlockTimeRequest btr) {
+    @PostMapping("/blockHalle")
+    public ResponseEntity<List<Termin>> blockHalle(@RequestBody RentHalleRequest rentHalleRequest) {
         try{
-            BlockTimeRequest blockTimeRequest = service.createBlockTermin(btr);
-            return ResponseEntity.status(HttpStatus.CREATED).body(blockTimeRequest);
+            List<Termin> createdBlockTermine = service.blockHalle(rentHalleRequest) ;
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdBlockTermine);
         }catch(IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }

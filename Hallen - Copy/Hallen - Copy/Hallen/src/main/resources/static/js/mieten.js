@@ -237,14 +237,15 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      const blockTimeData = {
-        hallenId: parseInt(hallenId),
+      const blockTimeData = { 
+        mieterId: 26,
+        halleId: parseInt(hallenId),
         anlass: anlass,
         anfang: anfang,
         ende: ende,
       };
 
-      const post = await fetch("http://localhost:8080/api/termine/blockTermin", {
+      const post = await fetch("http://localhost:8080/api/termine/blockHalle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(blockTimeData),

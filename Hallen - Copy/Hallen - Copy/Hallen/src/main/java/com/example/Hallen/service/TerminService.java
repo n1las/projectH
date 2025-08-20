@@ -8,8 +8,10 @@ import com.example.Hallen.model.Mieter;
 import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.MieterRepository;
 import com.example.Hallen.repository.TerminRepository;
+import com.example.Hallen.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,6 +55,31 @@ public class TerminService {
         termin.setConfirmed("unconfirmed");
         return repository.save(termin);
     }
+    public List<Termin> rentHalle(RentHalleRequest rentHalleRequest) {
+        List<Termin> createdTermine = new ArrayList<>();
+        try{
+            createdTermine = rentHalleRequestToTerminList(rentHalleRequest);
+            for(Termin t: createdTermine){
+                create(t);
+            }
+            return createdTermine;
+        }
+        catch (IllegalArgumentException e){
+            return createdTermine;
+        }
+
+    }
+    public List<Termin> blockHalle(RentHalleRequest rentHalleRequest) {
+        List<Termin> createdBlockTermine = new ArrayList<>();
+        createdBlockTermine = rentHalleRequestToTerminList(rentHalleRequest);
+        for(Termin t: createdBlockTermine){
+            t.setConfirmed("block");
+            t.setMieterId(SecurityUtils.getCurrentMieterId());
+            repository.save(t);
+        }
+        return createdBlockTermine;
+
+    }
     public List<Termin> rentMultipleFelder(RentMultipleFelderRequest rentMultipleFelderRequest){
         if(rentMultipleFelderRequest == null || rentMultipleFelderRequest.getFeldIds().isEmpty()){
             throw new IllegalArgumentException("Keine Felder Ausgewählt");
@@ -76,7 +103,7 @@ public class TerminService {
         return addedTermine;
     }
     // Note find a way to maybe combine rentHalle and rentMultiple felder into one Method
-    public List<Termin> rentHalle(RentHalleRequest rentHalleRequest){
+    public List<Termin> rentHalleRequestToTerminList(RentHalleRequest rentHalleRequest){
         List<Feld> feldIds = feldService.getFelderByHalleId(rentHalleRequest.getHalleId());
         List<Termin> termine = new ArrayList<>();
         for(Feld feld: feldIds){
@@ -87,7 +114,7 @@ public class TerminService {
                 termin.setAnlass(rentHalleRequest.getAnlass());
                 termin.setAnfang(rentHalleRequest.getAnfang());
                 termin.setEnde(rentHalleRequest.getEnde());
-                termine.add(create(termin));
+                termine.add(termin);
             }
             else{
                 throw new IllegalArgumentException("Termin bereits belegt");
@@ -179,21 +206,6 @@ public class TerminService {
             repository.save(termin);
         }
         return terminOptional;
-    }
-    public BlockTimeRequest createBlockTermin(BlockTimeRequest blockTimeRequest){
-        if(isTerminAvailable(blockTimeRequest.getHallenId(),blockTimeRequest.getAnfang(),blockTimeRequest.getEnde())){
-            Termin termin = new Termin();
-            termin.setFeldId(blockTimeRequest.getHallenId());
-            termin.setAnlass(blockTimeRequest.getAnlass());
-            termin.setAnfang(blockTimeRequest.getAnfang());
-            termin.setEnde(blockTimeRequest.getEnde());
-            termin.setConfirmed("block");
-            repository.save(termin);
-        return blockTimeRequest;
-    }else{
-        throw new IllegalArgumentException("Termin nicht verfügbar");
-        }
-
     }
 
 }
