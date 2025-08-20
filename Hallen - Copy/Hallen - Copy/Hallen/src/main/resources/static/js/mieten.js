@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const mieterId = userData.id;
 
       const serienTerminData = {
-        hallenId: hallenId,
+        halleId: hallenId,
         mieterId: mieterId,
         anlass: anlass,
         serieAnfang: anfangDatum,
@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
         wochentag: wochentag,
       };
 
-      const post = await fetch("http://localhost:8080/api/termine/serienTermin", {
+      const post = await fetch("http://localhost:8080/api/termine/serienTermin/Halle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(serienTerminData),
@@ -238,7 +238,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       const blockTimeData = { 
-        mieterId: 26,
         halleId: parseInt(hallenId),
         anlass: anlass,
         anfang: anfang,

@@ -1,9 +1,6 @@
 package com.example.Hallen.controller;
 
-import com.example.Hallen.dto.BlockTimeRequest;
-import com.example.Hallen.dto.RentHalleRequest;
-import com.example.Hallen.dto.RentMultipleFelderRequest;
-import com.example.Hallen.dto.SerienTerminRequest;
+import com.example.Hallen.dto.*;
 import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.TerminRepository;
 import com.example.Hallen.service.TerminService;
@@ -130,28 +127,10 @@ public class TerminController {
         }
     }
 
-    @PostMapping("serienTermin")
-    public ResponseEntity<List<Termin>> createSerienTermin(@RequestBody SerienTerminRequest str) {
-        List<Termin> erzeugteTermine = new ArrayList<>();
-        LocalDate serienDatum = str.getSerieAnfang();
-
-        while (!serienDatum.isAfter(str.getSerieEnde())) {
-            LocalDateTime anfang = LocalDateTime.of(serienDatum, str.getAnfang());
-            LocalDateTime ende = LocalDateTime.of(serienDatum, str.getEnde());
-            if (service.isTerminAvailable(str.getHallenId(), anfang, ende) && serienDatum.getDayOfWeek() == str.getWochentag()) {
-                Termin termin = new Termin();
-                termin.setAnfang(anfang);
-                termin.setEnde(ende);
-                termin.setMieterId(str.getMieterId());
-                termin.setAnlass(str.getAnlass());
-                termin.setFeldId(str.getHallenId());
-                termin.setConfirmed("unconfirmed");
-                service.create(termin);
-                erzeugteTermine.add(termin);
-            }
-            serienDatum = serienDatum.plusDays(1);
-        }
-        return ResponseEntity.ok(erzeugteTermine);
+    @PostMapping("/serienTermin/Halle")
+    public ResponseEntity<List<Termin>> createSerienTermin(@RequestBody HallenSerienTermin hst) {
+        List<Termin> termine = service.halleSerienTermin(hst);
+        return ResponseEntity.status(HttpStatus.CREATED).body(termine);
     }
 
     @PostMapping("/blockHalle")

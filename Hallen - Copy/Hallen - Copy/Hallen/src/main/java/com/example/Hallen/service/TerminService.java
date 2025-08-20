@@ -1,8 +1,6 @@
 package com.example.Hallen.service;
 
-import com.example.Hallen.dto.BlockTimeRequest;
-import com.example.Hallen.dto.RentHalleRequest;
-import com.example.Hallen.dto.RentMultipleFelderRequest;
+import com.example.Hallen.dto.*;
 import com.example.Hallen.model.Feld;
 import com.example.Hallen.model.Mieter;
 import com.example.Hallen.model.Termin;
@@ -10,9 +8,11 @@ import com.example.Hallen.repository.MieterRepository;
 import com.example.Hallen.repository.TerminRepository;
 import com.example.Hallen.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,6 +122,57 @@ public class TerminService {
         }
         return termine;
     }
+    // bitte besere Lösung finden ong
+    public List<Termin> halleSerienTermin(HallenSerienTermin hallenSerienTermin){
+        SerienTerminRequest serienTerminRequest = new SerienTerminRequest();
+        List<Feld> felder = feldService.getFelderByHalleId(hallenSerienTermin.getHalleId());
+        List<Long> feldIds = new ArrayList<>();
+        for(Feld f: felder){
+            feldIds.add(f.getId());
+        }
+        serienTerminRequest.setFeldIds(feldIds);
+        serienTerminRequest.setAnfang(hallenSerienTermin.getAnfang());
+        serienTerminRequest.setAnlass(hallenSerienTermin.getAnlass());
+        serienTerminRequest.setEnde(hallenSerienTermin.getEnde());
+        serienTerminRequest.setWochentag(hallenSerienTermin.getWochentag());
+        serienTerminRequest.setSerieAnfang(hallenSerienTermin.getSerieAnfang());
+        serienTerminRequest.setSerieEnde(hallenSerienTermin.getSerieEnde());
+        serienTerminRequest.setMieterId(hallenSerienTermin.getMieterId());
+        serienTerminRequest.setWochentag(hallenSerienTermin.getWochentag());
+        return serieRequestToTermine(serienTerminRequest);
+
+    }
+    public List<Termin> serieRequestToTermine(SerienTerminRequest serienTerminRequest){
+        List<Termin> erzeugteTermine = new ArrayList<>();
+        LocalDate serienDatum = serienTerminRequest.getSerieAnfang();
+        List<Long> feldIds = serienTerminRequest.getFeldIds();
+
+        while (!serienDatum.isAfter(serienTerminRequest.getSerieEnde())) {
+            LocalDateTime anfang = LocalDateTime.of(serienDatum, serienTerminRequest.getAnfang());
+            LocalDateTime ende = LocalDateTime.of(serienDatum, serienTerminRequest.getEnde());
+
+            if(serienDatum.getDayOfWeek() == serienTerminRequest.getWochentag() && areTermineAvailable(feldIds, anfang, ende)){
+                RentMultipleFelderRequest rmfr = new RentMultipleFelderRequest();
+                rmfr.setFeldIds(serienTerminRequest.getFeldIds());
+                rmfr.setAnfang(anfang);
+                rmfr.setEnde(ende);
+                rmfr.setMieterId(serienTerminRequest.getMieterId());
+                rmfr.setAnlass(serienTerminRequest.getAnlass());
+                try{
+                    erzeugteTermine.addAll(rentMultipleFelder(rmfr));
+
+                }
+                catch (IllegalArgumentException e){
+                    return erzeugteTermine;
+                }
+
+            }
+
+
+            serienDatum = serienDatum.plusDays(1);
+        }
+        return erzeugteTermine;
+    }
 
 
     public Termin update(Long id, Termin termin) {
@@ -150,6 +201,18 @@ public class TerminService {
             }
         }
         return true; // No conflicts
+    }
+    public boolean areTermineAvailable(List<Long> feldIds, LocalDateTime anfang, LocalDateTime ende){
+        for(Long feldId: feldIds){
+            List<Termin> existing = repository.findByFeldId(feldId);
+            for(Termin termin: existing){
+                if(termin.getAnfang().isBefore(ende) && termin.getEnde().isAfter(anfang)){
+                    return false;
+                }
+            }
+        }
+        return true;
+
     }
     public List<Termin> findByMieterId(Long mieterId){
         return repository.findByMieterId(mieterId);

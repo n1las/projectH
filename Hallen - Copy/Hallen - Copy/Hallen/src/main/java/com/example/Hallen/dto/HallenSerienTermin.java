@@ -2,12 +2,10 @@ package com.example.Hallen.dto;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 
-public class SerienTerminRequest {
-    private List<Long> feldIds;
+public class HallenSerienTermin {
+    private Long halleId;
     private Long mieterId;
     private String anlass;
     private LocalTime anfang;
@@ -16,14 +14,14 @@ public class SerienTerminRequest {
     private LocalDate serieEnde;
     private DayOfWeek wochentag;
 
-
-    public List<Long> getFeldIds() {
-        return feldIds;
+    public Long getHalleId() {
+        return halleId;
     }
 
-    public void setFeldIds(List<Long> feldIds) {
-        this.feldIds = feldIds;
+    public void setHalleId(Long halleId) {
+        this.halleId = halleId;
     }
+
     public Long getMieterId() {
         return mieterId;
     }
