@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TerminService {
@@ -270,5 +268,27 @@ public class TerminService {
         }
         return terminOptional;
     }
+    public  List<MergedTermine> merge() {
+        Map<String, MergedTermine> map = new HashMap<>();
+        List<Termin> termine = repository.findAll();
+
+        for (Termin t : termine) {
+            Long halleId = feldService.getById(t.getFeldId()).getHalleId();
+            String key = halleId + "|" +  t.getAnlass() + "|" + t.getAnfang() + "|" + t.getEnde();
+
+            MergedTermine mergedTermine = map.get(key);
+            if(mergedTermine != null){
+                mergedTermine.addToTerminIds(t.getId());
+            }
+            else {
+                List<Long> id = new ArrayList<>();
+                id.add(t.getId());
+                map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass()));
+            }
+        }
+
+        return new ArrayList<>(map.values());
+    }
+
 
 }

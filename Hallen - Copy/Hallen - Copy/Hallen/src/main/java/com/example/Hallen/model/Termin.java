@@ -86,4 +86,5 @@ public class Termin {
     public void setEnde(LocalDateTime ende) {
         this.ende = ende;
     }
+
 }

@@ -52,7 +52,10 @@ public class TerminController {
     public List<Termin>getTerminByHalleId(@PathVariable Long halleId){
         return service.getByHalleId(halleId);
     }
-
+    @GetMapping("/getMergedTermine")
+    public List<MergedTermine> getMergedTermine(){
+        return service.merge();
+    }
 
     @PostMapping("/mieten/multipleFelder")
     public ResponseEntity<List<Termin>> rentMultipleFelder(@RequestBody RentMultipleFelderRequest rentMultipleFelderRequest) {
