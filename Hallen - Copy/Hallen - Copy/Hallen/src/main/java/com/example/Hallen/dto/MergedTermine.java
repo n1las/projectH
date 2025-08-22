@@ -11,7 +11,16 @@ public class MergedTermine {
     private LocalDateTime anfang;
     private LocalDateTime ende;
     private String anlass;
-    private String anzahlFelder; // zb (Feld 1, Feld 2) oder (komplette Halle)
+    private String anzahlFelder;// zb (Feld 1, Feld 2) oder (komplette Halle)
+    private Long halleId;
+
+    public Long getHalleId() {
+        return halleId;
+    }
+
+    public void setHalleId(Long halleId) {
+        this.halleId = halleId;
+    }
 
     public String getAnzahlFelder() {
         return anzahlFelder;
@@ -24,12 +33,13 @@ public class MergedTermine {
         this.anzahlFelder += ", " + feldName;
     }
 
-    public MergedTermine(List<Long> terminIds, LocalDateTime anfang, LocalDateTime ende, String anlass, String anzahlFelder) {
+    public MergedTermine(List<Long> terminIds, LocalDateTime anfang, LocalDateTime ende, String anlass, String anzahlFelder, Long halleId) {
         this.terminIds = terminIds;
         this.anfang = anfang;
         this.ende = ende;
         this.anlass = anlass;
         this.anzahlFelder = anzahlFelder;
+        this.halleId = halleId;
 
     }
 
