@@ -2,6 +2,7 @@ package com.example.Hallen.service;
 
 import com.example.Hallen.dto.*;
 import com.example.Hallen.model.Feld;
+import com.example.Hallen.model.Halle;
 import com.example.Hallen.model.Mieter;
 import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.MieterRepository;
@@ -24,6 +25,8 @@ public class TerminService {
     private  EmailService emailService;
     @Autowired
     private FeldService feldService;
+    @Autowired
+    private HallenService hallenService;
 
     @Autowired
     private MieterRepository mieterRepository;
@@ -47,6 +50,10 @@ public class TerminService {
             termine.addAll(getTerminByFeldId(f.getId()));
         }
         return termine;
+    }
+    public Long getHalleIdByTerminId(Long terminId){
+        Feld feld = feldService.getById(terminId);
+        return feld.getHalleId();
     }
 
     public Termin create(Termin termin) {
@@ -275,15 +282,31 @@ public class TerminService {
         for (Termin t : termine) {
             Long halleId = feldService.getById(t.getFeldId()).getHalleId();
             String key = halleId + "|" +  t.getAnlass() + "|" + t.getAnfang() + "|" + t.getEnde();
+            Halle halle = hallenService.getHalleById(halleId);
 
             MergedTermine mergedTermine = map.get(key);
             if(mergedTermine != null){
                 mergedTermine.addToTerminIds(t.getId());
+                if(mergedTermine.getTerminIds().size() == halle.getHallenTyp()){
+                    mergedTermine.setAnzahlFelder("Komplette Halle");
+                }
+                else{
+                    Feld feld = feldService.getById(t.getFeldId());
+                    mergedTermine.addAnzahlFelder(feld.getName());
+
+                }
             }
             else {
                 List<Long> id = new ArrayList<>();
                 id.add(t.getId());
-                map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass()));
+                Feld feld = feldService.getById(t.getFeldId());
+                if(halle.getHallenTyp() == 1){
+                    map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass(),"Komplette Halle"));
+                }
+                else{
+                    map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass(),feld.getName()));
+                }
+
             }
         }
 
