@@ -301,16 +301,19 @@ public class TerminService {
                 id.add(t.getId());
                 Feld feld = feldService.getById(t.getFeldId());
                 if(halle.getHallenTyp() == 1){
-                    map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass(),"Komplette Halle", halleId));
+                    map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass(),"Komplette Halle", halleId, t.getConfirmed()));
                 }
                 else{
-                    map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass(),feld.getName(), halleId));
+                    map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass(),feld.getName(), halleId, t.getConfirmed()));
                 }
 
             }
         }
 
         return new ArrayList<>(map.values());
+    }
+    public List<Termin> getMergedTermineByConfirmed(String confirmed){
+        mer
     }
 
 
