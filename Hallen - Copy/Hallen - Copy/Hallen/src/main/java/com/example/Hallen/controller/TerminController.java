@@ -135,6 +135,11 @@ public class TerminController {
         List<Termin> termine = service.halleSerienTermin(hst);
         return ResponseEntity.status(HttpStatus.CREATED).body(termine);
     }
+    @PostMapping("/serienTermin/Felder")
+    public ResponseEntity<List<Termin>> createSerienTerminFelder(@RequestBody SerienTerminRequest srt){
+        List<Termin> termine = service.serieRequestToTermine(srt);
+        return ResponseEntity.status(HttpStatus.CREATED).body(termine);
+    }
 
     @PostMapping("/blockHalle")
     public ResponseEntity<List<Termin>> blockHalle(@RequestBody RentHalleRequest rentHalleRequest) {

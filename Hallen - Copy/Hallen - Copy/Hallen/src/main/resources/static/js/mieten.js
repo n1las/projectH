@@ -178,28 +178,30 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // SERIE
-    else if (typ === "serie") {
-      const anfangDatum = form.querySelector("input[name='serieAnfang']").value;
-      const endeDatum = form.querySelector("input[name='serieEnde']").value;
-      const anfangUhr = form.querySelector("input[name='anfangSerie']").value;
-      const endeUhr = form.querySelector("input[name='endeSerie']").value;
-      const wochentag = form.querySelector("select[name='wochentag']").value;
-      const anlass = form.querySelector("input[name='anlassSerie']").value;
-      const username = form.querySelector("input[name='username']").value.trim();
+  else if (typ === "serie") {
+    const anfangDatum = form.querySelector("input[name='serieAnfang']").value;
+    const endeDatum = form.querySelector("input[name='serieEnde']").value;
+    const anfangUhr = form.querySelector("input[name='anfangSerie']").value;
+    const endeUhr = form.querySelector("input[name='endeSerie']").value;
+    const wochentag = form.querySelector("select[name='wochentag']").value;
+    const anlass = form.querySelector("input[name='anlassSerie']").value;
+    const username = form.querySelector("input[name='username']").value.trim();
 
-      if (!anfangDatum || !endeDatum || !anfangUhr || !endeUhr || !wochentag || !anlass || !username) {
-        statusText.textContent = "❌ Bitte alle Felder ausfüllen (Serie).";
-        return;
-      }
+    if (!anfangDatum || !endeDatum || !anfangUhr || !endeUhr || !wochentag || !anlass || !username) {
+      statusText.textContent = "❌ Bitte alle Felder ausfüllen (Serie).";
+      return;
+    }
 
-      const userResponse = await fetch(`http://localhost:8080/api/Mieter/byUsername/${username}`);
-      if (!userResponse.ok) {
-        statusText.textContent = "❌ Benutzer nicht gefunden.";
-        return;
-      }
-      const userData = await userResponse.json();
-      const mieterId = userData.id;
+    const userResponse = await fetch(`http://localhost:8080/api/Mieter/byUsername/${username}`);
+    if (!userResponse.ok) {
+      statusText.textContent = "❌ Benutzer nicht gefunden.";
+      return;
+    }
+    const userData = await userResponse.json();
+    const mieterId = userData.id;
 
+    if (anzahlFelderSelect.value === "komplett") {
+      // Original: Halle
       const serienTerminData = {
         halleId: hallenId,
         mieterId: mieterId,
@@ -224,7 +226,40 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         statusText.textContent = "❌ Fehler beim Serientermin.";
       }
+    } else if (anzahlFelderSelect.value === "einzeln") {
+      // Use the already existing selectedFeldIds
+      if (!selectedFeldIds || selectedFeldIds.length === 0) {
+        statusText.textContent = "❌ Bitte mindestens ein Feld auswählen.";
+        return;
+      }
+
+      const serienTerminData = {
+        feldIds: selectedFeldIds,
+        mieterId: mieterId,
+        anlass: anlass,
+        serieAnfang: anfangDatum,
+        serieEnde: endeDatum,
+        anfang: anfangUhr,
+        ende: endeUhr,
+        wochentag: wochentag,
+      };
+
+      const post = await fetch("http://localhost:8080/api/termine/serienTermin/Felder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(serienTerminData),
+      });
+
+      if (post.ok) {
+        statusText.textContent = "✅ Serientermin (einzeln) erfolgreich erstellt!";
+        form.reset();
+        calendar?.refetchEvents();
+      } else {
+        statusText.textContent = "❌ Fehler beim Serientermin (einzeln).";
+      }
     }
+  }
+
 
     // BLOCK
     else if (typ === "block") {
