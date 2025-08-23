@@ -312,8 +312,15 @@ public class TerminService {
 
         return new ArrayList<>(map.values());
     }
-    public List<Termin> getMergedTermineByConfirmed(String confirmed){
-        mer
+    public List<MergedTermine> getMergedTermineByConfirmed(String confirmed){
+        List<MergedTermine> alleTermine = merge();
+        List<MergedTermine> termineConfirmed = new ArrayList<>();
+        for(MergedTermine mt: alleTermine){
+            if(mt.getConfirmed().equals(confirmed)){
+                termineConfirmed.add(mt);
+            }
+        }
+        return termineConfirmed;
     }
 
 

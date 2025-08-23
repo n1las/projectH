@@ -45,7 +45,7 @@ public class TerminController {
         return service.findByMieterIdAndConfirmed(mieterId,confirmed);
     }
     @GetMapping("/getByFeldId/{feldId}")
-        public List<Termin> getTerminByFeldId(@PathVariable Long feldId){
+    public List<Termin> getTerminByFeldId(@PathVariable Long feldId){
             return service.getTerminByFeldId(feldId);
         }
     @GetMapping("/getByHalleId/{halleId}")
@@ -55,6 +55,16 @@ public class TerminController {
     @GetMapping("/getMergedTermine")
     public List<MergedTermine> getMergedTermine(){
         return service.merge();
+    }
+
+    @GetMapping("/ByConfirmed/{confirmed}")
+    public List<Termin> getByConfirmed(@PathVariable String confirmed){
+        return service.findByConfirmed(confirmed);
+    }
+
+    @GetMapping("/MergedTermine/ByConfirmed/{confirmed}")
+    public List<MergedTermine> getMergedTermineByConfirmed(@PathVariable String confirmed){
+        return service.getMergedTermineByConfirmed(confirmed);
     }
 
     @PostMapping("/mieten/multipleFelder")
@@ -152,10 +162,7 @@ public class TerminController {
 
     }
 
-    @GetMapping("/ByConfirmed/{confirmed}")
-    public List<Termin> getByConfirmed(@PathVariable String confirmed){
-        return service.findByConfirmed(confirmed);
-    }
 }
+
 
 

@@ -2,7 +2,6 @@ package com.example.Hallen.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 public class RentMultipleFelderRequest {
     List<Long> feldIds;
     Long mieterId;
