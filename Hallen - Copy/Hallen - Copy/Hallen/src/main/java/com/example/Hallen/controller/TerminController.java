@@ -66,6 +66,11 @@ public class TerminController {
     public List<MergedTermine> getMergedTermineByConfirmed(@PathVariable String confirmed){
         return service.getMergedTermineByConfirmed(confirmed);
     }
+    @GetMapping("/MergedTermine/ForUser")
+    public List<MergedTermine> getMergedTermineForUser(){
+        return service.mergeForUser();
+    }
+
 
     @PostMapping("/mieten/multipleFelder")
     public ResponseEntity<List<Termin>> rentMultipleFelder(@RequestBody RentMultipleFelderRequest rentMultipleFelderRequest) {

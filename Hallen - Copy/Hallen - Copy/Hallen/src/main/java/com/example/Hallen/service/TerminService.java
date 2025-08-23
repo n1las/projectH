@@ -301,10 +301,10 @@ public class TerminService {
                 id.add(t.getId());
                 Feld feld = feldService.getById(t.getFeldId());
                 if(halle.getHallenTyp() == 1){
-                    map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass(),"Komplette Halle", halleId, t.getConfirmed()));
+                    map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass(),"Komplette Halle", halleId, t.getConfirmed(),t.getMieterId()));
                 }
                 else{
-                    map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass(),feld.getName(), halleId, t.getConfirmed()));
+                    map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass(),feld.getName(), halleId, t.getConfirmed(), t.getMieterId()));
                 }
 
             }
@@ -321,6 +321,19 @@ public class TerminService {
             }
         }
         return termineConfirmed;
+    }
+    public List<MergedTermine> mergeForUser(){
+        Long mieterId = SecurityUtils.getCurrentMieterId();
+        List<MergedTermine> unconfirmedTermine = getMergedTermineByConfirmed("unconfirmed");
+        List<MergedTermine> termineUser = new ArrayList<>();
+        for(MergedTermine mt: unconfirmedTermine){
+            if(mt.getMieterId().equals(mieterId)){
+                termineUser.add(mt);
+            }
+        }
+        return termineUser;
+
+
     }
 
 
