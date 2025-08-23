@@ -332,7 +332,12 @@ public class TerminService {
             }
         }
         return termineUser;
+    }
 
+    public void updateTerminConfirmed(CoCRequest coc){
+        for(Long id: coc.getTerminIds()){
+            updateTerminStatus(id,coc.getStatus());
+        }
 
     }
 
