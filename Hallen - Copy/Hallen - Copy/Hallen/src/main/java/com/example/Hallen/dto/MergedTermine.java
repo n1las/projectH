@@ -15,6 +15,17 @@ public class MergedTermine {
     private Long halleId;
     private String confirmed;
 
+    public MergedTermine(List<Long> terminIds, LocalDateTime anfang, LocalDateTime ende, String anlass, String anzahlFelder, Long halleId, String confirmed) {
+        this.terminIds = terminIds;
+        this.anfang = anfang;
+        this.ende = ende;
+        this.anlass = anlass;
+        this.anzahlFelder = anzahlFelder;
+        this.halleId = halleId;
+        this.confirmed = confirmed;
+
+    }
+
     public String getConfirmed() {
         return confirmed;
     }
@@ -40,25 +51,6 @@ public class MergedTermine {
     }
     public void addAnzahlFelder(String feldName){
         this.anzahlFelder += ", " + feldName;
-    }
-
-    public MergedTermine(List<Long> terminIds, LocalDateTime anfang, LocalDateTime ende, String anlass, String anzahlFelder, Long halleId, String confirmed) {
-        this.terminIds = terminIds;
-        this.anfang = anfang;
-        this.ende = ende;
-        this.anlass = anlass;
-        this.anzahlFelder = anzahlFelder;
-        this.halleId = halleId;
-        this.confirmed = confirmed;
-
-    }
-
-    public MergedTermine(List<Long> terminIds, LocalDateTime anfang, LocalDateTime ende, String anlass) {
-        this.terminIds = terminIds;
-        this.anfang = anfang;
-        this.ende = ende;
-        this.anlass = anlass;
-
     }
 
     public List<Long> getTerminIds() {
