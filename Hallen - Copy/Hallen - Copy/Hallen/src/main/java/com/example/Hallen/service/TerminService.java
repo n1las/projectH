@@ -251,6 +251,8 @@ public class TerminService {
         Optional<Termin> terminOptional = repository.findById(id);
         if(terminOptional.isPresent()){
             Termin termin = terminOptional.get();
+            termin.setConfirmed(terminStatus);
+            repository.save(termin);
             if(terminStatus.equals("cancelled")){
                 Optional<Mieter> mieterOptional = mieterRepository.findById(termin.getMieterId());
                 if(mieterOptional.isPresent()){
@@ -269,9 +271,6 @@ public class TerminService {
                 }
 
             }
-
-            termin.setConfirmed(terminStatus);
-            repository.save(termin);
         }
         return terminOptional;
     }
