@@ -6,6 +6,7 @@ body {
     padding: 0;
     background-color: #f4f4f4;
     text-align: center;
+    height: 100%;
 }
 
 /* Container holds sidebar + main */
@@ -15,17 +16,6 @@ body {
   flex: 1;
   padding: 20px 30px;
   overflow-y: auto;
-}
-footer{
-    background: #0056b3; /* Updated to match logo color */
-    color: white;
-    padding: 20px 0;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    z-index: 1001;
 }
 
 .sportanlagen {
@@ -37,7 +27,9 @@ footer{
     margin: auto;
     margin-top: 60px;
     position: relative;
+    padding-bottom: 100px; /* add space for footer */
 }
+
 
 figure {
     background: white;

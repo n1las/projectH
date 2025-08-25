@@ -1,5 +1,5 @@
-footer{
-    background: #0056b3; /* Updated to match logo color */
+footer {
+    background: #0056b3;
     color: white;
     padding: 20px 0;
     font-size: 16px;
@@ -7,10 +7,5 @@ footer{
     align-items: center;
     justify-content: center;
     gap: 20px;
-    z-index: 1001;
-    width: 100%;
-    background-color: #f1f1f1;
-    padding: 10px 20px;
-    text-align: center;
-    margin-top: auto;
+    
 }
