@@ -8,6 +8,7 @@ import java.util.List;
 
 public class MergedTermine {
     private List<Long> terminIds;
+    private List<Long> feldIds;
     private LocalDateTime anfang;
     private LocalDateTime ende;
     private String anlass;
@@ -16,20 +17,12 @@ public class MergedTermine {
     private String confirmed;
     private Long mieterId;
 
-    public MergedTermine(List<Long> terminIds, LocalDateTime anfang, LocalDateTime ende, String anlass, String anzahlFelder, Long halleId, String confirmed) {
-        this.terminIds = terminIds;
-        this.anfang = anfang;
-        this.ende = ende;
-        this.anlass = anlass;
-        this.anzahlFelder = anzahlFelder;
-        this.halleId = halleId;
-        this.confirmed = confirmed;
-    }
 
-    public MergedTermine(List<Long> terminIds, LocalDateTime anfang, LocalDateTime ende, String anlass,
+    public MergedTermine(List<Long> terminIds, List<Long> feldIds, LocalDateTime anfang, LocalDateTime ende, String anlass,
                          String anzahlFelder, Long halleId, String confirmed, Long mieterId) {
 
         this.terminIds = terminIds;
+        this.feldIds = feldIds;
         this.anfang = anfang;
         this.ende = ende;
         this.anlass = anlass;
@@ -39,6 +32,18 @@ public class MergedTermine {
         this.mieterId = mieterId;
 
     }
+
+    public List<Long> getFeldIds() {
+        return feldIds;
+    }
+
+    public void setFeldIds(List<Long> feldIds) {
+        this.feldIds = feldIds;
+    }
+    public void addToFeldId(Long feldId){
+        feldIds.add(feldId);
+    }
+
     public Long getMieterId() {
         return mieterId;
     }

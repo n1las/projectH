@@ -234,14 +234,17 @@ public class TerminService {
         return confirmedTermine;
     }
 
-    public boolean deleteByFeldIdAndAnfang(Long feldId, LocalDateTime anfang) {
-        Optional<Termin> terminOpt = repository.findByFeldIdAndAnfang(feldId, anfang)   ;
-        if (terminOpt.isPresent()) {
-            repository.delete(terminOpt.get());
-            return true;
-        } else {
-            return false;
+    public boolean deleteByFeldIdAndAnfang(List<Long> feldIds, LocalDateTime anfang) {
+        for(Long l: feldIds){
+            Optional<Termin> terminOpt = repository.findByFeldIdAndAnfang(l, anfang)   ;
+            if (terminOpt.isPresent()) {
+                repository.delete(terminOpt.get());
+            }
+            else {
+                return false;
+            }
         }
+        return true;
     }
     public List<Termin> findByConfirmed(String confirmed){
         return repository.findByIsConfirmed(confirmed);
@@ -274,6 +277,7 @@ public class TerminService {
         }
         return terminOptional;
     }
+    //TODO change it so it only merges the list you give it for better performance
     public  List<MergedTermine> merge() {
         Map<String, MergedTermine> map = new HashMap<>();
         List<Termin> termine = repository.findAll();
@@ -286,6 +290,7 @@ public class TerminService {
             MergedTermine mergedTermine = map.get(key);
             if(mergedTermine != null){
                 mergedTermine.addToTerminIds(t.getId());
+                mergedTermine.addToFeldId(t.getFeldId());
                 if(mergedTermine.getTerminIds().size() == halle.getHallenTyp()){
                     mergedTermine.setAnzahlFelder("Komplette Halle");
                 }
@@ -297,13 +302,15 @@ public class TerminService {
             }
             else {
                 List<Long> id = new ArrayList<>();
+                List<Long> feldIds = new ArrayList<>();
                 id.add(t.getId());
+                feldIds.add(t.getFeldId());
                 Feld feld = feldService.getById(t.getFeldId());
                 if(halle.getHallenTyp() == 1){
-                    map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass(),"Komplette Halle", halleId, t.getConfirmed(),t.getMieterId()));
+                    map.put(key, new MergedTermine(id, feldIds,t.getAnfang(),t.getEnde(),t.getAnlass(),"Komplette Halle", halleId, t.getConfirmed(),t.getMieterId()));
                 }
                 else{
-                    map.put(key, new MergedTermine(id,t.getAnfang(),t.getEnde(),t.getAnlass(),feld.getName(), halleId, t.getConfirmed(), t.getMieterId()));
+                    map.put(key, new MergedTermine(id, feldIds, t.getAnfang(),t.getEnde(),t.getAnlass(),feld.getName(), halleId, t.getConfirmed(), t.getMieterId()));
                 }
 
             }
@@ -339,6 +346,17 @@ public class TerminService {
         }
 
     }
+    /*
+    public void deleteByFeldIdAndStart(List<Long> feldIds, LocalDateTime start){
+        List<Termin> alleTermine = repository.findAll();
+        for(Termin t: alleTermine){
+            if(feldIds.contains(t.getFeldId()) && t.getAnfang().equals(start)){
+                delete(t.getId());
+            }
+        }
+    }
+
+     */
 
 
 }

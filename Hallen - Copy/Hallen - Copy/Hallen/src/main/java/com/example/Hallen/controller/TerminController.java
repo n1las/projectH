@@ -119,11 +119,9 @@ public class TerminController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteTermin(
-            @RequestParam Long feldId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime anfang) {
+    public ResponseEntity<String> deleteTermin(@RequestBody DeleteRequest deleteRequest) {
 
-        boolean deleted = service.deleteByFeldIdAndAnfang(feldId, anfang);
+        boolean deleted = service.deleteByFeldIdAndAnfang(deleteRequest.getFeldIds(), deleteRequest.getStart());
 
         if (deleted) {
             return ResponseEntity.ok("Termin deleted successfully! 🧹");

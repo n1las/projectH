@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (terminTyp.value === "einzel") {
       einzelInputs.style.display = "block";
       commonInput.style.display = "block";
+      felderAuswahlDiv.style.display = "block";
       // sicherstellen, dass Feld-Buttons da sind (falls Nutzer erst jetzt auf "einzel" wechselt)
       await loadFelderAndBuildButtons();
     } else if (terminTyp.value === "block") {
@@ -69,9 +70,11 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (terminTyp.value === "serie") {
       commonInput.style.display = "block";
       serieInputs.style.display = "block";
+      felderAuswahlDiv.style.display = "block";
       await loadFelderAndBuildButtons(); // falls Serie auch Felder braucht
     } else if (terminTyp.value === "delete") {
       deleteInputs.style.display = "block";
+      felderAuswahlDiv.style.display = "block"
       // Für delete keine Felder nötig
     }
   });
@@ -303,17 +306,33 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      const response = await fetch(`http://localhost:8080/api/termine/delete/${hallenId}/${anfang}`, {
-        method: "DELETE",
-      });
+ // Prepare the DeleteRequest object
+    const DeleteRequest = {
+        feldIds: selectedFeldIds,
+        start: anfang
+    };
 
-      if (response.ok) {
-        statusText.textContent = "✅ Termin erfolgreich gelöscht!";
-        form.reset();
-        calendar?.refetchEvents();
-      } else {
-        statusText.textContent = "❌ Fehler beim Löschen.";
-      }
+    // Make the fetch request
+    fetch('http://localhost:8080/api/termine/delete', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(DeleteRequest)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+        return response.text();
+    })
+    .then(message => {
+        console.log(message); // "Termin deleted successfully! 🧹" or "No matching Termin found. ❌"
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+    });
+
     }
   });
 
