@@ -16,7 +16,9 @@
       <li sec:authorize="hasAnyRole('ADMIN', 'USER')">
         <a href="/verein">Meine Termine</a>
       </li>
-      <li sec:authorize="hasRole('ADMIN')"></li>
-      <a href="/export">Datenbank Export</a>
+      <a>
+        <li sec:authorize="hasRole('ADMIN')" id="exportLi">Daten Bank Export</li>
+      </a>
+      
     </ul>
 </nav>

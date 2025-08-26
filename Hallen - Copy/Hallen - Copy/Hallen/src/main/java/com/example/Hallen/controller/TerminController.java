@@ -3,7 +3,9 @@ package com.example.Hallen.controller;
 import com.example.Hallen.dto.*;
 import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.TerminRepository;
+import com.example.Hallen.service.TerminExportService;
 import com.example.Hallen.service.TerminService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -71,7 +74,6 @@ public class TerminController {
     public List<MergedTermine> getMergedTermineForUser(){
         return service.mergeForUser();
     }
-
 
     @PostMapping("/mieten/multipleFelder")
     public ResponseEntity<List<Termin>> rentMultipleFelder(@RequestBody RentMultipleFelderRequest rentMultipleFelderRequest) {

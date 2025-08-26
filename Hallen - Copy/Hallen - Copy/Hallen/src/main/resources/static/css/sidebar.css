@@ -33,6 +33,7 @@
 
 .sidebar li {
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .sidebar a {

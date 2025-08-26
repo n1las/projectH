@@ -6,3 +6,6 @@ toggleBtn.addEventListener("click", () => {
   sidebar.classList.toggle("hidden");
   container.classList.toggle("sidebar-visible");
 });
+document.getElementById('exportLi').addEventListener('click', () => {
+    window.location.href = '/api/termineExport/export/excel';
+});

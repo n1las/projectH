@@ -27,6 +27,8 @@ public class TerminService {
     private FeldService feldService;
     @Autowired
     private HallenService hallenService;
+    @Autowired
+    private MieterService mieterService;
 
     @Autowired
     private MieterRepository mieterRepository;
@@ -51,9 +53,40 @@ public class TerminService {
         }
         return termine;
     }
+    //TODO: SCHLECHTESTER CODE JEMALS BITTE ÄNDERN (ABER ES FUNKTIONIERT)
     public Long getHalleIdByTerminId(Long terminId){
-        Feld feld = feldService.getById(terminId);
-        return feld.getHalleId();
+        Long respone = terminId;
+        Optional<Termin> terminOptional = getById(terminId);
+        if(terminOptional.isPresent()){
+            Termin termin = terminOptional.get();
+            Feld feld = feldService.getById(termin.getFeldId());
+            respone = feld.getHalleId();
+        }
+        return respone;
+
+    }
+    public String getHallenName(Long terminId){
+
+        return hallenService
+                .getHallenNameById(getHalleIdByTerminId(terminId));
+    }
+    public String getMieterName(Long terminId){
+        Optional<Termin> terminOptional = getById(terminId);
+        if(terminOptional.isPresent()){
+            Termin termin = terminOptional.get();
+            return mieterService.getMieterById(termin.getMieterId()).getUsername();
+        }
+
+        return "Fehler";
+    }
+    public String getFeldName(Long terminId){
+        Optional<Termin> terminOptional = getById(terminId);
+        if(terminOptional.isPresent()){
+            Termin termin = terminOptional.get();
+            Feld feld = feldService.getById(termin.getFeldId());
+            return feld.getName();
+        }
+        return "Felher";
     }
 
     public Termin create(Termin termin) {
@@ -358,17 +391,7 @@ public class TerminService {
         }
 
     }
-    /*
-    public void deleteByFeldIdAndStart(List<Long> feldIds, LocalDateTime start){
-        List<Termin> alleTermine = repository.findAll();
-        for(Termin t: alleTermine){
-            if(feldIds.contains(t.getFeldId()) && t.getAnfang().equals(start)){
-                delete(t.getId());
-            }
-        }
-    }
 
-     */
 
 
 }
