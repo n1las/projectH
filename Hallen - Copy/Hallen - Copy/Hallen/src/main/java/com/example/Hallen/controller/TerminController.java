@@ -5,6 +5,7 @@ import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.TerminRepository;
 import com.example.Hallen.service.TerminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -123,6 +124,15 @@ public class TerminController {
 
         boolean deleted = service.deleteByFeldIdAndAnfang(deleteRequest.getFeldIds(), deleteRequest.getStart());
 
+        if (deleted) {
+            return ResponseEntity.ok("Termin deleted successfully! 🧹");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No matching Termin found. ❌");
+        }
+    }
+    @DeleteMapping("/delete/byIds")
+    public ResponseEntity<String>deleteByIds(@RequestBody AdminDeleteRequest adminDeleteRequest){
+        boolean deleted = service.deleteByIds(adminDeleteRequest.getTerminIds());
         if (deleted) {
             return ResponseEntity.ok("Termin deleted successfully! 🧹");
         } else {

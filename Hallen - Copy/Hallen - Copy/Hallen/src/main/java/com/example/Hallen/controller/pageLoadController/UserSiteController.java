@@ -14,4 +14,8 @@ public class UserSiteController {
     public String showEditUserPage(@PathVariable String id){
         return "editUser";
     }
+    @GetMapping("/admin/termine")
+    public String showTerminePage(){
+        return"termine";
+    }
 }

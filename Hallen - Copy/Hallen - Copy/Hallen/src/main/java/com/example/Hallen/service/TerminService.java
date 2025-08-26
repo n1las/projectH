@@ -188,6 +188,18 @@ public class TerminService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+    public boolean deleteByIds(List<Long> terminIds){
+        for(Long id: terminIds){
+            Optional<Termin> terminOptional = repository.findById(id);
+            if(terminOptional.isPresent()){
+                repository.delete(terminOptional.get());
+            }
+            else{
+                return false;
+            }
+        }
+        return true;
+    }
 
     public boolean deleteByStart(LocalDateTime start){
         Optional<Termin> temp = repository.findByAnfang(start);
