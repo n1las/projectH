@@ -3,32 +3,26 @@ const terminTableBody = document.getElementById("termin-table-body");
 // 🕓 Hilfsfunktion: ISO-Datum → deutsches Format
 function formatGermanDate(isoDateString) {
   const date = new Date(isoDateString);
-  return date.toLocaleString('de-DE', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }) + ' Uhr';
-}
-
-async function getHallenName(id) {
-  const response = await fetch(`/api/Hallen/getName/${id}`);
-  if (!response.ok) throw new Error("Fehler beim Laden des Hallennamens");
-  return await response.text();
+  return date.toLocaleString("de-DE", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }) + " Uhr";
 }
 
 // 📥 Termine vom Server laden
 function loadTermine() {
-  fetch("http://localhost:8080/api/termine/MergedTermine/ForUser")
-    .then(response => {
+  fetch("http://localhost:8080/api/termine/getMergedTermine")
+    .then((response) => {
       if (!response.ok) throw new Error("Fehler beim Abrufen der Termine");
       return response.json();
     })
-    .then(termine => {
+    .then((termine) => {
       renderTerminTable(termine);
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("Fehler beim Abrufen der Daten:", error);
     });
 }
@@ -37,25 +31,21 @@ function loadTermine() {
 function renderTerminTable(termine) {
   terminTableBody.innerHTML = "";
 
-  termine.forEach(termin => {
+  termine.forEach((termin) => {
     const anfangFormatted = formatGermanDate(termin.anfang);
     const endeFormatted = formatGermanDate(termin.ende);
 
     const row = document.createElement("tr");
 
-    // 🏟 Hallenname-Zelle
-    const hallenNameCell = document.createElement("td");
-    hallenNameCell.textContent = "Lädt...";
-    row.appendChild(hallenNameCell);
+    // Termin Id(s)
+    const terminIdCell = document.createElement("td");
+    terminIdCell.textContent = termin.terminIds.join(", ");
+    row.appendChild(terminIdCell);
 
-    getHallenName(termin.halleId)
-      .then(name => hallenNameCell.textContent = name)
-      .catch(() => hallenNameCell.textContent = "Fehler");
-
-    // Anlass
-    const anlassCell = document.createElement("td");
-    anlassCell.textContent = termin.anlass;
-    row.appendChild(anlassCell);
+    // Feld Id(s)
+    const feldIdCell = document.createElement("td");
+    feldIdCell.textContent = termin.feldIds.join(", ");
+    row.appendChild(feldIdCell);
 
     // Anfang
     const anfangCell = document.createElement("td");
@@ -67,97 +57,77 @@ function renderTerminTable(termine) {
     endeCell.textContent = endeFormatted;
     row.appendChild(endeCell);
 
-    // Anzahl Felder
+    // Anlass
+    const anlassCell = document.createElement("td");
+    anlassCell.textContent = termin.anlass;
+    row.appendChild(anlassCell);
+
+    // Anzahl Felder (Text, z.B. "Feld 1, Feld 2")
     const felderCell = document.createElement("td");
     felderCell.textContent = termin.anzahlFelder;
     row.appendChild(felderCell);
 
-    // Absagen-Button
+    // Status
+    const statusCell = document.createElement("td");
+    statusCell.textContent = termin.confirmed;
+    row.appendChild(statusCell);
+
+    // MieterId
+    const mieterCell = document.createElement("td");
+    mieterCell.textContent = termin.mieterId;
+    row.appendChild(mieterCell);
+
+    // Bearbeiten-Button
+    const editCell = document.createElement("td");
+    const editBtn = document.createElement("button");
+    editBtn.className = "table-btn edit-btn";
+    editBtn.setAttribute("data-ids", termin.terminIds.join(","));
+    editBtn.textContent = "Bearbeiten";
+    editCell.appendChild(editBtn);
+    row.appendChild(editCell);
+
+    // Löschen-Button
     const deleteCell = document.createElement("td");
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "table-btn delete-btn";
     deleteBtn.setAttribute("data-ids", termin.terminIds.join(","));
-    deleteBtn.textContent = "Absagen";
+    deleteBtn.textContent = "Löschen";
     deleteCell.appendChild(deleteBtn);
     row.appendChild(deleteCell);
-
-    // Bestätigen-Button
-    const confirmCell = document.createElement("td");
-    const confirmBtn = document.createElement("button");
-    confirmBtn.className = "table-btn confirm-btn";
-    confirmBtn.setAttribute("data-ids", termin.terminIds.join(","));
-    confirmBtn.textContent = "Bestätigen";
-    confirmCell.appendChild(confirmBtn);
-    row.appendChild(confirmCell);
 
     terminTableBody.appendChild(row);
   });
 
-  // ✅ Termin bestätigen
-// ✅ Button-Events für Test :^)
-// ✅ Button-Events für CoCRequest mit nur einem Endpoint
-// ✅ Button-Events für CoCRequest mit List<Long>
-document.querySelectorAll(".confirm-btn").forEach(button => {
-  button.addEventListener("click", () => {
-    const ids = button.getAttribute("data-ids")
-      .split(",")
-      .map(id => Number(id)); // IDs als Number -> JSON Array of Long
-
-    console.log("Bestätigen gedrückt für TerminIds:", ids);
-
-    const sicher = confirm("Bist du sicher, dass du diesen Termin bestätigen möchtest?");
-    if (!sicher) return;
-
-    const body = {
-      terminIds: ids,
-      status: "confirmed"
-    };
-
-    fetch("http://localhost:8080/api/termine/CoC", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    })
-      .then(response => {
-        if (!response.ok) throw new Error("Fehler beim Bestätigen");
-        console.log("Bestätigung erfolgreich!");
-        loadTermine();
-      })
-      .catch(error => console.error("Fehler beim Bestätigen:", error));
+  // 🛠️ Button Events
+  document.querySelectorAll(".edit-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      const ids = button.getAttribute("data-ids").split(",").map(Number);
+      console.log("Bearbeiten gedrückt für TerminIds:", ids);
+      alert("Hier könnte dein Bearbeiten-Dialog kommen 😎");
+    });
   });
-});
 
-document.querySelectorAll(".delete-btn").forEach(button => {
-  button.addEventListener("click", () => {
-    const ids = button.getAttribute("data-ids")
-      .split(",")
-      .map(id => Number(id)); // IDs als Number -> JSON Array of Long
+  document.querySelectorAll(".delete-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      const ids = button.getAttribute("data-ids").split(",").map(Number);
+      console.log("Löschen gedrückt für TerminIds:", ids);
 
-    console.log("Absagen gedrückt für TerminIds:", ids);
+      const sicher = confirm("Bist du sicher, dass du diesen Termin löschen möchtest?");
+      if (!sicher) return;
 
-    const sicher = confirm("Bist du sicher, dass du diesen Termin absagen möchtest?");
-    if (!sicher) return;
-
-    const body = {
-      terminIds: ids,
-      status: "cancelled"
-    };
-
-    fetch("http://localhost:8080/api/termine/CoC", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    })
-      .then(response => {
-        if (!response.ok) throw new Error("Fehler beim Absagen");
-        console.log("Absage erfolgreich!");
-        loadTermine();
+      fetch("http://localhost:8080/api/termine/CoC", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ terminIds: ids, status: "cancelled" }),
       })
-      .catch(error => console.error("Fehler beim Absagen:", error));
+        .then((response) => {
+          if (!response.ok) throw new Error("Fehler beim Löschen");
+          console.log("Termin gelöscht!");
+          loadTermine();
+        })
+        .catch((error) => console.error("Fehler beim Löschen:", error));
+    });
   });
-});
-
-
 }
 
 // 🚀 Direkt beim Laden ausführen
