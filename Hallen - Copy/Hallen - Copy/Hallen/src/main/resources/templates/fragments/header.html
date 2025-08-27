@@ -12,8 +12,12 @@
     <button id="search-button">Suchen</button>
   </div>
 
-    <form action ="/logout" method="post">
-    <button type="submit" class="header-button"><p sec:authorize="hasAnyRole('USER','ADMIN')">LOGOUT</p></button>
+    <form sec:authorize="isAuthenticated()" action ="/logout" method="post">
+    <button type="submit" class="header-button">LOGOUT</button>
+    </form>
+
+    <form sec:authorize="isAnonymous()" action ="/login">
+    <button type="submit" class="header-button">LOGIN</button>
     </form>
 </header>
 </div>
