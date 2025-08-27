@@ -179,3 +179,28 @@
 #feldButtonsContainer{
   display: none;
 }
+.feld-button{
+  background: #007bff;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: Poppins, sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+
+}
+.feld-button:hover{
+  background: #0056b3;
+  transform: translateY(-2px);
+}
+.feld-button.selected{
+  background: #28a745;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+  color: #fff;
+}
+.feld-button:active {
+  transform: scale(0.95);
+}
