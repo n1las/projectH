@@ -13,7 +13,7 @@
   </div>
 
     <form action ="/logout" method="post">
-    <button type="submit" class="header-button">Logout</button>
+    <button type="submit" class="header-button"><p sec:authorize="hasAnyRole('USER','ADMIN')">LOGOUT</p></button>
     </form>
 </header>
 </div>
