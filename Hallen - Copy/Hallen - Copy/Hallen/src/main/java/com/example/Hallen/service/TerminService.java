@@ -1,6 +1,7 @@
 package com.example.Hallen.service;
 
 import com.example.Hallen.dto.*;
+import com.example.Hallen.exception.TerminNotAvailableException;
 import com.example.Hallen.model.Feld;
 import com.example.Hallen.model.Halle;
 import com.example.Hallen.model.Mieter;
@@ -9,9 +10,7 @@ import com.example.Hallen.repository.MieterRepository;
 import com.example.Hallen.repository.TerminRepository;
 import com.example.Hallen.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -124,43 +123,35 @@ public class TerminService {
         }
         List<Termin> addedTermine = new ArrayList<>();
         for(Long ids: rentMultipleFelderRequest.getFeldIds()){
-            if(isTerminAvailable(ids, rentMultipleFelderRequest.getAnfang(),rentMultipleFelderRequest.getEnde())){
-                Termin termin = new Termin();
-                termin.setFeldId(ids);
-                termin.setAnfang(rentMultipleFelderRequest.getAnfang());
-                termin.setEnde(rentMultipleFelderRequest.getEnde());
-                termin.setAnlass(rentMultipleFelderRequest.getAnlass());
-                termin.setMieterId(rentMultipleFelderRequest.getMieterId());
-                addedTermine.add(create(termin));
-            }
-            else{
-                throw new IllegalArgumentException("Termin ist bereits besetzt");
-            }
 
+            isTerminAvailable(ids, rentMultipleFelderRequest.getAnfang(),rentMultipleFelderRequest.getEnde());
+            Termin termin = new Termin();
+            termin.setFeldId(ids);
+            termin.setAnfang(rentMultipleFelderRequest.getAnfang());
+            termin.setEnde(rentMultipleFelderRequest.getEnde());
+            termin.setAnlass(rentMultipleFelderRequest.getAnlass());
+            termin.setMieterId(rentMultipleFelderRequest.getMieterId());
+            addedTermine.add(create(termin));
         }
         return addedTermine;
     }
-    // Note find a way to maybe combine rentHalle and rentMultiple felder into one Method
+    // TODO: COMBINE BOTH METHODS SHOULD WORK
     public List<Termin> rentHalleRequestToTerminList(RentHalleRequest rentHalleRequest){
         List<Feld> feldIds = feldService.getFelderByHalleId(rentHalleRequest.getHalleId());
         List<Termin> termine = new ArrayList<>();
         for(Feld feld: feldIds){
-            if(isTerminAvailable(feld.getId(),rentHalleRequest.getAnfang(),rentHalleRequest.getEnde())){
-                Termin termin = new Termin();
-                termin.setFeldId(feld.getId());
-                termin.setMieterId(rentHalleRequest.getMieterId());
-                termin.setAnlass(rentHalleRequest.getAnlass());
-                termin.setAnfang(rentHalleRequest.getAnfang());
-                termin.setEnde(rentHalleRequest.getEnde());
-                termine.add(termin);
-            }
-            else{
-                throw new IllegalArgumentException("Termin bereits belegt");
-            }
+            isTerminAvailable(feld.getId(),rentHalleRequest.getAnfang(),rentHalleRequest.getEnde());
+            Termin termin = new Termin();
+            termin.setFeldId(feld.getId());
+            termin.setMieterId(rentHalleRequest.getMieterId());
+            termin.setAnlass(rentHalleRequest.getAnlass());
+            termin.setAnfang(rentHalleRequest.getAnfang());
+            termin.setEnde(rentHalleRequest.getEnde());
+            termine.add(termin);
         }
         return termine;
     }
-    // bitte besere Lösung finden ong
+    // bitte bessere Lösung finden ong
     public List<Termin> halleSerienTermin(HallenSerienTermin hallenSerienTermin){
         SerienTerminRequest serienTerminRequest = new SerienTerminRequest();
         List<Feld> felder = feldService.getFelderByHalleId(hallenSerienTermin.getHalleId());
@@ -180,6 +171,8 @@ public class TerminService {
         return serieRequestToTermine(serienTerminRequest);
 
     }
+
+    //TODO: FRAG OB MAN TERMINE DIE IN SERIE GEBUCHT WERDEN ÜBERSPRINGEN SOLL WENN ZB NUR EINER BELEGT IST ODER KOMPLETT ABBRECHEN SOLL
     public List<Termin> serieRequestToTermine(SerienTerminRequest serienTerminRequest){
         List<Termin> erzeugteTermine = new ArrayList<>();
         LocalDate serienDatum = serienTerminRequest.getSerieAnfang();
@@ -242,15 +235,14 @@ public class TerminService {
         }
         return false;
     }
-    public boolean isTerminAvailable(Long feldId, LocalDateTime anfang, LocalDateTime ende) {
+    public void isTerminAvailable(Long feldId, LocalDateTime anfang, LocalDateTime ende) {
         List<Termin> existing = repository.findByFeldId(feldId);
         for (Termin t : existing) {
             if (t.getAnfang().isBefore(ende) && t.getEnde().isAfter(anfang)) {
                 // Overlap exists
-                return false;
+                throw new TerminNotAvailableException("Termin am" + t.getAnfang() + "bereits belegt");
             }
         }
-        return true; // No conflicts
     }
     public boolean areTermineAvailable(List<Long> feldIds, LocalDateTime anfang, LocalDateTime ende){
         for(Long feldId: feldIds){

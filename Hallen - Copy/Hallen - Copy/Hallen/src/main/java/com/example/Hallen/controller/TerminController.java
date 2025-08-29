@@ -77,6 +77,7 @@ public class TerminController {
 
     @PostMapping("/mieten/multipleFelder")
     public ResponseEntity<List<Termin>> rentMultipleFelder(@RequestBody RentMultipleFelderRequest rentMultipleFelderRequest) {
+
         List<Termin> termine = service.rentMultipleFelder(rentMultipleFelderRequest);
         return ResponseEntity.ok(termine);
     }
@@ -117,20 +118,6 @@ public class TerminController {
         service.delete(id);
     }
 
-    @GetMapping("/check")
-    public ResponseEntity<Boolean> checkAvailability(
-            @RequestParam Long hallenId,
-            @RequestParam String anfang,
-            @RequestParam String ende) {
-        try {
-            LocalDateTime start = LocalDateTime.parse(anfang);
-            LocalDateTime end = LocalDateTime.parse(ende);
-            boolean isAvailable = service.isTerminAvailable(hallenId, start, end);
-            return ResponseEntity.ok(isAvailable);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(false); // 400 if parsing fails or error occurs
-        }
-    }
     // Note: find a way to maybe put cancelTermin and confirmTermin into one Method called updateTerminStatus
     @PatchMapping("/CoC")
     public ResponseEntity<String> confirmTermine(@RequestBody CoCRequest coc){
