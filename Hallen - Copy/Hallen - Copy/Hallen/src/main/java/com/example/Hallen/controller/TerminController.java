@@ -85,6 +85,27 @@ public class TerminController {
         List<Termin> termine = service.rentHalle(rentHalleRequest);
         return ResponseEntity.ok(termine);
     }
+    @PostMapping("/serienTermin/Halle")
+    public ResponseEntity<List<Termin>> createSerienTermin(@RequestBody HallenSerienTermin hst) {
+        List<Termin> termine = service.halleSerienTermin(hst);
+        return ResponseEntity.status(HttpStatus.CREATED).body(termine);
+    }
+    @PostMapping("/serienTermin/Felder")
+    public ResponseEntity<List<Termin>> createSerienTerminFelder(@RequestBody SerienTerminRequest srt){
+        List<Termin> termine = service.serieRequestToTermine(srt);
+        return ResponseEntity.status(HttpStatus.CREATED).body(termine);
+    }
+
+    @PostMapping("/blockHalle")
+    public ResponseEntity<List<Termin>> blockHalle(@RequestBody RentHalleRequest rentHalleRequest) {
+        try{
+            List<Termin> createdBlockTermine = service.blockHalle(rentHalleRequest) ;
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdBlockTermine);
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
+    }
 
     @PutMapping("/{id}")
     public Termin update(@PathVariable Long id, @RequestBody Termin termin) {
@@ -140,28 +161,6 @@ public class TerminController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No matching Termin found. ❌");
         }
-    }
-
-    @PostMapping("/serienTermin/Halle")
-    public ResponseEntity<List<Termin>> createSerienTermin(@RequestBody HallenSerienTermin hst) {
-        List<Termin> termine = service.halleSerienTermin(hst);
-        return ResponseEntity.status(HttpStatus.CREATED).body(termine);
-    }
-    @PostMapping("/serienTermin/Felder")
-    public ResponseEntity<List<Termin>> createSerienTerminFelder(@RequestBody SerienTerminRequest srt){
-        List<Termin> termine = service.serieRequestToTermine(srt);
-        return ResponseEntity.status(HttpStatus.CREATED).body(termine);
-    }
-
-    @PostMapping("/blockHalle")
-    public ResponseEntity<List<Termin>> blockHalle(@RequestBody RentHalleRequest rentHalleRequest) {
-        try{
-            List<Termin> createdBlockTermine = service.blockHalle(rentHalleRequest) ;
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdBlockTermine);
-        }catch(IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-
     }
 
 }
