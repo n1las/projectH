@@ -130,23 +130,35 @@ document.addEventListener("DOMContentLoaded", function () {
           ende: ende,
         };
 
-        const post = await fetch("http://localhost:8080/api/termine/mieten/halle", {
+      const post = await fetch("http://localhost:8080/api/termine/mieten/halle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(rentData),
       });
-       if (post.ok) {
+
+      if (post.ok) {
         statusText.textContent = "✅ Einzeltermin erfolgreich erstellt!";
         form.reset();
-        // Auswahl zurücksetzen
         selectedFeldIds = [];
         if (feldButtonsContainer) {
-          feldButtonsContainer.querySelectorAll(".feld-button.selected").forEach(btn => btn.classList.remove("selected"));
+          feldButtonsContainer.querySelectorAll(".feld-button.selected")
+            .forEach(btn => btn.classList.remove("selected"));
         }
         location.href = location.href;
       } else {
-        statusText.textContent = "❌ Fehler beim Speichern.";
+        // Body auslesen (deine Exception Message vom Backend)
+        const errorMessage = await post.text(); 
+        // Wenn du JSON zurückgibst: const error = await post.json(); console.log(error.message);
+
+        // HTTP Status prüfen
+        if (post.status === 409) { 
+          statusText.textContent = `❌ ${errorMessage}`;
+        } else {
+          statusText.textContent = "❌ Unerwarteter Fehler beim Speichern.";
+          console.error("Fehler:", post.status, errorMessage);
+        }
       }
+
       }
       else if(felderOrHalle === "einzeln"){
         const rentData = {
