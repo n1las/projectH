@@ -87,6 +87,9 @@ public class TerminService {
         }
         return "Felher";
     }
+    public List<MergedTermine> mergeAll(){
+        return merge(repository.findAll());
+    }
 
     public Termin create(Termin termin) {
         termin.setConfirmed("unconfirmed");
@@ -314,10 +317,9 @@ public class TerminService {
         }
         return terminOptional;
     }
-    //TODO change it so it only merges the list you give it for better performance
-    public  List<MergedTermine> merge() {
+
+    public  List<MergedTermine> merge(List<Termin> termine) {
         Map<String, MergedTermine> map = new HashMap<>();
-        List<Termin> termine = repository.findAll();
 
         for (Termin t : termine) {
             Long halleId = feldService.getById(t.getFeldId()).getHalleId();
@@ -356,25 +358,22 @@ public class TerminService {
         return new ArrayList<>(map.values());
     }
     public List<MergedTermine> getMergedTermineByConfirmed(String confirmed){
-        List<MergedTermine> alleTermine = merge();
-        List<MergedTermine> termineConfirmed = new ArrayList<>();
-        for(MergedTermine mt: alleTermine){
-            if(mt.getConfirmed().equals(confirmed)){
-                termineConfirmed.add(mt);
-            }
-        }
-        return termineConfirmed;
+        return merge(repository.findByIsConfirmed(confirmed));
     }
     public List<MergedTermine> mergeForUser(){
         Long mieterId = SecurityUtils.getCurrentMieterId();
-        List<MergedTermine> unconfirmedTermine = getMergedTermineByConfirmed("unconfirmed");
-        List<MergedTermine> termineUser = new ArrayList<>();
-        for(MergedTermine mt: unconfirmedTermine){
-            if(mt.getMieterId().equals(mieterId)){
-                termineUser.add(mt);
+        List<Termin> mieterTermine = repository.findByMieterId(mieterId);
+        List<Termin> mieterTermineUn = new ArrayList<>();
+        for(Termin termin: mieterTermine){
+            if (termin.getConfirmed().equals("unconfirmed")){
+                mieterTermineUn.add(termin);
             }
+
         }
-        return termineUser;
+        return merge(mieterTermineUn);
+    }
+    public List<MergedTermine> mergeForCalendar(Long halleId){
+        return merge(getByHalleId(halleId));
     }
 
     public void updateTerminConfirmed(CoCRequest coc){

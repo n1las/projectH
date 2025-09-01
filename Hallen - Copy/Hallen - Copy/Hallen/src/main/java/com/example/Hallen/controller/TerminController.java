@@ -3,22 +3,13 @@ package com.example.Hallen.controller;
 import com.example.Hallen.dto.*;
 import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.TerminRepository;
-import com.example.Hallen.service.TerminExportService;
 import com.example.Hallen.service.TerminService;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/termine")
@@ -58,7 +49,7 @@ public class TerminController {
     }
     @GetMapping("/getMergedTermine")
     public List<MergedTermine> getMergedTermine(){
-        return service.merge();
+        return service.mergeAll();
     }
 
     @GetMapping("/ByConfirmed/{confirmed}")
@@ -73,6 +64,10 @@ public class TerminController {
     @GetMapping("/MergedTermine/ForUser")
     public List<MergedTermine> getMergedTermineForUser(){
         return service.mergeForUser();
+    }
+    @GetMapping("/MergedTermine/ForCalendar/{halleId}")
+    public List<MergedTermine> getMergedForCalendar(@PathVariable Long halleId){
+        return service.mergeForCalendar(halleId);
     }
 
     @PostMapping("/mieten/multipleFelder")

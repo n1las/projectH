@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
     const calendarEl = document.getElementById('calendar');
     const hallenId = localStorage.getItem("selectedSubsiteId");
 
@@ -13,21 +13,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    // Hole HallenTyp vor Kalenderinitialisierung
-    async function getHallentyp(hallenId) {
-        try {
-            const resp = await fetch(`http://localhost:8080/api/Hallen/${hallenId}`);
-            if (!resp.ok) throw new Error("Fehler beim Laden der Halle");
-            const halle = await resp.json();
-            return halle.hallenTyp;
-        } catch (e) {
-            console.error(e);
-            return 1; // Fallback, falls Fehler
-        }
-    }
-
-    const hallentyp = await getHallentyp(hallenId);
-
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         headerToolbar: {
@@ -35,63 +20,32 @@ document.addEventListener('DOMContentLoaded', async function() {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
-        events: async function(fetchInfo, successCallback, failureCallback) {
+        events: async function (fetchInfo, successCallback, failureCallback) {
             try {
-                const response = await fetch(`http://localhost:8080/api/termine/getByHalleId/${hallenId}`);
+                const response = await fetch(`http://localhost:8080/api/termine/MergedTermine/ForCalendar/${hallenId}`);
                 if (!response.ok) throw new Error('Fehler beim Laden der Termine');
+
                 const termine = await response.json();
 
-                // Hole Feldnamen parallel
-                const feldMap = {};
-                await Promise.all(termine.map(async t => {
-                    if (!feldMap[t.feldId]) {
-                        try {
-                            const feldResp = await fetch(`http://localhost:8080/api/feld/${t.feldId}`);
-                            if (feldResp.ok) {
-                                const feldData = await feldResp.json();
-                                feldMap[t.feldId] = feldData.name;
-                            }
-                        } catch(e) {
-                            feldMap[t.feldId] = '';
-                        }
-                    }
+                const events = termine.map(t => ({
+                    id: t.id,
+                    // Beschreibung direkt an den Titel hängen
+                    title: t.anlass + (t.anzahlFelder ? " - " + t.anzahlFelder : ""),
+                    start: t.anfang,
+                    end: t.ende,
+                    color: getEventColor(t.confirmed)
                 }));
-
-                // Gruppiere Termine nach MieterId, Anlass, Anfang, Ende
-                const grouped = {};
-                for (let t of termine) {
-                    const key = `${t.mieterId}-${t.anlass}-${t.anfang}-${t.ende}`;
-                    if (!grouped[key]) grouped[key] = [];
-                    grouped[key].push(t);
-                }
-
-                // Baue Events
-                const events = Object.values(grouped).map(grp => {
-                    const t = grp[0]; 
-                    let title = t.anlass;
-
-                    if (grp.length === hallentyp) {
-                        title += ' (komplette Halle)';
-                    } else {
-                        const feldNames = grp.map(x => feldMap[x.feldId] || '').join(', ');
-                        title += ` (${feldNames})`;
-                    }
-
-                    return {
-                        id: grp.map(x => x.id).join(','), 
-                        title,
-                        start: t.anfang,
-                        end: t.ende,
-                        color: getEventColor(t.confirmed)
-                    };
-                });
 
                 successCallback(events);
             } catch (error) {
                 console.error(error);
                 failureCallback(error);
             }
-        }
+        },
+
+        // Überschneidende Termine nebeneinander darstellen
+        slotEventOverlap: false,
+        eventOverlap: true
     });
 
     calendar.render();

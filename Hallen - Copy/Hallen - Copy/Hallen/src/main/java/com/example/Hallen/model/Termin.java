@@ -27,6 +27,17 @@ public class Termin {
     // block = used to block other appointments when the Halle is closed
     @Column(name = "isConfirmed")
     private String isConfirmed; // confirmed, unconfirmed, expired, cancelled, block
+
+    public Termin(Long id, Long feldId, Long mieterId, String anlass, LocalDateTime anfang, LocalDateTime ende, String isConfirmed) {
+        this.id = id;
+        this.feldId = feldId;
+        this.mieterId = mieterId;
+        this.anlass = anlass;
+        this.anfang = anfang;
+        this.ende = ende;
+        this.isConfirmed = isConfirmed;
+    }
+
     public Termin(){
 
     }
