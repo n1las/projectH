@@ -1,9 +1,11 @@
+/*
 package com.example.Hallen.controller;
 
 import com.example.Hallen.repository.TerminRepository;
 import com.example.Hallen.service.TerminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+
 
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -26,10 +28,11 @@ public class TestDataController {
             LocalDateTime start = LocalDateTime.now().plusDays(random.nextInt(30)).withHour(random.nextInt(8) + 8);
             LocalDateTime end = start.withHour(random.nextInt(8));
 
-            Termin termin = new Termin(null, title, start, assignedUser);
+
             terminRepository.save(termin);
         }
 
         return "50 test Termine created!";
     }
 }
+*/
