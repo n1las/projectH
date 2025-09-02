@@ -327,36 +327,34 @@ document.addEventListener("DOMContentLoaded", function () {
         statusText.textContent = "❌ Bitte Startzeitpunkt eingeben.";
         return;
       }
-
- // Prepare the DeleteRequest object
-    const DeleteRequest = {
+      let deleteRequest = {
         feldIds: selectedFeldIds,
         start: anfang
-    };
+      };
 
-    // Make the fetch request
-    fetch('http://localhost:8080/api/termine/delete', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(DeleteRequest)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-        }
-        return response.text();
-    })
-    .then(message => {
-        console.log(message); // "Termin deleted successfully! 🧹" or "No matching Termin found. ❌"
-    })
-    .catch(error => {
-        console.error('Fetch error:', error);
+
+      if(anzahlFelderSelect.value === "komplett"){
+        deleteRequest.feldIds = allFeldIds;
+      }
+
+      // Make the fetch request
+      fetch("http://localhost:8080/api/termine/delete", {
+          method: "DELETE",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify(deleteRequest)
+      })
+      .then(res => {
+          if (!res.ok) throw new Error("Error: " + res.status);
+          return res.text();
+      })
+      .then(data => console.log("Success:", data))
+      .catch(err => console.error("Fetch error:", err));
+
+
+      }
     });
-
-    }
-  });
 
   // ---------- Hilfsfunktionen ----------
 
@@ -377,8 +375,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const felder = await res.json(); // erwartet: [{ id, name, ... }, ...]
         feldButtonsContainer.innerHTML = "";
         selectedFeldIds = [];
+        allFeldIds = [];
 
         felder.forEach((feld) => {
+          allFeldIds.push(feld.id);
           const btn = document.createElement("button");
           btn.type = "button";
           btn.textContent = feld.name ?? `Feld ${feld.id}`;
@@ -403,6 +403,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             // Debug:
             console.log("Aktuell ausgewählte Feld-IDs:", selectedFeldIds);
+            console.log("alle feldIDs:  ", allFeldIds);
           });
 
           feldButtonsContainer.appendChild(btn);
