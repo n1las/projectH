@@ -62,20 +62,24 @@ document.addEventListener("DOMContentLoaded", function () {
       einzelInputs.style.display = "block";
       commonInput.style.display = "block";
       felderAuswahlDiv.style.display = "block";
+      feldButtonsContainer.style.display = "block";
       // sicherstellen, dass Feld-Buttons da sind (falls Nutzer erst jetzt auf "einzel" wechselt)
       await loadFelderAndBuildButtons();
     } else if (terminTyp.value === "block") {
       einzelInputs.style.display = "block";
+      felderAuswahlDiv.style.display = "none";
+      feldButtonsContainer.style.display = "none";
       await loadFelderAndBuildButtons(); // ggf. auch für Block relevant
     } else if (terminTyp.value === "serie") {
       commonInput.style.display = "block";
       serieInputs.style.display = "block";
       felderAuswahlDiv.style.display = "block";
+      feldButtonsContainer.style.display = "block";
       await loadFelderAndBuildButtons(); // falls Serie auch Felder braucht
     } else if (terminTyp.value === "delete") {
       deleteInputs.style.display = "block";
       felderAuswahlDiv.style.display = "block"
-      // Für delete keine Felder nötig
+      feldButtonsContainer.style.display = "block";
     }
   });
   anzahlFelderSelect.addEventListener("change", async () => {
@@ -138,13 +142,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (post.ok) {
         statusText.textContent = "✅ Einzeltermin erfolgreich erstellt!";
+        window.refreshCalendar();
         form.reset();
         selectedFeldIds = [];
         if (feldButtonsContainer) {
           feldButtonsContainer.querySelectorAll(".feld-button.selected")
             .forEach(btn => btn.classList.remove("selected"));
         }
-        location.href = location.href;
+      
       } else {
         // Body auslesen (deine Exception Message vom Backend)
         const errorMessage = await post.text(); 
@@ -179,6 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (post.ok) {
         statusText.textContent = "✅ Einzeltermin erfolgreich erstellt!";
         form.reset();
+        window.refreshCalendar();
         selectedFeldIds = [];
         if (feldButtonsContainer) {
           feldButtonsContainer.querySelectorAll(".feld-button.selected")
@@ -246,8 +252,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (post.ok) {
         statusText.textContent = "✅ Serientermin erfolgreich erstellt!";
+        window.refreshCalendar();
         form.reset();
-        calendar?.refetchEvents();
       } else {
         statusText.textContent = "❌ Fehler beim Serientermin.";
       }
@@ -278,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (post.ok) {
         statusText.textContent = "✅ Serientermin (einzeln) erfolgreich erstellt!";
         form.reset();
-        calendar?.refetchEvents();
+        window.refreshCalendar();
       } else {
         statusText.textContent = "❌ Fehler beim Serientermin (einzeln).";
       }
@@ -313,7 +319,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (post.ok) {
         statusText.textContent = "✅ Block-Zeitraum erfolgreich eingetragen!";
         form.reset();
-        calendar?.refetchEvents();
+        window.refreshCalendar();
       } else {
         statusText.textContent = "❌ Fehler beim Speichern des Blocks.";
       }

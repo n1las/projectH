@@ -1,8 +1,11 @@
-document.addEventListener('DOMContentLoaded', async function () {
+// calendar.js
+
+let calendar; // global calendar instance
+
+window.initCalendar = function () {
     const calendarEl = document.getElementById('calendar');
     const hallenId = localStorage.getItem("selectedSubsiteId");
 
-    // Farb-Mapping nach Status
     function getEventColor(status) {
         switch (status) {
             case 'confirmed': return 'green';
@@ -13,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    const calendar = new FullCalendar.Calendar(calendarEl, {
+    calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         headerToolbar: {
             left: 'prev,next today',
@@ -29,7 +32,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 const events = termine.map(t => ({
                     id: t.id,
-                    // Beschreibung direkt an den Titel hängen
                     title: t.anlass + (t.anzahlFelder ? " - " + t.anzahlFelder : ""),
                     start: t.anfang,
                     end: t.ende,
@@ -42,11 +44,24 @@ document.addEventListener('DOMContentLoaded', async function () {
                 failureCallback(error);
             }
         },
-
-        // Überschneidende Termine nebeneinander darstellen
         slotEventOverlap: false,
         eventOverlap: true
     });
 
     calendar.render();
+};
+
+// Refresh calendar events without duplication
+window.refreshCalendar = function () {
+    if (calendar) {
+        // Refetch events from the original events function
+        calendar.refetchEvents();
+    } else {
+        window.initCalendar();
+    }
+};
+
+// Initialize calendar on page load
+document.addEventListener('DOMContentLoaded', () => {
+    window.initCalendar();
 });
