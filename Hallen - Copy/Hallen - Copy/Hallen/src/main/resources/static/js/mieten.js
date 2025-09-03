@@ -190,7 +190,6 @@ document.addEventListener("DOMContentLoaded", function () {
           feldButtonsContainer.querySelectorAll(".feld-button.selected")
             .forEach(btn => btn.classList.remove("selected"));
         }
-        location.href = location.href;
       } else {
         // Body auslesen (deine Exception Message vom Backend)
         const errorMessage = await post.text(); 
