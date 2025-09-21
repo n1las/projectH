@@ -98,4 +98,9 @@ public class Termin {
         this.ende = ende;
     }
 
+    @Override
+    public String toString(){
+        return "Feld ID" +Long.toString(this.feldId) + " " + "Mieter ID" + Long.toString(this.mieterId) + " " + anfang + " " + ende  + " " + anlass;
+    }
+
 }

@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (halle.hallenTyp > 1) {
         felderAuswahlDiv.style.display = "block";
-  
+
         if (anzahlFelderSelect) anzahlFelderSelect.style.display = "block";
         // Buttons direkt aus dem Feld-Endpoint generieren
         await loadFelderAndBuildButtons();
@@ -73,8 +73,6 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (terminTyp.value === "serie") {
       commonInput.style.display = "block";
       serieInputs.style.display = "block";
-      felderAuswahlDiv.style.display = "block";
-      feldButtonsContainer.style.display = "block";
       await loadFelderAndBuildButtons(); // falls Serie auch Felder braucht
     } else if (terminTyp.value === "delete") {
       deleteInputs.style.display = "block";
@@ -94,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
   });
-  
+
   // ➜ Absenden
   rentBtn.addEventListener("click", async () => {
     if (!statusText) return;
@@ -122,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       const userData = await userResponse.json();
       const mieterId = userData.id;
-      
+
       const felderOrHalle = anzahlFelderSelect.value;
 
       if(felderOrHalle === "komplett"){
@@ -149,14 +147,14 @@ document.addEventListener("DOMContentLoaded", function () {
           feldButtonsContainer.querySelectorAll(".feld-button.selected")
             .forEach(btn => btn.classList.remove("selected"));
         }
-      
+
       } else {
         // Body auslesen (deine Exception Message vom Backend)
-        const errorMessage = await post.text(); 
+        const errorMessage = await post.text();
         // Wenn du JSON zurückgibst: const error = await post.json(); console.log(error.message);
 
         // HTTP Status prüfen
-        if (post.status === 409) { 
+        if (post.status === 409) {
           statusText.textContent = `❌ ${errorMessage}`;
         } else {
           statusText.textContent = "❌ Unerwarteter Fehler beim Speichern.";
@@ -192,11 +190,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       } else {
         // Body auslesen (deine Exception Message vom Backend)
-        const errorMessage = await post.text(); 
+        const errorMessage = await post.text();
         // Wenn du JSON zurückgibst: const error = await post.json(); console.log(error.message);
 
         // HTTP Status prüfen
-        if (post.status === 409) { 
+        if (post.status === 409) {
           statusText.textContent = `❌ ${errorMessage}`;
         } else {
           statusText.textContent = "❌ Unerwarteter Fehler beim Speichern.";
@@ -302,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      const blockTimeData = { 
+      const blockTimeData = {
         halleId: parseInt(hallenId),
         anlass: anlass,
         anfang: anfang,
