@@ -11,7 +11,8 @@ window.initCalendar = function () {
             case 'confirmed': return 'green';
             case 'unconfirmed': return 'gold';
             case 'expired': return 'red';
-            case 'block': return 'gray';
+            case 'block': return 'purple';
+            case 'cancelled': return 'gray';
             default: return 'blue';
         }
     }

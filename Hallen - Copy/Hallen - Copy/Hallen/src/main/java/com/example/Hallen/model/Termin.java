@@ -100,7 +100,7 @@ public class Termin {
 
     @Override
     public String toString(){
-        return "Feld ID" +Long.toString(this.feldId) + " " + "Mieter ID" + Long.toString(this.mieterId) + " " + anfang + " " + ende  + " " + anlass;
+        return "Feld ID" +Long.toString(this.feldId) + " " + "Mieter ID" + Long.toString(this.mieterId) + " " + anfang + " " + ende  + " " + anlass + " " + isConfirmed;
     }
 
 }

@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,8 +27,11 @@ public class TestDataController {
     private TerminService terminService;
 
     private final Random random = new Random();
-    private String[] anlass = {"Training", "Turnier", "Freundschaftsspiel", "Vereinsmeisterschaft", "Sportkurs", "Fußballtraining", "Abschlussfeier", "Volleyball", "Basketball", "Handball", "Tanzkurs",
-            "Messe", "Flohmarkt", "Konzert", "Gemeindeversammlung"};
+    private String[] anlass = {"Training", "Turnier", "Freundschaftsspiel", "Vereinsmeisterschaft", "Sportkurs",
+            "Fußballtraining", "Abschlussfeier", "Volleyball", "Basketball", "Handball",
+            "Tanzkurs", "Messe", "Flohmarkt", "Konzert", "Gemeindeversammlung"};
+    private String[] status = {"expired", "cancelled", "unconfirmed", "confirmed"};
+    private Long[] felder = { 2L, 3L, 4L};
 
 
 
@@ -35,26 +41,37 @@ public class TestDataController {
         for (int i = 0; i < 10; i++) {
             Termin termin = new Termin();
 
-            LocalDateTime start = LocalDateTime.of(2025, 9, 20, 0, 0);
-            LocalDateTime end = LocalDateTime.of(2026, 6, 30, 0, 0);
+            LocalDate start = LocalDate.of(2025, 9, 20);
+            LocalDate end = LocalDate.of(2026, 1, 1);
 
-            long startEpoch = start.toEpochSecond(ZoneOffset.UTC);
-            long endEpoch = end.toEpochSecond(ZoneOffset.UTC);
-            long randomEpoch = startEpoch + (long) (random.nextDouble() * (endEpoch - startEpoch));
-            LocalDateTime randomDateTime = LocalDateTime.ofEpochSecond(randomEpoch, 0, ZoneOffset.UTC);
+            // Pick a random date first
+            long daysBetween = ChronoUnit.DAYS.between(start, end);
+            LocalDate randomDate = start.plusDays(random.nextInt((int) daysBetween + 1));
+
+            // Pick a random time between 00:00 and 18:00
+            int randomHour = random.nextInt(18); // 0 to 17
+            int randomMinute = random.nextInt(60);
+            int randomSecond = random.nextInt(60);
+
+            LocalTime randomTime = LocalTime.of(randomHour, randomMinute, randomSecond);
+
+            LocalDateTime randomDateTime = LocalDateTime.of(randomDate, randomTime);
             termin.setAnlass(anlass[random.nextInt(anlass.length)]);
             termin.setAnfang(randomDateTime);
-            termin.setEnde(randomDateTime.plusHours(random.nextLong((9 - 2) + 1)));
+            long hoursToAdd = 5 + random.nextInt(2);
+            termin.setEnde(randomDateTime.plusHours(hoursToAdd));
+            termin.setFeldId(felder[random.nextInt(felder.length)]);
+            termin.setConfirmed(status[random.nextInt(status.length)]);
             termin.setMieterId(22L);
-            termin.setFeldId(18L);
+
 
             try {
                 terminService.isTerminAvailable(termin.getFeldId(), termin.getAnfang(), termin.getEnde());
-                terminService.create(termin);
                 createdTermine.add(termin);
+                terminRepository.save(termin);
 
             } catch (TerminNotAvailableException e) {
-                return "mehhhh";
+                return "Meehhhhh";
             }
 
         }
