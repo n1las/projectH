@@ -99,13 +99,20 @@ function renderTerminTable(termine) {
   });
 
   // 🛠️ Button Events
-  document.querySelectorAll(".edit-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      const ids = button.getAttribute("data-ids").split(",").map(Number);
-      console.log("Bearbeiten gedrückt für TerminIds:", ids);
-      alert("Hier könnte dein Bearbeiten-Dialog kommen 😎");
-    });
+document.querySelectorAll(".edit-btn").forEach((button) => {
+  button.addEventListener("click", () => {
+    // Finde den Termin anhand der IDs
+    const ids = button.getAttribute("data-ids");
+    const termin = termine.find(t => t.terminIds.join(",") === ids);
+
+    // In localStorage speichern
+    localStorage.setItem("editTermin", JSON.stringify(termin));
+
+    alert(localStorage.getItem("editTermin"))
+    // Weiterleiten auf Subsite
+    // window.location.href = "/edit.html";
   });
+});
 
   document.querySelectorAll(".delete-btn").forEach((button) => {
     button.addEventListener("click", () => {

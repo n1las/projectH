@@ -1,134 +1,81 @@
-const terminTableBody = document.getElementById("termin-table-body");
+// editTermin.js
+document.addEventListener("DOMContentLoaded", () => {
+  const termin = JSON.parse(localStorage.getItem("editTermin"));
 
-// 🕓 Hilfsfunktion: ISO-Datum → deutsches Format
-function formatGermanDate(isoDateString) {
-  const date = new Date(isoDateString);
-  return date.toLocaleString("de-DE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }) + " Uhr";
-}
+  if (!termin) {
+    alert("Kein Termin im Speicher gefunden!");
+    return;
+  }
 
-// 📥 Termine vom Server laden
-function loadTermine() {
-  fetch("http://localhost:8080/api/termine/getMergedTermine")
-    .then((response) => {
-      if (!response.ok) throw new Error("Fehler beim Abrufen der Termine");
-      return response.json();
-    })
-    .then((termine) => {
-      renderTerminTable(termine);
-    })
-    .catch((error) => {
-      console.error("Fehler beim Abrufen der Daten:", error);
+  // Felder füllen
+  document.getElementById("anlass").value = termin.anlass || "";
+
+  if (termin.anfang) {
+    document.getElementById("anfang").value = termin.anfang.slice(0, 16); // ISO → datetime-local
+  }
+
+  if (termin.ende) {
+    document.getElementById("ende").value = termin.ende.slice(0, 16);
+  }
+
+  document.getElementById("mieter").value = termin.mieterId || "";
+
+  // Halle-Select füllen
+  const halleSelect = document.getElementById("halle");
+  halleSelect.innerHTML = ""; // Reset
+
+  if (termin.feldIds && termin.feldIds.length > 0) {
+    termin.feldIds.forEach(feldId => {
+      const option = document.createElement("option");
+      option.value = feldId;
+      option.textContent = `Feld ${feldId}`;
+      option.selected = true;
+      halleSelect.appendChild(option);
     });
-}
+  } else {
+    const option = document.createElement("option");
+    option.textContent = "Keine Halle ausgewählt";
+    option.disabled = true;
+    halleSelect.appendChild(option);
+  }
 
-// 📊 Tabelle befüllen & Event Listener anhängen
-function renderTerminTable(termine) {
-  terminTableBody.innerHTML = "";
+  // Status-Select füllen
+  const statusSelect = document.getElementById("status");
+  statusSelect.innerHTML = "";
 
-  termine.forEach((termin) => {
-    const anfangFormatted = formatGermanDate(termin.anfang);
-    const endeFormatted = formatGermanDate(termin.ende);
-
-    const row = document.createElement("tr");
-
-    // Termin Id(s)
-    const terminIdCell = document.createElement("td");
-    terminIdCell.textContent = termin.terminIds.join(", ");
-    row.appendChild(terminIdCell);
-
-    // Feld Id(s)
-    const feldIdCell = document.createElement("td");
-    feldIdCell.textContent = termin.feldIds.join(", ");
-    row.appendChild(feldIdCell);
-
-    // Anfang
-    const anfangCell = document.createElement("td");
-    anfangCell.textContent = anfangFormatted;
-    row.appendChild(anfangCell);
-
-    // Ende
-    const endeCell = document.createElement("td");
-    endeCell.textContent = endeFormatted;
-    row.appendChild(endeCell);
-
-    // Anlass
-    const anlassCell = document.createElement("td");
-    anlassCell.textContent = termin.anlass;
-    row.appendChild(anlassCell);
-
-    // Anzahl Felder (Text, z.B. "Feld 1, Feld 2")
-    const felderCell = document.createElement("td");
-    felderCell.textContent = termin.anzahlFelder;
-    row.appendChild(felderCell);
-
-    // Status
-    const statusCell = document.createElement("td");
-    statusCell.textContent = termin.confirmed;
-    row.appendChild(statusCell);
-
-    // MieterId
-    const mieterCell = document.createElement("td");
-    mieterCell.textContent = termin.mieterId;
-    row.appendChild(mieterCell);
-
-    // Bearbeiten-Button
-    const editCell = document.createElement("td");
-    const editBtn = document.createElement("button");
-    editBtn.className = "table-btn edit-btn";
-    editBtn.setAttribute("data-ids", termin.terminIds.join(","));
-    editBtn.textContent = "Bearbeiten";
-    editCell.appendChild(editBtn);
-    row.appendChild(editCell);
-
-    // Löschen-Button
-    const deleteCell = document.createElement("td");
-    const deleteBtn = document.createElement("button");
-    deleteBtn.className = "table-btn delete-btn";
-    deleteBtn.setAttribute("data-ids", termin.terminIds.join(","));
-    deleteBtn.textContent = "Löschen";
-    deleteCell.appendChild(deleteBtn);
-    row.appendChild(deleteCell);
-
-    terminTableBody.appendChild(row);
+  const statuses = ["true", "false"];
+  statuses.forEach(s => {
+    const option = document.createElement("option");
+    option.value = s;
+    option.textContent = s === "true" ? "Bestätigt" : "Offen";
+    if (String(termin.confirmed) === s) {
+      option.selected = true;
+    }
+    statusSelect.appendChild(option);
   });
 
-  // 🛠️ Button Events
-  document.querySelectorAll(".edit-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      const ids = button.getAttribute("data-ids").split(",").map(Number);
-      console.log("Bearbeiten gedrückt für TerminIds:", ids);
-      alert("Hier könnte dein Bearbeiten-Dialog kommen 😎");
-    });
+  // Event Listener: Formular speichern
+  document.getElementById("edit-termin-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const updatedTermin = {
+      terminIds: termin.terminIds,
+      feldIds: Array.from(halleSelect.selectedOptions).map(opt => parseInt(opt.value, 10)),
+      anlass: document.getElementById("anlass").value,
+      anfang: document.getElementById("anfang").value,
+      ende: document.getElementById("ende").value,
+      mieterId: document.getElementById("mieter").value,
+      confirmed: document.getElementById("status").value === "true"
+    };
+
+    console.log("Aktualisierte Daten:", updatedTermin);
+
+    // TODO: API-Call einbauen
+    // fetch("http://localhost:8080/api/termine/update", { ... })
   });
 
-  document.querySelectorAll(".delete-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      const ids = button.getAttribute("data-ids").split(",").map(Number);
-      console.log("Löschen gedrückt für TerminIds:", ids);
-
-      const sicher = confirm("Bist du sicher, dass du diesen Termin löschen möchtest?");
-      if (!sicher) return;
-
-      fetch("http://localhost:8080/api/termine/CoC", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ terminIds: ids, status: "cancelled" }),
-      })
-        .then((response) => {
-          if (!response.ok) throw new Error("Fehler beim Löschen");
-          console.log("Termin gelöscht!");
-          loadTermine();
-        })
-        .catch((error) => console.error("Fehler beim Löschen:", error));
-    });
+  // Abbrechen Button → zurück zur Übersicht
+  document.querySelector(".cancel").addEventListener("click", () => {
+    window.location.href = "/";
   });
-}
-
-// 🚀 Direkt beim Laden ausführen
-loadTermine();
+});
