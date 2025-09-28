@@ -382,6 +382,24 @@ public class TerminService {
         }
 
     }
+    public List<Termin> editTermin(EditTerminRequest request){
+        List<Termin> updated = new ArrayList<>();
+        for(Long id: request.getIds()){
+            Termin termin = repository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("Termin with id:" + id + " not found"));
+            termin.setMieterId(mieterService.findByUsername(request.getMieterName()).getId());
+            termin.setAnlass(request.getAnlass());
+            termin.setAnfang(request.getAnfang());
+            termin.setEnde(request.getEnde());
+            termin.setConfirmed(request.getStatus());
+            updated.add(termin);
+            isTerminAvailable(termin.getFeldId(),termin.getAnfang(),termin.getEnde());
+            repository.save(termin);
+
+
+        }
+        return updated;
+    }
 
 
 

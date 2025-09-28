@@ -18,4 +18,7 @@ public class UserSiteController {
     public String showTerminePage(){
         return"termine";
     }
+    @GetMapping("/admin/editTermine") String editTerminePage(){
+        return "editTermine";
+    }
 }

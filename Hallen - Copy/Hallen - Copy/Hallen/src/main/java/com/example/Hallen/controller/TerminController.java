@@ -1,6 +1,7 @@
 package com.example.Hallen.controller;
 
 import com.example.Hallen.dto.*;
+import com.example.Hallen.exception.TerminNotAvailableException;
 import com.example.Hallen.model.Termin;
 import com.example.Hallen.repository.TerminRepository;
 import com.example.Hallen.service.TerminService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/termine")
@@ -143,6 +145,19 @@ public class TerminController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No matching Termin found. ❌");
         }
+    }
+    @PutMapping("/editTermin")
+    public ResponseEntity<List<Termin>> update (@RequestBody EditTerminRequest request){
+       try{
+           List<Termin> updated = service.editTermin(request);
+           return ResponseEntity.status(HttpStatus.OK).body(updated);
+       }
+       catch (NoSuchElementException e){
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+       }
+       catch (TerminNotAvailableException t){
+           return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+       }
     }
 
 }

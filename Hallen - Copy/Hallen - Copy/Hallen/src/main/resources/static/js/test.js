@@ -7,74 +7,83 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Felder füllen
-  document.getElementById("anlass").value = termin.anlass || "";
+  // --- Input Refs ---
+  const anlassInput = document.getElementById("anlass");
+  const anfangInput = document.getElementById("anfang");
+  const endeInput = document.getElementById("ende");
+  const mieterInput = document.getElementById("mieter"); // shows name now
+  const statusSelect = document.getElementById("status");
+
+  // --- Felder füllen ---
+  anlassInput.value = termin.anlass || "";
 
   if (termin.anfang) {
-    document.getElementById("anfang").value = termin.anfang.slice(0, 16); // ISO → datetime-local
+    anfangInput.value = termin.anfang.slice(0, 16);
   }
-
   if (termin.ende) {
-    document.getElementById("ende").value = termin.ende.slice(0, 16);
+    endeInput.value = termin.ende.slice(0, 16);
   }
 
-  document.getElementById("mieter").value = termin.mieterId || "";
-
-  // Halle-Select füllen
-  const halleSelect = document.getElementById("halle");
-  halleSelect.innerHTML = ""; // Reset
-
-  if (termin.feldIds && termin.feldIds.length > 0) {
-    termin.feldIds.forEach(feldId => {
-      const option = document.createElement("option");
-      option.value = feldId;
-      option.textContent = `Feld ${feldId}`;
-      option.selected = true;
-      halleSelect.appendChild(option);
-    });
-  } else {
-    const option = document.createElement("option");
-    option.textContent = "Keine Halle ausgewählt";
-    option.disabled = true;
-    halleSelect.appendChild(option);
+  // --- Mietername laden ---
+  if (termin.mieterId) {
+    fetch(`http://localhost:8080/api/Mieter/${termin.mieterId}`)
+      .then(res => {
+        if (!res.ok) throw new Error("Mieter konnte nicht geladen werden");
+        return res.json();
+      })
+      .then(mieter => {
+        mieterInput.value = mieter.username || "";
+      })
+      .catch(err => {
+        console.error("Fehler beim Laden des Mieters:", err);
+        mieterInput.value = "";
+      });
   }
 
-  // Status-Select füllen
-  const statusSelect = document.getElementById("status");
-  statusSelect.innerHTML = "";
+  // --- Status setzen ---
+  if (termin.status) {
+    statusSelect.value = termin.status;
+  }
 
-  const statuses = ["true", "false"];
-  statuses.forEach(s => {
-    const option = document.createElement("option");
-    option.value = s;
-    option.textContent = s === "true" ? "Bestätigt" : "Offen";
-    if (String(termin.confirmed) === s) {
-      option.selected = true;
-    }
-    statusSelect.appendChild(option);
-  });
-
-  // Event Listener: Formular speichern
-  document.getElementById("edit-termin-form").addEventListener("submit", (e) => {
+  // --- Formular speichern ---
+  document.getElementById("edit-termin-form").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const updatedTermin = {
-      terminIds: termin.terminIds,
-      feldIds: Array.from(halleSelect.selectedOptions).map(opt => parseInt(opt.value, 10)),
-      anlass: document.getElementById("anlass").value,
-      anfang: document.getElementById("anfang").value,
-      ende: document.getElementById("ende").value,
-      mieterId: document.getElementById("mieter").value,
-      confirmed: document.getElementById("status").value === "true"
+    const requestBody = {
+      ids: termin.terminIds,
+      anlass: anlassInput.value,
+      anfang: anfangInput.value,
+      ende: endeInput.value,
+      mieterName: mieterInput.value,   // now the name, not the id
+      status: statusSelect.value
     };
 
-    console.log("Aktualisierte Daten:", updatedTermin);
+    console.log("Sending request:", requestBody);
 
-    // TODO: API-Call einbauen
-    // fetch("http://localhost:8080/api/termine/update", { ... })
+    try {
+      const res = await fetch("http://localhost:8080/api/termine/editTermin", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      if (!res.ok) {
+        throw new Error("Update fehlgeschlagen: " + res.status);
+      }
+
+      const updated = await res.json();
+      console.log("Server-Antwort:", updated);
+
+      // window.location.href = "/";
+    } catch (err) {
+      console.error("Fehler beim Speichern:", err);
+      alert("Speichern fehlgeschlagen!");
+    }
   });
 
-  // Abbrechen Button → zurück zur Übersicht
+  // --- Abbrechen Button ---
   document.querySelector(".cancel").addEventListener("click", () => {
     window.location.href = "/";
   });

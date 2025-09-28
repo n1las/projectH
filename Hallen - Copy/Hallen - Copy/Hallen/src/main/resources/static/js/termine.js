@@ -108,7 +108,7 @@ document.querySelectorAll(".edit-btn").forEach((button) => {
     // In localStorage speichern
     localStorage.setItem("editTermin", JSON.stringify(termin));
 
-    alert(localStorage.getItem("editTermin"))
+    window.location.href = "/admin/editTermine";
     // Weiterleiten auf Subsite
     // window.location.href = "/edit.html";
   });
