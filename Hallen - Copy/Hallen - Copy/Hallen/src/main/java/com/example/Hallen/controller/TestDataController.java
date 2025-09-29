@@ -30,18 +30,20 @@ public class TestDataController {
     private String[] anlass = {"Training", "Turnier", "Freundschaftsspiel", "Vereinsmeisterschaft", "Sportkurs",
             "Fußballtraining", "Abschlussfeier", "Volleyball", "Basketball", "Handball",
             "Tanzkurs", "Messe", "Flohmarkt", "Konzert", "Gemeindeversammlung"};
-    private String[] status = {"expired", "cancelled", "unconfirmed", "confirmed"};
+    private String[] status = {"cancelled", "unconfirmed", "confirmed"};
     private Long[] felder = { 2L, 3L, 4L};
+    private Long[] mieter = {22L, 30L, 29L, 28L };
+    private int dupes = 0;
 
 
 
     @GetMapping("/api/testdata/termine")
     public String createTestTermine() {
         List<Termin> createdTermine = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             Termin termin = new Termin();
 
-            LocalDate start = LocalDate.of(2025, 9, 20);
+            LocalDate start = LocalDate.of(2025, 9, 30);
             LocalDate end = LocalDate.of(2026, 1, 1);
 
             // Pick a random date first
@@ -60,22 +62,23 @@ public class TestDataController {
             termin.setAnfang(randomDateTime);
             long hoursToAdd = 5 + random.nextInt(2);
             termin.setEnde(randomDateTime.plusHours(hoursToAdd));
-            termin.setFeldId(felder[random.nextInt(felder.length)]);
+            termin.setFeldId(Long.valueOf(random.nextInt(14) + 1));
             termin.setConfirmed(status[random.nextInt(status.length)]);
-            termin.setMieterId(22L);
+            termin.setMieterId(mieter[random.nextInt(mieter.length)]);
 
 
             try {
                 terminService.isTerminAvailable(termin.getFeldId(), termin.getAnfang(), termin.getEnde());
-                createdTermine.add(termin);
-                terminRepository.save(termin);
 
             } catch (TerminNotAvailableException e) {
-                return "Meehhhhh";
+                dupes++;
+                continue;
             }
+            createdTermine.add(termin);
+            terminRepository.save(termin);
 
         }
-        return createdTermine.toString();
+        return createdTermine.toString() + dupes;
     }
 
 

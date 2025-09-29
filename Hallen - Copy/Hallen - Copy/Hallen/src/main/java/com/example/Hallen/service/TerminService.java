@@ -308,7 +308,8 @@ public class TerminService {
                             "\n Anlass: " + termin.getAnlass() +
                             "\n Anfang: " + termin.getAnfang() +
                             "\n Ende: " + termin.getEnde() +
-                            "\n FeldID: " + termin.getFeldId();
+                            "\n FeldID: " + termin.getFeldId() +
+                            "\n Halle: " + getHallenName(termin.getId());
 
                     emailService.sendEmail(receiver, subject, text);
                 }
