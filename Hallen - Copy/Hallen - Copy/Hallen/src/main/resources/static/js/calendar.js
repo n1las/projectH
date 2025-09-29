@@ -17,13 +17,19 @@ window.initCalendar = function () {
         }
     }
 
-    calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
+calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    locale: 'de', 
+    eventTimeFormat: {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    },
         events: async function (fetchInfo, successCallback, failureCallback) {
             try {
                 const response = await fetch(`http://localhost:8080/api/termine/MergedTermine/ForCalendar/${hallenId}`);
