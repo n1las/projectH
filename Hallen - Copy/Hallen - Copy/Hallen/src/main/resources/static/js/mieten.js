@@ -322,41 +322,47 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // DELETE
-    else if (typ === "delete") {
-      const anfang = form.querySelector("input[name='anfangDelete']").value;
+else if (typ === "delete") {
+    const anfang = form.querySelector("input[name='anfangDelete']").value;
 
-      if (!anfang) {
+    if (!anfang && anzahlFelderSelect.value !== "komplett") {
         statusText.textContent = "❌ Bitte Startzeitpunkt eingeben.";
         return;
-      }
-      let deleteRequest = {
-        feldIds: selectedFeldIds,
-        start: anfang
-      };
+    }
 
+    let deleteRequest;
+    let endpoint = "http://localhost:8080/api/termine/delete"; // default endpoint
 
-      if(anzahlFelderSelect.value === "komplett"){
-        deleteRequest.feldIds = allFeldIds;
-      }
+    if (anzahlFelderSelect.value === "komplett") {
+        // Build request according to DeleteTerminKomplettRequest DTO
+        deleteRequest = {
+            halleId: hallenId,  // make sure you have the hall ID available
+            anfang: anfang              // LocalDateTime in Java will parse ISO string
+        };
+        endpoint = "http://localhost:8080/api/termine/delete/Halle";
+    } else {
+        // Regular delete request
+        deleteRequest = {
+            feldIds: selectedFeldIds,
+            start: anfang
+        };
+    }
 
-      // Make the fetch request
-      fetch("http://localhost:8080/api/termine/delete", {
-          method: "DELETE",
-          headers: {
-              "Content-Type": "application/json"
-          },
-          body: JSON.stringify(deleteRequest)
-      })
-      .then(res => {
-          if (!res.ok) throw new Error("Error: " + res.status);
-          return res.text();
-      })
-      .then(data => console.log("Success:", data))
-      .catch(err => console.error("Fetch error:", err));
+    fetch(endpoint, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(deleteRequest)
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Error: " + res.status);
+        return res.text();
+    })
+    .then(data => console.log("Success:", data))
+    .catch(err => console.error("Fetch error:", err));
+}
 
-
-      }
     });
 
   // ---------- Hilfsfunktionen ----------

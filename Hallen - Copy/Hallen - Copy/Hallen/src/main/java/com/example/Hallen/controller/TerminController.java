@@ -146,6 +146,15 @@ public class TerminController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No matching Termin found. ❌");
         }
     }
+    @DeleteMapping("/delete/Halle")
+    public ResponseEntity<String>deleteByHalle(@RequestBody DeleteTerminKomplettRequest request){
+        boolean deleted = service.deleteByHalle(request);
+        if (deleted) {
+            return ResponseEntity.ok("Termin deleted successfully! 🧹");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No matching Termin found. ❌");
+        }
+    }
     @PutMapping("/editTermin")
     public ResponseEntity<List<Termin>> update (@RequestBody EditTerminRequest request){
        try{

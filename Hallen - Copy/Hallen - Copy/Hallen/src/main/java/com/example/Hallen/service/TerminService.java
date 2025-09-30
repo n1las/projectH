@@ -401,6 +401,14 @@ public class TerminService {
         }
         return updated;
     }
+    public boolean deleteByHalle(DeleteTerminKomplettRequest request){
+        List<Feld> felder = feldService.getFelderByHalleId(request.getHalleId());
+        List<Long> feldIds = new ArrayList<>();
+        for(Feld feld: felder){
+            feldIds.add(feld.getId());
+        }
+        return deleteByFeldIdAndAnfang(feldIds, request.getAnfang());
+    }
 
 
 
