@@ -394,7 +394,7 @@ public class TerminService {
             termin.setEnde(request.getEnde());
             termin.setConfirmed(request.getStatus());
             updated.add(termin);
-            isTerminAvailable(termin.getFeldId(),termin.getAnfang(),termin.getEnde());
+            //isTerminAvailable(termin.getFeldId(),termin.getAnfang(),termin.getEnde());
             repository.save(termin);
 
 
