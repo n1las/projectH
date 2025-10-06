@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Mietername laden ---
   if (termin.mieterId) {
-    fetch(`http://localhost:8080/api/Mieter/${termin.mieterId}`)
+    fetch(`/api/Mieter/${termin.mieterId}`)
       .then(res => {
         if (!res.ok) throw new Error("Mieter konnte nicht geladen werden");
         return res.json();
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Sending request:", requestBody);
 
     try {
-      const res = await fetch("http://localhost:8080/api/termine/editTermin", {
+      const res = await fetch("/api/termine/editTermin", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"

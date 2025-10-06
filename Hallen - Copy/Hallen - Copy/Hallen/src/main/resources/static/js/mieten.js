@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // ➜ Halle laden: #anzahlFelder nur anzeigen, wenn hallenTyp > 1
   (async () => {
     try {
-      const res = await fetch(`http://localhost:8080/api/Hallen/${hallenId}`);
+      const res = await fetch(`/api/Hallen/${hallenId}`);
       if (!res.ok) throw new Error("Halle konnte nicht geladen werden");
       const halle = await res.json();
 
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Mieter laden
-      const userResponse = await fetch(`http://localhost:8080/api/Mieter/byUsername/${username}`);
+      const userResponse = await fetch(`/api/Mieter/byUsername/${username}`);
       if (!userResponse.ok) {
         statusText.textContent = "❌ Benutzer nicht gefunden.";
         return;
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
           ende: ende,
         };
 
-      const post = await fetch("http://localhost:8080/api/termine/mieten/halle", {
+      const post = await fetch("/api/termine/mieten/halle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(rentData),
@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
         feldIds: selectedFeldIds, // hier die ausgewählten Feld-IDs
       };
 
-      const post = await fetch("http://localhost:8080/api/termine/mieten/multipleFelder", {
+      const post = await fetch("/api/termine/mieten/multipleFelder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(rentData),
@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const userResponse = await fetch(`http://localhost:8080/api/Mieter/byUsername/${username}`);
+    const userResponse = await fetch(`/api/Mieter/byUsername/${username}`);
     if (!userResponse.ok) {
       statusText.textContent = "❌ Benutzer nicht gefunden.";
       return;
@@ -241,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
         wochentag: wochentag,
       };
 
-      const post = await fetch("http://localhost:8080/api/termine/serienTermin/Halle", {
+      const post = await fetch("/api/termine/serienTermin/Halle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(serienTerminData),
@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function () {
         wochentag: wochentag,
       };
 
-      const post = await fetch("http://localhost:8080/api/termine/serienTermin/Felder", {
+      const post = await fetch("/api/termine/serienTermin/Felder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(serienTerminData),
@@ -307,7 +307,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ende: ende,
       };
 
-      const post = await fetch("http://localhost:8080/api/termine/blockHalle", {
+      const post = await fetch("/api/termine/blockHalle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(blockTimeData),
@@ -331,7 +331,7 @@ else if (typ === "delete") {
     }
 
     let deleteRequest;
-    let endpoint = "http://localhost:8080/api/termine/delete"; // default endpoint
+    let endpoint = "/api/termine/delete"; // default endpoint
 
     if (anzahlFelderSelect.value === "komplett") {
         // Build request according to DeleteTerminKomplettRequest DTO
@@ -339,7 +339,7 @@ else if (typ === "delete") {
             halleId: hallenId,  // make sure you have the hall ID available
             anfang: anfang              // LocalDateTime in Java will parse ISO string
         };
-        endpoint = "http://localhost:8080/api/termine/delete/Halle";
+        endpoint = "/api/termine/delete/Halle";
     } else {
         // Regular delete request
         deleteRequest = {
@@ -377,7 +377,7 @@ else if (typ === "delete") {
   async function loadFelderAndBuildButtons() {
     if (!feldButtonsContainer) return;
       try {
-        const res = await fetch(`http://localhost:8080/api/feld/getByHallenId/${hallenId}`);
+        const res = await fetch(`/api/feld/getByHallenId/${hallenId}`);
 
         if (!res.ok) throw new Error("Felder konnten nicht geladen werden");
 

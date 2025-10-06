@@ -14,7 +14,7 @@ function formatGermanDate(isoDateString) {
 
 // 📥 Termine vom Server laden
 function loadTermine() {
-  fetch("http://localhost:8080/api/termine/getMergedTermine")
+  fetch("/api/termine/getMergedTermine")
     .then((response) => {
       if (!response.ok) throw new Error("Fehler beim Abrufen der Termine");
       return response.json();
@@ -122,7 +122,7 @@ document.querySelectorAll(".edit-btn").forEach((button) => {
       const sicher = confirm("Bist du sicher, dass du diesen Termin löschen möchtest?");
       if (!sicher) return;
 
-      fetch("http://localhost:8080/api/termine/delete/byIds", {
+      fetch("/api/termine/delete/byIds", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ terminIds: ids}),

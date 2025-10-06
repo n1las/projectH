@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         right: 'dayGridMonth,timeGridWeek,timeGridDay'
       },
       events: function(fetchInfo, successCallback, failureCallback) {
-        fetch(`http://localhost:8080/api/termine`)
+        fetch(`/api/termine`)
           .then(response => {
             if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`);
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Fetch and display Hallen data ---
   if (hallenId) {
-    fetch(`http://localhost:8080/api/Hallen/${hallenId}`)
+    fetch(`/api/Hallen/${hallenId}`)
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

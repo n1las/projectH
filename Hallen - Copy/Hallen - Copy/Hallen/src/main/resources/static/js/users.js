@@ -1,6 +1,6 @@
 const userTableBody = document.getElementById("user-table-body");
 
-fetch("http://localhost:8080/api/Mieter")
+fetch("/api/Mieter")
   .then(response => {
     if (!response.ok) {
       throw new Error("Fehler beim Laden der Benutzerdaten");
@@ -76,4 +76,4 @@ if (newUserButton) {
   });
 }
 
-  
+

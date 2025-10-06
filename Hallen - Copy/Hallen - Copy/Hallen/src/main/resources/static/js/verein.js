@@ -20,7 +20,7 @@ async function getHallenName(id) {
 
 // 📥 Termine vom Server laden
 function loadTermine() {
-  fetch("http://localhost:8080/api/termine/MergedTermine/ForUser")
+  fetch("/api/termine/MergedTermine/ForUser")
     .then(response => {
       if (!response.ok) throw new Error("Fehler beim Abrufen der Termine");
       return response.json();
@@ -113,7 +113,7 @@ document.querySelectorAll(".confirm-btn").forEach(button => {
       status: "confirmed"
     };
 
-    fetch("http://localhost:8080/api/termine/CoC", {
+    fetch("/api/termine/CoC", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
@@ -143,7 +143,7 @@ document.querySelectorAll(".delete-btn").forEach(button => {
       status: "cancelled"
     };
 
-    fetch("http://localhost:8080/api/termine/CoC", {
+    fetch("/api/termine/CoC", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)

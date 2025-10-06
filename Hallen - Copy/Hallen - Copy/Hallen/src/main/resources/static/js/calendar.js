@@ -24,7 +24,7 @@ calendar = new FullCalendar.Calendar(calendarEl, {
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
-    locale: 'de', 
+    locale: 'de',
     eventTimeFormat: {
         hour: '2-digit',
         minute: '2-digit',
@@ -32,7 +32,7 @@ calendar = new FullCalendar.Calendar(calendarEl, {
     },
         events: async function (fetchInfo, successCallback, failureCallback) {
             try {
-                const response = await fetch(`http://localhost:8080/api/termine/MergedTermine/ForCalendar/${hallenId}`);
+                const response = await fetch(`/api/termine/MergedTermine/ForCalendar/${hallenId}`);
                 if (!response.ok) throw new Error('Fehler beim Laden der Termine');
 
                 const termine = await response.json();
