@@ -134,27 +134,27 @@ public class TerminController {
         boolean deleted = service.deleteByFeldIdAndAnfang(deleteRequest.getFeldIds(), deleteRequest.getStart());
 
         if (deleted) {
-            return ResponseEntity.ok("Termin deleted successfully! 🧹");
+            return ResponseEntity.ok("Termin erfolgreich gelöscht! 🧹");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No matching Termin found. ❌");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Keinen passenden Termin gefunden. ❌");
         }
     }
     @DeleteMapping("/delete/byIds")
     public ResponseEntity<String>deleteByIds(@RequestBody AdminDeleteRequest adminDeleteRequest){
         boolean deleted = service.deleteByIds(adminDeleteRequest.getTerminIds());
         if (deleted) {
-            return ResponseEntity.ok("Termin deleted successfully! 🧹");
+            return ResponseEntity.ok("Termin erfolgreich gelöscht! 🧹");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No matching Termin found. ❌");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Keinen passenden Termin gefunden. ❌");
         }
     }
     @DeleteMapping("/delete/Halle")
     public ResponseEntity<String>deleteByHalle(@RequestBody DeleteTerminKomplettRequest request){
         boolean deleted = service.deleteByHalle(request);
         if (deleted) {
-            return ResponseEntity.ok("Termin deleted successfully! 🧹");
+            return ResponseEntity.ok("Termin erfolgreich gelöscht! 🧹");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No matching Termin found. ❌");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Keinen passenden Termin gefunden. ❌");
         }
     }
     @PutMapping("/editTermin")

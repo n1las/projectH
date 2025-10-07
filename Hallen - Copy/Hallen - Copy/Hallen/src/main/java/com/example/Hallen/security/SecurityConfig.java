@@ -27,8 +27,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)  // or .csrf().disable() if using older SpringSecurity
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**","/test").hasRole("ADMIN")
-                        .requestMatchers("/login", "/register", "/css/**", "/js/**", "/img/**","/home","/subsite/**", "/api/**").permitAll()
+                        .requestMatchers("/admin/**","/test", "/api/Mieter/**").hasRole("ADMIN")
+                        .requestMatchers("/login", "/register", "/css/**", "/js/**", "/img/**","/home","/subsite/**", "/api/termine/**", "api/Hallen/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception

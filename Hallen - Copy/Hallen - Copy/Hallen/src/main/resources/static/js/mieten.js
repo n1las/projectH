@@ -76,8 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
       await loadFelderAndBuildButtons(); // falls Serie auch Felder braucht
     } else if (terminTyp.value === "delete") {
       deleteInputs.style.display = "block";
-      felderAuswahlDiv.style.display = "block"
-      feldButtonsContainer.style.display = "block";
+      await loadFelderAndBuildButtons()
     }
   });
   anzahlFelderSelect.addEventListener("change", async () => {
@@ -322,47 +321,53 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-else if (typ === "delete") {
-    const anfang = form.querySelector("input[name='anfangDelete']").value;
+    else if (typ === "delete") {
+        const anfang = form.querySelector("input[name='anfangDelete']").value;
 
-    if (!anfang && anzahlFelderSelect.value !== "komplett") {
-        statusText.textContent = "❌ Bitte Startzeitpunkt eingeben.";
-        return;
+        if (!anfang && anzahlFelderSelect.value !== "komplett") {
+            statusText.textContent = "❌ Bitte Startzeitpunkt eingeben.";
+            return;
+        }
+
+        let deleteRequest;
+        let endpoint = "/api/termine/delete"; // default endpoint
+
+        if (anzahlFelderSelect.value === "komplett") {
+            deleteRequest = {
+                halleId: parseInt(hallenId),
+                anfang: anfang
+            };
+            endpoint = "/api/termine/delete/Halle";
+        } else {
+            deleteRequest = {
+                feldIds: selectedFeldIds,
+                start: anfang
+            };
+        }
+
+        console.log(deleteRequest);
+        console.log(endpoint);
+
+        fetch(endpoint, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(deleteRequest)
+        })
+        .then(res => res.text())
+        .then(data => {
+            console.log("Server response:", data);
+            statusText.textContent = data;
+            window.refreshCalendar(); // directly show whatever the server returns
+        })
+        .catch(err => {
+            console.error("Fetch error:", err);
+            statusText.textContent = "❌ Fehler beim Löschen des Termins.";
+        });
+
+
     }
-
-    let deleteRequest;
-    let endpoint = "/api/termine/delete"; // default endpoint
-
-    if (anzahlFelderSelect.value === "komplett") {
-        // Build request according to DeleteTerminKomplettRequest DTO
-        deleteRequest = {
-            halleId: hallenId,  // make sure you have the hall ID available
-            anfang: anfang              // LocalDateTime in Java will parse ISO string
-        };
-        endpoint = "/api/termine/delete/Halle";
-    } else {
-        // Regular delete request
-        deleteRequest = {
-            feldIds: selectedFeldIds,
-            start: anfang
-        };
-    }
-
-    fetch(endpoint, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(deleteRequest)
-    })
-    .then(res => {
-        if (!res.ok) throw new Error("Error: " + res.status);
-        return res.text();
-    })
-    .then(data => console.log("Success:", data))
-    .catch(err => console.error("Fetch error:", err));
-}
-
     });
 
   // ---------- Hilfsfunktionen ----------
