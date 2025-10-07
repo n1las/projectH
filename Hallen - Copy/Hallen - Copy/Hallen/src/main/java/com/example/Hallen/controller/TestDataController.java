@@ -53,9 +53,8 @@ public class TestDataController {
             // Pick a random time between 00:00 and 18:00
             int randomHour = random.nextInt(18); // 0 to 17
             int randomMinute = random.nextInt(60);
-            int randomSecond = random.nextInt(60);
 
-            LocalTime randomTime = LocalTime.of(randomHour, randomMinute, randomSecond);
+            LocalTime randomTime = LocalTime.of(randomHour, randomMinute, 0);
 
             LocalDateTime randomDateTime = LocalDateTime.of(randomDate, randomTime);
             termin.setAnlass(anlass[random.nextInt(anlass.length)]);
