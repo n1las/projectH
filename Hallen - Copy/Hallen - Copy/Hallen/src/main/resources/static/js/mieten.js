@@ -57,26 +57,21 @@ document.addEventListener("DOMContentLoaded", function () {
     commonInput.style.display = "none";
     serieInputs.style.display = "none";
     deleteInputs.style.display = "none";
+    await loadFelderAndBuildButtons();
 
     if (terminTyp.value === "einzel") {
       einzelInputs.style.display = "block";
       commonInput.style.display = "block";
-      felderAuswahlDiv.style.display = "block";
-      feldButtonsContainer.style.display = "block";
       // sicherstellen, dass Feld-Buttons da sind (falls Nutzer erst jetzt auf "einzel" wechselt)
-      await loadFelderAndBuildButtons();
     } else if (terminTyp.value === "block") {
       einzelInputs.style.display = "block";
-      felderAuswahlDiv.style.display = "none";
-      feldButtonsContainer.style.display = "none";
-      await loadFelderAndBuildButtons(); // ggf. auch für Block relevant
+
     } else if (terminTyp.value === "serie") {
       commonInput.style.display = "block";
       serieInputs.style.display = "block";
-      await loadFelderAndBuildButtons(); // falls Serie auch Felder braucht
+
     } else if (terminTyp.value === "delete") {
       deleteInputs.style.display = "block";
-      await loadFelderAndBuildButtons()
     }
   });
   anzahlFelderSelect.addEventListener("change", async () => {
@@ -379,11 +374,22 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Lädt Felder aus dem Backend und erzeugt Buttons (GENAU wie du wolltest)
-  async function loadFelderAndBuildButtons() {
-    if (!feldButtonsContainer) return;
-      try {
-        const res = await fetch(`/api/feld/getByHallenId/${hallenId}`);
+async function loadFelderAndBuildButtons() {
+    if (!feldButtonsContainer || !felderAuswahlDiv) return;
 
+    // Sichtbarkeit je nach Termin-Typ
+    if (terminTyp.value === "block") {
+        felderAuswahlDiv.style.display = "none";
+        feldButtonsContainer.innerHTML = ""; // sicherstellen, dass keine Buttons angezeigt werden
+        selectedFeldIds = [];
+        allFeldIds = [];
+        return; // Funktion hier beenden
+    } else {
+        felderAuswahlDiv.style.display = "block";
+    }
+
+    try {
+        const res = await fetch(`/api/feld/getByHallenId/${hallenId}`);
         if (!res.ok) throw new Error("Felder konnten nicht geladen werden");
 
         const felder = await res.json(); // erwartet: [{ id, name, ... }, ...]
@@ -392,45 +398,44 @@ document.addEventListener("DOMContentLoaded", function () {
         allFeldIds = [];
 
         felder.forEach((feld) => {
-          allFeldIds.push(feld.id);
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.textContent = feld.name ?? `Feld ${feld.id}`;
-          btn.className = "feld-button";
-          btn.style.marginRight = "8px";
+            allFeldIds.push(feld.id);
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.textContent = feld.name ?? `Feld ${feld.id}`;
+            btn.className = "feld-button";
+            btn.style.marginRight = "8px";
 
-          // ID/Name als data-Attribute
-          btn.dataset.feldId = feld.id;
-          btn.dataset.feldName = feld.name ?? `Feld ${feld.id}`;
+            btn.dataset.feldId = feld.id;
+            btn.dataset.feldName = feld.name ?? `Feld ${feld.id}`;
 
-          // Toggle + Array-Management (IDs als Number speichern)
-          btn.addEventListener("click", () => {
-            btn.classList.toggle("selected");
-            const feldIdNum = Number(btn.dataset.feldId);
+            btn.addEventListener("click", () => {
+                btn.classList.toggle("selected");
+                const feldIdNum = Number(btn.dataset.feldId);
 
-            if (btn.classList.contains("selected")) {
-              if (!selectedFeldIds.includes(feldIdNum)) {
-                selectedFeldIds.push(feldIdNum);
-              }
-            } else {
-              selectedFeldIds = selectedFeldIds.filter((id) => id !== feldIdNum);
-            }
-            // Debug:
-            console.log("Aktuell ausgewählte Feld-IDs:", selectedFeldIds);
-            console.log("alle feldIDs:  ", allFeldIds);
-          });
+                if (btn.classList.contains("selected")) {
+                    if (!selectedFeldIds.includes(feldIdNum)) {
+                        selectedFeldIds.push(feldIdNum);
+                    }
+                } else {
+                    selectedFeldIds = selectedFeldIds.filter((id) => id !== feldIdNum);
+                }
 
-          feldButtonsContainer.appendChild(btn);
+                console.log("Aktuell ausgewählte Feld-IDs:", selectedFeldIds);
+                console.log("Alle Feld-IDs:", allFeldIds);
+            });
+
+            feldButtonsContainer.appendChild(btn);
         });
 
         if (felder.length === 0) {
-          const info = document.createElement("div");
-          info.textContent = "Keine Felder gefunden.";
-          feldButtonsContainer.appendChild(info);
+            const info = document.createElement("div");
+            info.textContent = "Keine Felder gefunden.";
+            feldButtonsContainer.appendChild(info);
         }
-      } catch (e) {
+    } catch (e) {
         console.error(e);
         feldButtonsContainer.innerHTML = "Fehler beim Laden der Felder.";
-      }
-  }
+    }
+}
+
 });
