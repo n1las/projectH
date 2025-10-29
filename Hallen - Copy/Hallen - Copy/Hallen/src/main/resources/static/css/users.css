@@ -133,3 +133,7 @@ img {
 .delete-btn{
   background-color: red;
 }
+#mainHeader{
+  color: blue;
+  padding-top: 40px;
+}
