@@ -135,5 +135,23 @@ img {
 }
 #mainHeader{
   color: #007bff;
+
+}
+.header-row {
+  display: flex;
+  align-items: center;
   padding-top: 40px;
+}
+
+#filter-button {
+  margin-left: auto;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#filter-button:hover {
+  background: #0056b3;
 }
